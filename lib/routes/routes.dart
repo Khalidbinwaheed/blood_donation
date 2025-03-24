@@ -1,5 +1,4 @@
 import 'package:blood_donation/feathers/user_managment/presentation/screens/main_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -18,23 +17,21 @@ enum AppRoutes {
 }
 
 @riverpod
-
 GoRouter goRouter(GoRouterRef ref) {
   return GoRouter(
     initialLocation: '/splash',
     debugLogDiagnostics: true,
     routes: [
       GoRoute(
+        name: 'splash',
         path: '/splash',
-        name: AppRoutes.splash.name,
         builder: (ctx, state) => const SplashScreen(),
       ),
       GoRoute(
+        name: 'main',
         path: '/main',
-        name: AppRoutes.splash.name,
         builder: (ctx, state) => const MainScreen(),
       ),
-     
     ],
   );
 }
