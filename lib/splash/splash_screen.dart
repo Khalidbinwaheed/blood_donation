@@ -1,4 +1,6 @@
+import 'package:blood_donation/routes/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -22,30 +24,43 @@ class _SplashScreenState extends State<SplashScreen>
     _logoAnimatin = Tween<Offset>(
       begin: const Offset(0, -1),
       end: const Offset(0, 0),
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeInOut,
-      ),
-    );
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
     _textAnimation = Tween<Offset>(
       begin: const Offset(-1, 0),
       end: const Offset(0, 0),
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.easeInOut,
-      ),
-    );
-    _controller.forward().whenComplete(() {
-      Future.delayed(const Duration(seconds: 2), () {
-        Navigator.pushReplacementNamed(context, '/home');
-      });
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+
+    _controller.forward();
+
+    Future.delayed(const Duration(seconds: 3), () {
+      context.goNamed(AppRoutes.main.name);
     });
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Placeholder();
+    return Scaffold(
+      backgroundColor: const Color(0xff680c07),
+      body: Center(
+        child: Column(
+          children: [
+            SlideTransition(
+              position: _logoAnimatin,
+              child: Image.asset(
+                'assets/logo.png',
+                width: 150,
+                height: 200,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
