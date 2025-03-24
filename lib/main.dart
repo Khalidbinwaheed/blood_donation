@@ -11,22 +11,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(primarySwatch: Colors.blue),
-
-      home: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Hello World')),
-      body: Center(child: Text('Hello World')),
+      title: 'Blood Donation',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff680c07)),
+        useMaterial3: true,
+        appBarTheme: const AppBarTheme().copyWith(
+          color: const Color(0xff680c07),
+          centerTitle: true,
+          iconTheme: IconThemeData().copyWith(color: Colors.white),
+        ),
+      ),
     );
   }
 }
