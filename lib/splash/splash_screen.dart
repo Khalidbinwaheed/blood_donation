@@ -49,14 +49,21 @@ class _SplashScreenState extends State<SplashScreen>
       backgroundColor: const Color(0xff680c07),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SlideTransition(
               position: _logoAnimatin,
-              child: Image.asset(
-                'assets/logo.png',
-                width: 150,
-                height: 200,
-              ),
+              child: Image.asset('assets/logo.png', width: 150),
+            ),
+            const SizedBox(height: 20),
+            SlideTransition(
+              position: _textAnimation,
+              child: Text('Blood Donation'),
+            ),
+            SlideTransition(
+              position: _textAnimation,
+              child: Text('Save a life, Give blood'),
             ),
           ],
         ),
