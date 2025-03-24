@@ -37,6 +37,11 @@ class _SplashScreenState extends State<SplashScreen>
         curve: Curves.easeInOut,
       ),
     );
+    _controller.forward().whenComplete(() {
+      Future.delayed(const Duration(seconds: 2), () {
+        Navigator.pushReplacementNamed(context, '/home');
+      });
+    });
   }
 
   @override
