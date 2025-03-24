@@ -1,8 +1,9 @@
+import 'package:blood_donation/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends ConsumerWidget {
@@ -11,7 +12,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
-      routerConfig: ,
+      routerConfig: ref.watch(goRouterProvider),
       debugShowCheckedModeBanner: false,
       title: 'Blood Donation',
       theme: ThemeData(
