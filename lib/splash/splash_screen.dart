@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
 
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 5), () {
       context.goNamed(AppRoutes.main.name);
     });
   }
@@ -54,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen>
           children: [
             SlideTransition(
               position: _logoAnimatin,
-              child: Image.asset('assets/logo.jpg', width: 150),
+              child: Image.asset('assets/logo.png', width: 300),
             ),
             const SizedBox(height: 20),
             SlideTransition(
