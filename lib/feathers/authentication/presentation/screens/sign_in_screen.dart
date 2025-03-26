@@ -1,3 +1,4 @@
+import 'package:blood_donation/common_widgets/common_text_field.dart';
 import 'package:blood_donation/util/appstyles.dart';
 import 'package:blood_donation/util/size_config.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,12 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           'Sign in to your account',
           style: AppStyle.titleTextStyle.copyWith(color: Colors.black),
         ),
-        SizedBox(height: SizeConfig.getProportionateHeight(25),)
+        SizedBox(height: SizeConfig.getProportionateHeight(25)),
+        CommonTextField(
+          hintText: 'Email',
+          textInputType: TextInputType.emailAddress,
+          controller: null,
+        ),
       ],
     );
   }
