@@ -12,6 +12,18 @@ class SignInScreen extends ConsumerStatefulWidget {
 }
 
 class _SignInScreenState extends ConsumerState<SignInScreen> {
+
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -30,8 +42,16 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
         CommonTextField(
           hintText: 'Email',
           textInputType: TextInputType.emailAddress,
-          controller: null,
+          controller: _emailController,
         ),
+        SizedBox(height: SizeConfig.getProportionateHeight(10)),
+        CommonTextField(
+          hintText: 'Enter Password',
+          textInputType: TextInputType.text,
+          controller: _passwordController,
+        ),
+        SizedBox(height: SizeConfig.getProportionateHeight(10)),
+        
       ],
     );
   }
