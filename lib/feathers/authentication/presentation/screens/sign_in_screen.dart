@@ -1,21 +1,32 @@
+import 'package:blood_donation/util/appstyles.dart';
+import 'package:blood_donation/util/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SignInScreen extends ConsumerStatefulWidget{
+class SignInScreen extends ConsumerStatefulWidget {
   const SignInScreen({super.key});
 
   @override
   _SignInScreenState createState() => _SignInScreenState();
-
 }
 
-class _SignInScreenState extends ConsumerState<SignInScreen>{
+class _SignInScreenState extends ConsumerState<SignInScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text('Sign In Screen'),
-      ),
+    return Column(
+      children: [
+        Image.asset(
+          'assets/logo.png',
+          height: SizeConfig.getProportionateHeight(100),
+          width: SizeConfig.getProportionateWidth(100),
+          fit: BoxFit.cover,
+        ),
+        Text(
+          'Sign in to your account',
+          style: AppStyle.titleTextStyle.copyWith(color: Colors.black),
+        ),
+        SizedBox(height: SizeConfig.getProportionateHeight(25),)
+      ],
     );
   }
 }
