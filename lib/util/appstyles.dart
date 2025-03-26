@@ -13,4 +13,11 @@ class AppStyle {
     color: Colors.white,
     fontWeight: FontWeight.w600,
   );
+  static final normalTextStyle = GoogleFonts.lobsterTwo(
+    fontSize: SizeConfig.getProportionateHeight(15),
+    color: Colors.white,
+    fontWeight: FontWeight.w400,
+  );
+
+  static const mainColor = Color(0xff680c07);
 }
