@@ -1,4 +1,5 @@
 import 'package:blood_donation/routes/routes.dart';
+import 'package:blood_donation/util/appstyles.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -59,11 +60,14 @@ class _SplashScreenState extends State<SplashScreen>
             const SizedBox(height: 20),
             SlideTransition(
               position: _textAnimation,
-              child: Text('Blood Donation'),
+              child: Text('Blood Donation', style: AppStyle.titleTextStyle),
             ),
             SlideTransition(
               position: _textAnimation,
-              child: Text('Save a life, Give blood'),
+              child: Text(
+                'Save a life, Give blood',
+                style: AppStyle.normalTextStyle,
+              ),
             ),
           ],
         ),
