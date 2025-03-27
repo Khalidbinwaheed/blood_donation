@@ -1,7 +1,6 @@
 import 'dart:async';
-import 'dart:ffi';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 class GoRouterRefreshStream extends ChangeNotifier {
   GoRouterRefreshStream(Stream<dynamic> stream) {
