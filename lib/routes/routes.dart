@@ -1,6 +1,6 @@
 import 'package:blood_donation/feathers/user_managment/presentation/screens/main_screen.dart';
+import 'package:blood_donation/routes/go_router_refresh_stream.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -36,7 +36,7 @@ GoRouter goRouter(GoRouterRef ref) {
       return null;
         
     },
-    refreshListenable: ,
+    refreshListenable: GoRouterRefreshStream(firebaseAuth.authStateChanges()),
       routes: [
       GoRoute(
         name: 'splash',
