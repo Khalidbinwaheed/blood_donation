@@ -1,20 +1,20 @@
-import 'package:blood_donation/util/size_config.dart';
+//import 'package:blood_donation/util/size_config.dart';
 import 'package:flutter/material.dart';
 //import 'package:google_fonts/google_fonts.dart';
 
 class AppStyle {
   static final headingTextStyle = TextStyle(
-    fontSize:20,
+    fontSize: 20,
     color: Colors.white,
     fontWeight: FontWeight.bold,
   );
-  static final titleTextStyle = const TextStyle(
+  static final titleTextStyle = TextStyle(
     fontSize: 20,
     color: Colors.white,
     fontWeight: FontWeight.w600,
   );
   static final normalTextStyle = TextStyle(
-    fontSize:15,
+    fontSize: 15,
     color: Colors.white,
     fontWeight: FontWeight.w400,
   );
