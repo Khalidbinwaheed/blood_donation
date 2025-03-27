@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 
 class AppStyle {
   static final headingTextStyle = TextStyle(
-    fontSize: SizeConfig.getProportionateHeight(20),
+    fontSize:20,
     color: Colors.white,
     fontWeight: FontWeight.bold,
   );
-  static final titleTextStyle = TextStyle(
-    fontSize: SizeConfig.getProportionateHeight(18),
+  static final titleTextStyle = const TextStyle(
+    fontSize: 20,
     color: Colors.white,
     fontWeight: FontWeight.w600,
   );
   static final normalTextStyle = TextStyle(
-    fontSize: SizeConfig.getProportionateHeight(15),
+    fontSize:15,
     color: Colors.white,
     fontWeight: FontWeight.w400,
   );
