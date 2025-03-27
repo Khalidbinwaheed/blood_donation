@@ -1,6 +1,5 @@
 import 'package:blood_donation/util/appstyles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class CommonTextField extends StatelessWidget {
   const CommonTextField({
