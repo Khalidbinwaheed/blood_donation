@@ -38,7 +38,7 @@ enum AppRoutes {
 // --- Placeholder for RegisterScreen (if you haven't created it) ---
 // Remove this if you have your actual RegisterScreen
 class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+  const RegisterScreen({super.key});
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(title: Text('Register')),
