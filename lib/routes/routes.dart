@@ -1,5 +1,6 @@
 import 'dart:async'; // Import needed for StreamSubscription
 
+import 'package:blood_donation/feathers/authentication/presentation/screens/registration_screen.dart';
 import 'package:blood_donation/feathers/authentication/presentation/screens/sign_in_screen.dart';
 // Assuming RegisterScreen exists or you'll add it
 // import 'package:blood_donation/feathers/authentication/presentation/screens/register_screen.dart';
@@ -85,7 +86,6 @@ GoRouter goRouter(GoRouterRef ref) {
   const emailedUsersPath = '/emailedUsers';
   const notificationsPath = '/notifications';
 
-
   return GoRouter(
     initialLocation: splashPath,
     debugLogDiagnostics: !kReleaseMode, // Only log in debug mode
@@ -148,9 +148,10 @@ GoRouter goRouter(GoRouterRef ref) {
       GoRoute(
         name: AppRoutes.register.name, // Use enum for name
         path: registerPath, // Use constant
-        builder:
-            (context, state) =>
-                const RegisterScreen(), // Use placeholder or your actual screen
+        builder: (context, state) {
+          final type = state.extra as String;
+          return RegistrationScreen(type);
+        }, // Use placeholder or your actual screen
       ),
       GoRoute(
         name: AppRoutes.main.name, // Use enum for name
