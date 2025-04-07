@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 
 class AppUser {
   final String name;
@@ -19,7 +18,7 @@ class AppUser {
 
   @override
   bool operator ==(Object other) =>
-      (identical(this, other)) ||
+      identical(this, other) ||
       (other is AppUser &&
           runtimeType == other.runtimeType &&
           name == other.name &&
@@ -40,14 +39,7 @@ class AppUser {
 
   @override
   String toString() {
-    return 'AppUser{' +
-        'name: $name,' +
-        'phoneNumber: $phoneNumber,' +
-        'bloodGroup: $bloodGroup,' +
-        'email: $email,' +
-        'type: $type,' +
-        'userId: $userId' +
-        '}';
+    return 'AppUser{name: $name, phoneNumber: $phoneNumber, bloodGroup: $bloodGroup, email: $email, type: $type, userId: $userId}';
   }
 
   AppUser copyWith({
@@ -67,26 +59,26 @@ class AppUser {
       userId: userId ?? this.userId,
     );
   }
-}
 
-Map<String, dynamic> toMap(AppUser user) {
-  return <String, dynamic>{
-    'name': name,
-    'phoneNumber': phoneNumber,
-    'bloodGroup': bloodGroup,
-    'email': email,
-    'type': type,
-    'userId': userId,
-  };
-}
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'phoneNumber': phoneNumber,
+      'bloodGroup': bloodGroup,
+      'email': email,
+      'type': type,
+      'userId': userId,
+    };
+  }
 
-factory AppUser.fromMap(Map<String, dynamic> map) {
-  return AppUser(
-    name: map['name'] as String,
-    phoneNumber: map['phoneNumber'] as String,
-    bloodGroup: map['bloodGroup'] as String,
-    email: map['email'] as String,
-    type: map['type'] as String,
-    userId: map['userId'] as String,
-  );
+  factory AppUser.fromMap(Map<String, dynamic> map) {
+    return AppUser(
+      name: map['name'] as String,
+      phoneNumber: map['phoneNumber'] as String,
+      bloodGroup: map['bloodGroup'] as String,
+      email: map['email'] as String,
+      type: map['type'] as String,
+      userId: map['userId'] as String,
+    );
+  }
 }
