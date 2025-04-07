@@ -101,4 +101,7 @@ User? currentUser(CurrentUserRef ref) {
 
 
 @riverpod
-
+Stream<AppUser> loadUserInformation(LoadUserInformationRef ref, String userId) {
+  final authRepository = ref.watch(authRepositoryProvider);
+  return authRepository.loadUserInformation(userId);
+}
