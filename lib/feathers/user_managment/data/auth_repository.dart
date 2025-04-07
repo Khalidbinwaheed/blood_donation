@@ -54,8 +54,8 @@ class AuthRepository {
   Future<void> signOut() async {
     await _auth.signOut();
   }
-
 }
+
 @riverpod
 AuthRepository authRepository(AuthRepositoryRef ref) {
   return AuthRepository(FirebaseAuth.instance);
