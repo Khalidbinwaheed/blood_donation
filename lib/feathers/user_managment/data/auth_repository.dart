@@ -11,13 +11,20 @@ class AuthRepository {
 
   final FirebaseAuth _auth;
 
-  Future<void> signInWithEmailAndPassowrd({
+  /// Signs in a user with email and password
+  Future<void> signInWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
-    await _auth.signInWithEmailAndPassword(email: email, password: password);
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+    } catch (e) {
+      // Error handling
+      throw Exception('Error signing in: $e');
+    }
   }
 
+  /// Creates a new user with email, password, and additional details
   Future<void> createUserWithEmailAndPassword({
     required String email,
     required String password,
@@ -26,37 +33,59 @@ class AuthRepository {
     required String phoneNumber,
     required String type,
   }) async {
-    final cred = await _auth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    try {
+      final cred = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
-    final firebaseFireStore = FirebaseFirestore.instance;
-    final appUser = AppUser(
-      name: name,
-      phoneNumber: phoneNumber,
-      bloodGroup: bloodGroup,
-      email: email,
-      type: type,
-      userId: cred.user!.uid,
-    );
+      final firebaseFirestore = FirebaseFirestore.instance;
+      final appUser = AppUser(
+        name: name,
+        phoneNumber: phoneNumber,
+        bloodGroup: bloodGroup,
+        email: email,
+        type: type,
+        userId: cred.user!.uid,
+      );
 
-    await firebaseFireStore
-        .collection('users')
-        .doc(cred.user!.uid)
-        .set(appUser.toMap());
+      await firebaseFirestore
+          .collection('users')
+          .doc(cred.user!.uid)
+          .set(appUser.toMap());
+    } catch (e) {
+      // Error handling
+      throw Exception('Error creating user: $e');
+    }
   }
 
+  /// Gets the currently signed-in user
   User? get currentUser {
-    return _auth.currentUser;
+    try {
+      return _auth.currentUser;
+    } catch (e) {
+      // Error handling
+      throw Exception('Error fetching current user: $e');
+    }
   }
 
+  /// Signs out the current user
   Future<void> signOut() async {
-    await _auth.signOut();
+    try {
+      await _auth.signOut();
+    } catch (e) {
+      // Error handling
+      throw Exception('Error signing out: $e');
+    }
   }
 }
 
 @riverpod
 AuthRepository authRepository(AuthRepositoryRef ref) {
   return AuthRepository(FirebaseAuth.instance);
+}
+
+@riverpod
+User? currentUser(CurrentUserRef ref) {
+  return ref.watch(authRepositoryProvider).currentUser;
 }
