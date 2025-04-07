@@ -59,6 +59,14 @@ class AuthRepository {
     }
   }
 
+  Stream<AppUser> loadUserInformation(String userId) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .snapshots()
+        .map((docSnapshot) => AppUser.fromMap(docSnapshot.data()!));
+  }
+
   /// Gets the currently signed-in user
   User? get currentUser {
     try {
@@ -87,5 +95,10 @@ AuthRepository authRepository(AuthRepositoryRef ref) {
 
 @riverpod
 User? currentUser(CurrentUserRef ref) {
-  return ref.watch(authRepositoryProvider).currentUser;
+  final authRepository = ref.watch(authRepositoryProvider);
+  return authRepository.currentUser;
 }
+
+
+@riverpod
+
