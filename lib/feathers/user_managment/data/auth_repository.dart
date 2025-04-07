@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../Domain/app_user.dart';
+
 class AuthRepository {
   AuthRepository(this._auth);
 
@@ -20,10 +22,24 @@ class AuthRepository {
     required String phoneNumber,
     required String type,
   }) async {
-    final cred = _auth.createUserWithEmailAndPassword(
+    final cred = await _auth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
-    final user = cred.user;
+
+    final firebaseFireStore = FirebaseFirestore.instance;
+    final appUser = AppUser(
+      name: name,
+      phoneNumber: phoneNumber,
+      bloodGroup: bloodGroup,
+      email: email,
+      type: type,
+      userId: cred.user!.uid,
+    );
+
+    await firebaseFireStore
+        .collection('users')
+        .doc(cred.user!.uid)
+        .set(appUser.toMap());
   }
 }
