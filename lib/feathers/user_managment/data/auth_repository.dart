@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../Domain/app_user.dart';
+
+part 'auth_repository.g.dart';
 
 class AuthRepository {
   AuthRepository(this._auth);
@@ -43,4 +46,17 @@ class AuthRepository {
         .doc(cred.user!.uid)
         .set(appUser.toMap());
   }
+
+  User? get currentUser {
+    return _auth.currentUser;
+  }
+
+  Future<void> signOut() async {
+    await _auth.signOut();
+  }
+
+}
+@riverpod
+AuthRepository authRepository(AuthRepositoryRef ref) {
+  return AuthRepository(FirebaseAuth.instance);
 }
