@@ -46,12 +46,10 @@ extension AsyncValueUi on AsyncValue {
   }
 }
 
-
 String _errorMessage(Object? error) {
   if (error is FirebaseAuthException) {
     return error.message ?? error.toString();
-  } 
-  else{
+  } else {
     return error.toString();
   }
 }
