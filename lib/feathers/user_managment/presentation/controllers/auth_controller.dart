@@ -9,18 +9,21 @@ class AuthController extends AsyncNotifier<void> {
     // Initialize any necessary resources or state here
   }
 
-  Future<void> signInWithEmailAndPassword(
-      {required String email, required String password}) async {
+  Future<void> signInWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
     if (email.trim().isEmpty || password.trim().isEmpty) {
-      state = AsyncError('Ensure All fields are filled', StackTrace.current);
+      state = AsyncError('Ensure all fields are filled', StackTrace.current);
+      return; // Add a return to prevent further execution
     }
     state = const AsyncLoading();
     state = await AsyncValue.guard(
-        () => ref.read(authRepositoryProvider).signInWithEmailAndPassword(
-              email: email,
-              password: password,
-            ));
-    return;
+      () => ref.read(authRepositoryProvider).signInWithEmailAndPassword(
+            email: email,
+            password: password,
+          ),
+    );
   }
 
   Future<void> createUserWithEmailAndPassword({
@@ -35,22 +38,21 @@ class AuthController extends AsyncNotifier<void> {
         password.trim().isEmpty ||
         name.trim().isEmpty ||
         phoneNumber.trim().isEmpty ||
-        bloodGroup == null) {
-      state = AsyncError('Ensure All fields are filled', StackTrace.current);
+        bloodGroup.isEmpty) {
+      state = AsyncError('Ensure all fields are filled', StackTrace.current);
+      return; // Add a return to prevent further execution
     }
 
-    return;
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() => ref
+        .read(authRepositoryProvider)
+        .createUserWithEmailAndPassword(
+          email: email,
+          password: password,
+          name: name,
+          bloodGroup: bloodGroup,
+          phoneNumber: phoneNumber,
+          type: type,
+        ));
   }
-
-
-  state = const AsyncLoading();
-  state = await AsyncValue.guard(() => ref.read(authRepositoryProvider).currentUserWithEmailAndPassword(
-        email: email,
-        password: password,
-        name :  name,
-        bloodGroup : bloodGroup,
-        phoneNumber :  phoneNumber,
-        type : type,
-
-      ));
 }
