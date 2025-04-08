@@ -2,8 +2,12 @@ import 'dart:async';
 
 import 'package:blood_donation/feathers/user_managment/data/auth_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class AuthController extends AsyncNotifier<void> {
+part 'auth_controller.g.dart';
+
+@riverpod
+class AuthController extends _$AuthController {
   @override
   FutureOr<void> build() {
     // Initialize any necessary resources or state here
