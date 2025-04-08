@@ -31,6 +31,8 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
   Widget build(BuildContext context) {
     SizeConfig.init(context);
 
+    final state = ref.watch(authControllerProvider);
+
     ref.listen<AsyncValue>(authControllerProvider, (_, state) {
       state.showAlertDialogOnError(context);
       
@@ -89,7 +91,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                                 email: email, password: password);
                       },
                       title: 'Sign In',
-                      isLoading: false),
+                      isLoading: state.isLoading),
                   SizedBox(height: SizeConfig.getProportionateHeight(15)),
                   Text(
                     'Or',
