@@ -1,5 +1,6 @@
 import 'package:blood_donation/common_widgets/common_button.dart';
 import 'package:blood_donation/common_widgets/common_text_field.dart';
+import 'package:blood_donation/feathers/authentication/presentation/controllers/auth_controller.dart';
 import 'package:blood_donation/routes/routes.dart';
 import 'package:blood_donation/util/appstyles.dart';
 import 'package:blood_donation/util/size_config.dart';
@@ -55,7 +56,8 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   ),
                   Text(
                     'Sign in to your account',
-                    style: AppStyle.titleTextStyle.copyWith(color: Colors.black),
+                    style:
+                        AppStyle.titleTextStyle.copyWith(color: Colors.black),
                   ),
                   SizedBox(height: SizeConfig.getProportionateHeight(25)),
                   CommonTextField(
@@ -70,11 +72,23 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                     controller: _passwordController,
                   ),
                   SizedBox(height: SizeConfig.getProportionateHeight(10)),
-                  CommonButton(onTap: () {}, title: 'Sign In', isLoading: false),
+                  CommonButton(
+                      onTap: () {
+                        final email = _emailController.text.toString();
+                        final password = _passwordController.text.toString();
+
+                        ref
+                            .read(authControllerProvider.notifier)
+                            .signInWithEmailAndPassword(
+                                email: email, password: password);
+                      },
+                      title: 'Sign In',
+                      isLoading: false),
                   SizedBox(height: SizeConfig.getProportionateHeight(15)),
                   Text(
                     'Or',
-                    style: AppStyle.titleTextStyle.copyWith(color: Colors.black),
+                    style:
+                        AppStyle.titleTextStyle.copyWith(color: Colors.black),
                   ),
                   SizedBox(height: SizeConfig.getProportionateHeight(15)),
                   GestureDetector(
@@ -84,7 +98,6 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                         extra: 'Recipient',
                       );
                     },
-      
                     child: Container(
                       padding: EdgeInsets.all(10),
                       width: SizeConfig.screenWidth,
@@ -110,7 +123,6 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                     onTap: () {
                       context.goNamed(AppRoutes.register.name, extra: 'Donor');
                     },
-      
                     child: Container(
                       padding: EdgeInsets.all(10),
                       width: SizeConfig.screenWidth,
