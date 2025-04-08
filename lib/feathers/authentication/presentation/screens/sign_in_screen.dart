@@ -1,3 +1,4 @@
+import 'package:blood_donation/common_widgets/async_value_ui.dart';
 import 'package:blood_donation/common_widgets/common_button.dart';
 import 'package:blood_donation/common_widgets/common_text_field.dart';
 import 'package:blood_donation/feathers/authentication/presentation/controllers/auth_controller.dart';
@@ -29,6 +30,11 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
+
+    ref.listen<AsyncValue>(authControllerProvider, (_, state) {
+      state.showAlertDialogOnError(context);
+      
+    });
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppStyle.mainColor,
