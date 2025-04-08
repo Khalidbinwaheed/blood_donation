@@ -20,5 +20,37 @@ class AuthController extends AsyncNotifier<void> {
               email: email,
               password: password,
             ));
+    return;
   }
+
+  Future<void> createUserWithEmailAndPassword({
+    required String email,
+    required String password,
+    required String name,
+    required String phoneNumber,
+    required String bloodGroup,
+    required String type,
+  }) async {
+    if (email.trim().isEmpty ||
+        password.trim().isEmpty ||
+        name.trim().isEmpty ||
+        phoneNumber.trim().isEmpty ||
+        bloodGroup == null) {
+      state = AsyncError('Ensure All fields are filled', StackTrace.current);
+    }
+
+    return;
+  }
+
+
+  state = const AsyncLoading();
+  state = await AsyncValue.guard(() => ref.read(authRepositoryProvider).currentUserWithEmailAndPassword(
+        email: email,
+        password: password,
+        name :  name,
+        bloodGroup : bloodGroup,
+        phoneNumber :  phoneNumber,
+        type : type,
+
+      ));
 }
