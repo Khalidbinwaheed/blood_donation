@@ -25,14 +25,20 @@ class MainDrawer extends ConsumerWidget {
                   width: 2,
                 ),
               ),
-              child: Column(children: [
-                Image.asset(
-                  'assets/logo.png',
-                  height: SizeConfig.getProportionateHeight(50),
-                  width: SizeConfig.getProportionateWidth(50),
-                  fit: BoxFit.cover,
-                ),	
-              ],),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/logo.png',
+                    height: SizeConfig.getProportionateHeight(40),
+                    width: SizeConfig.getProportionateWidth(40),
+                    fit: BoxFit.cover,
+                  ),
+                  Text('Blood Donation App', style: AppStyle.titleTextStyle),
+                  Text('Your name', style: AppStyle.normalTextStyle),
+                  Text('Your email', style: AppStyle.normalTextStyle),
+                ],
+              ),
             ))
           ],
         ),
