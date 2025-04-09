@@ -71,10 +71,43 @@ class MainDrawer extends ConsumerWidget {
                             style: AppStyle.headingTextStyle
                                 .copyWith(fontSize: 17.0),
                           ),
-                          onTap: (){
+                          onTap: () {
                             context.goNamed(AppRoutes.main.name);
-                            
                           },
+                        ),
+                        ListTile(
+                          leading: const Icon(
+                            Icons.check_circle,
+                            color: Colors.black,
+                            size: 30,
+                          ),
+                          title: Text(
+                            'Donors Emailed',
+                            style: AppStyle.headingTextStyle
+                                .copyWith(fontSize: 17.0),
+                          ),
+                          onTap: () {
+                            // context.goNamed(AppRoutes.main.name);
+                          },
+                        ),
+                        ListTile(
+                          leading: const Icon(
+                            Icons.handshake,
+                            color: Colors.black,
+                            size: 30,
+                          ),
+                          title: Text(
+                            'Same Blood Group As me',
+                            style: AppStyle.headingTextStyle
+                                .copyWith(fontSize: 17.0),
+                          ),
+                          onTap: () {
+                            context.goNamed(AppRoutes.main.name);
+                          },
+                        ),
+                        const Divider(
+                          color: Colors.white,
+                          height: 2,
                         )
                       ],
                     ),
