@@ -1,3 +1,4 @@
+import 'package:blood_donation/routes/routes.dart';
 import 'package:blood_donation/util/appstyles.dart';
 import 'package:blood_donation/util/size_config.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +72,8 @@ class MainDrawer extends ConsumerWidget {
                                 .copyWith(fontSize: 17.0),
                           ),
                           onTap: (){
-                            context.goNamed(name)
+                            context.goNamed(AppRoutes.main.name);
+                            
                           },
                         )
                       ],
