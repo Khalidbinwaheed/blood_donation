@@ -3,6 +3,7 @@ import 'package:blood_donation/util/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class MainDrawer extends ConsumerWidget {
   const MainDrawer({super.key});
@@ -69,6 +70,9 @@ class MainDrawer extends ConsumerWidget {
                             style: AppStyle.headingTextStyle
                                 .copyWith(fontSize: 17.0),
                           ),
+                          onTap: (){
+                            context.goNamed(name)
+                          },
                         )
                       ],
                     ),
