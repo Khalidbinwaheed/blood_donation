@@ -108,6 +108,23 @@ class MainDrawer extends ConsumerWidget {
                         const Divider(
                           color: Colors.white,
                           height: 2,
+                        ),
+                        Text(
+                          'Blood Groups',
+                          style: AppStyle.normalTextStyle,
+                        ),
+                        ListTile(
+                          leading: Image.asset('assets/logo.png',
+                              height: 30, width: 30),
+                          ),
+                          title :  Text(
+                            'A positive',
+                            style: AppStyle.normalTextStyle,
+                          ),
+                          onTap: (){
+                            //context.goNamed(AppRoutes.main.name);
+                            
+                          },
                         )
                       ],
                     ),
