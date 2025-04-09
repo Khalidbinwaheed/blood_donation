@@ -1,3 +1,4 @@
+import 'package:blood_donation/feathers/user_managment/presentation/widgets/main_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,6 +11,7 @@ class MainScreen extends ConsumerWidget{
       appBar: AppBar(
         title: const Text('Blood Donation'),
       ),
+      drawer: const MainDrawer(),
     );
   }
 }
