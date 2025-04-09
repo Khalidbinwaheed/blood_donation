@@ -120,9 +120,9 @@ class MainDrawer extends ConsumerWidget {
                             'A positive',
                             style: AppStyle.normalTextStyle,
                           ),
-                          onTap: (){
-                            //context.goNamed(AppRoutes.main.name);
-                            
+                          onTap: () {
+                            context.goNamed(AppRoutes.bloodGroupSelected.name,
+                                extra: 'A+');
                           },
                         )
                       ],
