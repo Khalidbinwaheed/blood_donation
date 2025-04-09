@@ -39,30 +39,43 @@ class MainDrawer extends ConsumerWidget {
                   Text('Your email', style: AppStyle.normalTextStyle),
                 ],
               ),
-            )
-            ),
-            Expanded (child: Container(
-              width: double.infinity,
-              margin: EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                color: AppStyle.mainColor,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: Colors.white,
-                  style: BorderStyle.solid,
-                  width: 2,
-                )
-              ),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    
-                  ],
+            )),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                margin: EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                    color: AppStyle.mainColor,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Colors.white,
+                      style: BorderStyle.solid,
+                      width: 2,
+                    )),
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ListTile(
+                          leading: const Icon(
+                            Icons.home,
+                            color: Colors.black,
+                            size: 30,
+                          ),
+                          title: Text(
+                            'Home',
+                            style: AppStyle.headingTextStyle
+                                .copyWith(fontSize: 17.0),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),),
+            ),
           ],
         ),
       ),
