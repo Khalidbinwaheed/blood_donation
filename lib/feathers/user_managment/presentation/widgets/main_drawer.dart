@@ -116,8 +116,7 @@ class MainDrawer extends ConsumerWidget {
                         ListTile(
                           leading: Image.asset('assets/logo.png',
                               height: 30, width: 30),
-                          ),
-                          title :  Text(
+                          title: Text(
                             'A positive',
                             style: AppStyle.normalTextStyle,
                           ),
