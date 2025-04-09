@@ -133,7 +133,23 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                   ),
                   SizedBox(height: SizeConfig.getProportionateHeight(15)),
                   CommonButton(
-                    onTap: () {},
+                    onTap: () {
+                      final email = _emailController.text.toString();
+                      final password = _passwordController.text.toString();
+                      final name = _nameController.text.toString();
+                      final phoneNumber =
+                          _phoneNumberController.text.toString();
+
+                      ref
+                          .read(authControllerProvider.notifier)
+                          .createUserWithEmailAndPassword(
+                              email: email,
+                              password: password,
+                              name: name,
+                              phoneNumber: phoneNumber,
+                              bloodGroup: _selectedBloodGroup!,
+                              type: widget.type);
+                    },
                     title: 'Rigester Me Now',
                     isLoading: state.isLoading,
                   ),
