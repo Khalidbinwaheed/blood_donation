@@ -2,6 +2,7 @@ import 'dart:async'; // Import needed for StreamSubscription
 
 import 'package:blood_donation/feathers/authentication/presentation/screens/registration_screen.dart';
 import 'package:blood_donation/feathers/authentication/presentation/screens/sign_in_screen.dart';
+import 'package:blood_donation/feathers/user_managment/presentation/screens/blood_group_selected_screen.dart';
 // Assuming RegisterScreen exists or you'll add it
 // import 'package:blood_donation/feathers/authentication/presentation/screens/register_screen.dart';
 import 'package:blood_donation/feathers/user_managment/presentation/screens/main_screen.dart';
@@ -29,11 +30,6 @@ enum AppRoutes {
   bloodGroupSelected,
   emailedUsers,
   notifications,
-  // Add other routes as needed
-  // account,
-  // bloodGroupSelected,
-  // emailedUsers,
-  // notifications,
 }
 
 // --- Placeholder for RegisterScreen (if you haven't created it) ---
@@ -42,9 +38,9 @@ class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: Text('Register')),
-    body: const Center(child: Text('Register Screen Placeholder')),
-  );
+        appBar: AppBar(title: Text('Register')),
+        body: const Center(child: Text('Register Screen Placeholder')),
+      );
 }
 
 // --- Firebase Auth Provider ---
@@ -58,8 +54,8 @@ class GoRouterRefreshStream extends ChangeNotifier {
   GoRouterRefreshStream(Stream<dynamic> stream) {
     notifyListeners(); // Initial check
     _subscription = stream.asBroadcastStream().listen(
-      (dynamic _) => notifyListeners(), // Notify listeners on stream events
-    );
+          (dynamic _) => notifyListeners(), // Notify listeners on stream events
+        );
   }
 
   late final StreamSubscription<dynamic> _subscription;
@@ -158,19 +154,21 @@ GoRouter goRouter(GoRouterRef ref) {
         path: mainPath, // Use constant
         builder: (context, state) => const MainScreen(),
         // Define nested routes for '/main/...' if needed
-        // routes: [
-        //   GoRoute(
-        //     name: AppRoutes.account.name,
-        //     path: 'account', // Relative path: /main/account
-        //     builder: (context, state) => const AccountScreen(),
-        //   ),
-        // ],
+        routes: [
+          GoRoute(
+            name: AppRoutes.bloodGroupSelected.name,
+            path: 'bloodGroupSelected', // Relative path: /main/account
+            builder: (context, state) {
+              final bloodGroup = state.extra as String;
+              return BloodGroupSelectedScreen(bloodGroup);
+            },
+          ),
+        ],
       ),
     ],
     // Optional: Error handler page
-    errorBuilder:
-        (context, state) => Scaffold(
-          body: Center(child: Text('Page not found: ${state.error}')),
-        ),
+    errorBuilder: (context, state) => Scaffold(
+      body: Center(child: Text('Page not found: ${state.error}')),
+    ),
   );
 }
