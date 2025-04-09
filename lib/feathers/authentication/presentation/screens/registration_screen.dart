@@ -1,5 +1,7 @@
+import 'package:blood_donation/common_widgets/async_value_ui.dart';
 import 'package:blood_donation/common_widgets/common_button.dart';
 import 'package:blood_donation/common_widgets/common_text_field.dart';
+import 'package:blood_donation/feathers/authentication/presentation/controllers/auth_controller.dart';
 import 'package:blood_donation/routes/routes.dart';
 import 'package:blood_donation/util/appstyles.dart';
 import 'package:blood_donation/util/size_config.dart';
@@ -47,6 +49,12 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
+
+    final state = ref.watch(authControllerProvider);
+
+    ref.listen<AsyncValue>(authControllerProvider, (_, state) {
+      state.showAlertDialogOnError(context);
+    });
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppStyle.mainColor,
@@ -106,18 +114,17 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                         borderRadius: BorderRadius.circular(20.0),
                       ),
                     ),
-                    items:
-                        _bloodGroups.map((String group) {
-                          return DropdownMenuItem<String>(
-                            value: group,
-                            child: Text(
-                              group,
-                              style: AppStyle.normalTextStyle.copyWith(
-                                color: Colors.black,
-                              ),
-                            ),
-                          );
-                        }).toList(),
+                    items: _bloodGroups.map((String group) {
+                      return DropdownMenuItem<String>(
+                        value: group,
+                        child: Text(
+                          group,
+                          style: AppStyle.normalTextStyle.copyWith(
+                            color: Colors.black,
+                          ),
+                        ),
+                      );
+                    }).toList(),
                     onChanged: (String? newValue) {
                       setState(() {
                         _selectedBloodGroup = newValue;
@@ -128,7 +135,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                   CommonButton(
                     onTap: () {},
                     title: 'Rigester Me Now',
-                    isLoading: false,
+                    isLoading: state.isLoading,
                   ),
                   SizedBox(height: SizeConfig.getProportionateHeight(15)),
                   Text(
@@ -142,7 +149,6 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                     onTap: () {
                       context.goNamed(AppRoutes.signIn.name);
                     },
-
                     child: Container(
                       padding: EdgeInsets.all(10),
                       width: SizeConfig.screenWidth,
@@ -164,7 +170,6 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                     ),
                   ),
                   SizedBox(height: SizeConfig.getProportionateHeight(10)),
-
                   SizedBox(height: SizeConfig.getProportionateHeight(10)),
                 ],
               ),
