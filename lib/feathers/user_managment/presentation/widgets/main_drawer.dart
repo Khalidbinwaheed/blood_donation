@@ -221,6 +221,59 @@ class MainDrawer extends ConsumerWidget {
                                 extra: 'O-');
                           },
                         ),
+                        const Divider(
+                          color: Colors.white,
+                          height: 2,
+                        ),
+                        Text(
+                          'Actions',
+                          style: AppStyle.normalTextStyle,
+                        ),
+                        ListTile(
+                          leading: const Icon(
+                            Icons.notifications,
+                            color: Colors.black,
+                            size: 30,
+                          ),
+                          title: Text(
+                            'Notifications',
+                            style: AppStyle.headingTextStyle
+                                .copyWith(fontSize: 17.0),
+                          ),
+                          onTap: () {
+                            context.goNamed(AppRoutes.main.name);
+                          },
+                        ),
+                        ListTile(
+                          leading: const Icon(
+                            Icons.settings,
+                            color: Colors.black,
+                            size: 30,
+                          ),
+                          title: Text(
+                            'Settings',
+                            style: AppStyle.headingTextStyle
+                                .copyWith(fontSize: 17.0),
+                          ),
+                          onTap: () {
+                            context.goNamed(AppRoutes.main.name);
+                          },
+                        ),
+                        ListTile(
+                          leading: const Icon(
+                            Icons.account_circle,
+                            color: Colors.black,
+                            size: 30,
+                          ),
+                          title: Text(
+                            'My Account',
+                            style: AppStyle.headingTextStyle
+                                .copyWith(fontSize: 17.0),
+                          ),
+                          onTap: () {
+                            context.goNamed(AppRoutes.main.name);
+                          },
+                        ),
                       ],
                     ),
                   ),
