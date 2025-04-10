@@ -274,6 +274,59 @@ class MainDrawer extends ConsumerWidget {
                             context.goNamed(AppRoutes.main.name);
                           },
                         ),
+                        const Divider(
+                          color: Colors.white,
+                          height: 2,
+                        ),
+                        Text(
+                          'Communicate',
+                          style: AppStyle.normalTextStyle,
+                        ),
+                        ListTile(
+                          leading: const Icon(
+                            Icons.info,
+                            color: Colors.black,
+                            size: 30,
+                          ),
+                          title: Text(
+                            'About Us',
+                            style: AppStyle.headingTextStyle
+                                .copyWith(fontSize: 17.0),
+                          ),
+                          onTap: () {
+                            context.goNamed(AppRoutes.main.name);
+                          },
+                        ),
+                        ListTile(
+                          leading: const Icon(
+                            Icons.share,
+                            color: Colors.black,
+                            size: 30,
+                          ),
+                          title: Text(
+                            'Share',
+                            style: AppStyle.headingTextStyle
+                                .copyWith(fontSize: 17.0),
+                          ),
+                          onTap: () {
+                            context.goNamed(AppRoutes.main.name);
+                          },
+                        ),
+                        ListTile(
+                          leading: const Icon(
+                            Icons.star,
+                            color: Colors.black,
+                            size: 30,
+                          ),
+                          title: Text(
+                            'Rate Us',
+                            style: AppStyle.headingTextStyle
+                                .copyWith(fontSize: 17.0),
+                          ),
+                          onTap: () {
+                            context.goNamed(AppRoutes.main.name);
+                          },
+                        )
                       ],
                     ),
                   ),
