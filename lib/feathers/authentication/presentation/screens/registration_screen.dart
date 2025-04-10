@@ -88,7 +88,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                   ),
                   SizedBox(height: SizeConfig.getProportionateHeight(25)),
                   CommonTextField(
-                    hintText: 'Name ...',
+                    hintText: 'Enter Your Name',
                     textInputType: TextInputType.text,
                     controller: _nameController,
                   ),
