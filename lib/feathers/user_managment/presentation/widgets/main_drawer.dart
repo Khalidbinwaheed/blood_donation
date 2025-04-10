@@ -124,18 +124,20 @@ class MainDrawer extends ConsumerWidget {
                             context.goNamed(AppRoutes.bloodGroupSelected.name,
                                 extra: 'A+');
                           },
-                           ListTile(
+                        ),
+                        ListTile(
                           leading: Image.asset('assets/logo.png',
                               height: 30, width: 30),
                           title: Text(
-                            'A Negitive',
+                            'A Negative',
                             style: AppStyle.normalTextStyle,
                           ),
                           onTap: () {
                             context.goNamed(AppRoutes.bloodGroupSelected.name,
                                 extra: 'A-');
                           },
-                           ListTile(
+                        ),
+                        ListTile(
                           leading: Image.asset('assets/logo.png',
                               height: 30, width: 30),
                           title: Text(
@@ -146,19 +148,79 @@ class MainDrawer extends ConsumerWidget {
                             context.goNamed(AppRoutes.bloodGroupSelected.name,
                                 extra: 'B+');
                           },
-                           ListTile(
+                        ),
+                        ListTile(
                           leading: Image.asset('assets/logo.png',
                               height: 30, width: 30),
                           title: Text(
-                            'B Negitive',
+                            'A positive',
+                            style: AppStyle.normalTextStyle,
+                          ),
+                          onTap: () {
+                            context.goNamed(AppRoutes.bloodGroupSelected.name,
+                                extra: 'A+');
+                          },
+                        ),
+                        ListTile(
+                          leading: Image.asset('assets/logo.png',
+                              height: 30, width: 30),
+                          title: Text(
+                            'B Negative',
                             style: AppStyle.normalTextStyle,
                           ),
                           onTap: () {
                             context.goNamed(AppRoutes.bloodGroupSelected.name,
                                 extra: 'B-');
                           },
-                          
-                        )
+                        ),
+                        ListTile(
+                          leading: Image.asset('assets/logo.png',
+                              height: 30, width: 30),
+                          title: Text(
+                            'AB positive',
+                            style: AppStyle.normalTextStyle,
+                          ),
+                          onTap: () {
+                            context.goNamed(AppRoutes.bloodGroupSelected.name,
+                                extra: 'AB+');
+                          },
+                        ),
+                        ListTile(
+                          leading: Image.asset('assets/logo.png',
+                              height: 30, width: 30),
+                          title: Text(
+                            'AB Negative',
+                            style: AppStyle.normalTextStyle,
+                          ),
+                          onTap: () {
+                            context.goNamed(AppRoutes.bloodGroupSelected.name,
+                                extra: 'AB-');
+                          },
+                        ),
+                        ListTile(
+                          leading: Image.asset('assets/logo.png',
+                              height: 30, width: 30),
+                          title: Text(
+                            'O positive',
+                            style: AppStyle.normalTextStyle,
+                          ),
+                          onTap: () {
+                            context.goNamed(AppRoutes.bloodGroupSelected.name,
+                                extra: 'O+');
+                          },
+                        ),
+                        ListTile(
+                          leading: Image.asset('assets/logo.png',
+                              height: 30, width: 30),
+                          title: Text(
+                            'O Nagative',
+                            style: AppStyle.normalTextStyle,
+                          ),
+                          onTap: () {
+                            context.goNamed(AppRoutes.bloodGroupSelected.name,
+                                extra: 'O-');
+                          },
+                        ),
                       ],
                     ),
                   ),
