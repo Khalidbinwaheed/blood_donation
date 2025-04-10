@@ -92,10 +92,22 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                     textInputType: TextInputType.text,
                     controller: _nameController,
                   ),
+                  SizedBox(height: SizeConfig.getProportionateHeight(25)),
+                  CommonTextField(
+                    hintText: 'Enter Ur Email',
+                    textInputType: TextInputType.text,
+                    controller: _emailController,
+                  ),
+                  SizedBox(height: SizeConfig.getProportionateHeight(25)),
+                  CommonTextField(
+                    hintText: 'Password',
+                    textInputType: TextInputType.text,
+                    controller: _passwordController,
+                  ),
                   SizedBox(height: SizeConfig.getProportionateHeight(10)),
                   CommonTextField(
                     hintText: 'Enter Phone Number',
-                    textInputType: TextInputType.number,
+                    textInputType: TextInputType.text,
                     controller: _phoneNumberController,
                   ),
                   SizedBox(height: SizeConfig.getProportionateHeight(10)),
