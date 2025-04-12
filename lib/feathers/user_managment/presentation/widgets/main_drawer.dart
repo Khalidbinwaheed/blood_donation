@@ -1,3 +1,5 @@
+import 'package:blood_donation/common_widgets/async_value_ui.dart';
+import 'package:blood_donation/feathers/user_managment/data/auth_repository.dart';
 import 'package:blood_donation/routes/routes.dart';
 import 'package:blood_donation/util/appstyles.dart';
 import 'package:blood_donation/util/size_config.dart';
@@ -11,6 +13,12 @@ class MainDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final userId = ref.watch(currentUserProvider)!.uid;
+
+    final userDataAsync = ref.watch(loadUserInformationProvider(userId));
+    ref.listen<AsyncValue>(loadUserInformationProvider(userId), (_, state) {
+      state.showAlertDialogOnError(context);
+    });
     return SafeArea(
       child: Drawer(
         child: Column(
