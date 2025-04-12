@@ -37,14 +37,16 @@ class AccountScreen extends ConsumerWidget {
                 child: Column(
                   children: [
                     Text(
-                      'Type : User Type',
+                      'Type : ${userData.type}',
                       style: AppStyle.titleTextStyle,
                     ),
                     SizedBox(
                       height: SizeConfig.getProportionateHeight(20),
                     ),
                     Image.asset(
-                      'assets/logo.png',
+                      userData.type == userData.type
+                          ? 'assets/logo.png' //donor image
+                          : 'assets/logo.png', //recipient image
                       height: SizeConfig.getProportionateHeight(100),
                       width: SizeConfig.getProportionateWidth(100),
                       fit: BoxFit.cover,
