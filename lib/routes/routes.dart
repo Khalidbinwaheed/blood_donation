@@ -1,5 +1,6 @@
 import 'dart:async'; // Import needed for StreamSubscription
 
+import 'package:blood_donation/feathers/authentication/presentation/screens/lib/feathers/user_managment/presentation/screens/account_screen.dart';
 import 'package:blood_donation/feathers/authentication/presentation/screens/registration_screen.dart';
 import 'package:blood_donation/feathers/authentication/presentation/screens/sign_in_screen.dart';
 import 'package:blood_donation/feathers/user_managment/presentation/screens/blood_group_selected_screen.dart';
@@ -164,9 +165,9 @@ GoRouter goRouter(GoRouterRef ref) {
             },
           ),
            GoRoute(
-        name: AppRoutes.signIn.name, // Use enum for name
-        path: signInPath, // Use constant and CORRECTED path
-        builder: (context, state) => const SignInScreen(),
+        name: AppRoutes.account.name, // Use enum for name
+        path: accountpath, // Use constant and CORRECTED path
+        builder: (context, state) => const AccountScreen(),
       ),
         ],
       ),
