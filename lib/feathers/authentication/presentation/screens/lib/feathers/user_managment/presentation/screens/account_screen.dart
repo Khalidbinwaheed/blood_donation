@@ -11,20 +11,11 @@ class AccountScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text('My profile information' , style: AppStyle.headingTextStyle,),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Account Screen'),
-            ElevatedButton(
-              onPressed: () {
-                // Add your logout logic here
-              },
-              child: const Text('Logout'),
-            ),
-          ],
-        ),
-      ),
+      body: Column(
+        children: [
+          Text( 'Type : User Type', style: AppStyle.normalTextStyle,)
+        ],
+      )
     );
   }
 }
