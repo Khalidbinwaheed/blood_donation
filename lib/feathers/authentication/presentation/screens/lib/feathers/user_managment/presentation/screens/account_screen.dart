@@ -1,3 +1,4 @@
+import 'package:blood_donation/common_widgets/common_button.dart';
 import 'package:blood_donation/util/appstyles.dart';
 import 'package:blood_donation/util/size_config.dart';
 import 'package:flutter/material.dart';
@@ -35,16 +36,24 @@ class AccountScreen extends ConsumerWidget {
           ),
           Text(
             'Name : User Name',
-            style: AppStyle.normalTextStyle,
+            style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
           ),
-           Text(
+          Text(
             'BloodGroup : Your Blood Group here ',
-            style: AppStyle.normalTextStyle,
+            style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
           ),
-           Text(
-            'Name : User Name',
-            style: AppStyle.normalTextStyle,
+          Text(
+            'Email : Your Email here',
+            style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
           ),
+          Text(
+            'Phone : Your Phone here',
+            style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
+          ),
+          SizedBox(
+            height: SizeConfig.getProportionateHeight(20),
+          ),
+          CommonButton(onTap: () {}, title: 'SignOut', isLoading: false)
         ],
       ),
     );
