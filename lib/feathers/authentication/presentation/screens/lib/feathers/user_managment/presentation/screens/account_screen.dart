@@ -30,6 +30,21 @@ class AccountScreen extends ConsumerWidget {
             width: SizeConfig.getProportionateWidth(100),
             fit: BoxFit.cover,
           ),
+          SizedBox(
+            height: SizeConfig.getProportionateHeight(20),
+          ),
+          Text(
+            'Name : User Name',
+            style: AppStyle.normalTextStyle,
+          ),
+           Text(
+            'BloodGroup : Your Blood Group here ',
+            style: AppStyle.normalTextStyle,
+          ),
+           Text(
+            'Name : User Name',
+            style: AppStyle.normalTextStyle,
+          ),
         ],
       ),
     );
