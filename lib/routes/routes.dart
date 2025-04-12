@@ -163,6 +163,11 @@ GoRouter goRouter(GoRouterRef ref) {
               return BloodGroupSelectedScreen(bloodGroup);
             },
           ),
+           GoRoute(
+        name: AppRoutes.signIn.name, // Use enum for name
+        path: signInPath, // Use constant and CORRECTED path
+        builder: (context, state) => const SignInScreen(),
+      ),
         ],
       ),
     ],
