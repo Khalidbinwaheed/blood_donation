@@ -9,6 +9,7 @@ class AccountScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    SizeConfig.init(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -16,45 +17,50 @@ class AccountScreen extends ConsumerWidget {
           style: AppStyle.headingTextStyle,
         ),
       ),
-      body: Column(
-        children: [
-          Text(
-            'Type : User Type',
-            style: AppStyle.titleTextStyle,
-          ),
-          SizedBox(
-            height: SizeConfig.getProportionateHeight(20),
-          ),
-          Image.asset(
-            'assets/logo.png',
-            height: SizeConfig.getProportionateHeight(100),
-            width: SizeConfig.getProportionateWidth(100),
-            fit: BoxFit.cover,
-          ),
-          SizedBox(
-            height: SizeConfig.getProportionateHeight(20),
-          ),
-          Text(
-            'Name : User Name',
-            style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
-          ),
-          Text(
-            'BloodGroup : Your Blood Group here ',
-            style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
-          ),
-          Text(
-            'Email : Your Email here',
-            style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
-          ),
-          Text(
-            'Phone : Your Phone here',
-            style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
-          ),
-          SizedBox(
-            height: SizeConfig.getProportionateHeight(20),
-          ),
-          CommonButton(onTap: () {}, title: 'SignOut', isLoading: false)
-        ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+        ),
+        child: Column(
+          children: [
+            Text(
+              'Type : User Type',
+              style: AppStyle.titleTextStyle,
+            ),
+            SizedBox(
+              height: SizeConfig.getProportionateHeight(20),
+            ),
+            Image.asset(
+              'assets/logo.png',
+              height: SizeConfig.getProportionateHeight(100),
+              width: SizeConfig.getProportionateWidth(100),
+              fit: BoxFit.cover,
+            ),
+            SizedBox(
+              height: SizeConfig.getProportionateHeight(20),
+            ),
+            Text(
+              'Name : User Name',
+              style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
+            ),
+            Text(
+              'BloodGroup : Your Blood Group here ',
+              style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
+            ),
+            Text(
+              'Email : Your Email here',
+              style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
+            ),
+            Text(
+              'Phone : Your Phone here',
+              style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
+            ),
+            SizedBox(
+              height: SizeConfig.getProportionateHeight(20),
+            ),
+            CommonButton(onTap: () {}, title: 'SignOut', isLoading: false)
+          ],
+        ),
       ),
     );
   }
