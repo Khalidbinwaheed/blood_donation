@@ -1,3 +1,4 @@
+import 'package:blood_donation/util/appstyles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,7 +9,7 @@ class AccountScreen extends ConsumerWidget {
   Widget build (BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My profile information'),
+        title: Text('My profile information' , style: AppStyle.headingTextStyle,),
       ),
       body: Center(
         child: Column(
