@@ -1,4 +1,8 @@
+import 'package:blood_donation/common_widgets/async_value_ui.dart';
+import 'package:blood_donation/common_widgets/async_value_widget.dart';
 import 'package:blood_donation/common_widgets/common_button.dart';
+import 'package:blood_donation/feathers/user_managment/Domain/app_user.dart';
+import 'package:blood_donation/feathers/user_managment/data/auth_repository.dart';
 import 'package:blood_donation/util/appstyles.dart';
 import 'package:blood_donation/util/size_config.dart';
 import 'package:flutter/material.dart';
@@ -10,58 +14,72 @@ class AccountScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     SizeConfig.init(context);
+    final userId = ref.watch(currentUserProvider)!.uid;
+
+    final userDataAsync = ref.watch(loadUserInformationProvider(userId));
+    ref.listen<AsyncValue>(loadUserInformationProvider(userId), (_, state) {
+      state.showAlertDialogOnError(context);
+    });
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'My profile information',
-          style: AppStyle.headingTextStyle,
+        appBar: AppBar(
+          title: Text(
+            'My profile information',
+            style: AppStyle.headingTextStyle,
+          ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-        ),
-        child: Column(
-          children: [
-            Text(
-              'Type : User Type',
-              style: AppStyle.titleTextStyle,
-            ),
-            SizedBox(
-              height: SizeConfig.getProportionateHeight(20),
-            ),
-            Image.asset(
-              'assets/logo.png',
-              height: SizeConfig.getProportionateHeight(100),
-              width: SizeConfig.getProportionateWidth(100),
-              fit: BoxFit.cover,
-            ),
-            SizedBox(
-              height: SizeConfig.getProportionateHeight(20),
-            ),
-            Text(
-              'Name : User Name',
-              style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
-            ),
-            Text(
-              'BloodGroup : Your Blood Group here ',
-              style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
-            ),
-            Text(
-              'Email : Your Email here',
-              style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
-            ),
-            Text(
-              'Phone : Your Phone here',
-              style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
-            ),
-            SizedBox(
-              height: SizeConfig.getProportionateHeight(20),
-            ),
-            CommonButton(onTap: () {}, title: 'SignOut', isLoading: false)
-          ],
-        ),
-      ),
-    );
+        body: AsyncValueWidget<AppUser>(
+            value: userDataAsync,
+            data: (userData) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      'Type : User Type',
+                      style: AppStyle.titleTextStyle,
+                    ),
+                    SizedBox(
+                      height: SizeConfig.getProportionateHeight(20),
+                    ),
+                    Image.asset(
+                      'assets/logo.png',
+                      height: SizeConfig.getProportionateHeight(100),
+                      width: SizeConfig.getProportionateWidth(100),
+                      fit: BoxFit.cover,
+                    ),
+                    SizedBox(
+                      height: SizeConfig.getProportionateHeight(20),
+                    ),
+                    Text(
+                      'Name : User Name',
+                      style: AppStyle.normalTextStyle
+                          .copyWith(color: Colors.black),
+                    ),
+                    Text(
+                      'BloodGroup : Your Blood Group here ',
+                      style: AppStyle.normalTextStyle
+                          .copyWith(color: Colors.black),
+                    ),
+                    Text(
+                      'Email : Your Email here',
+                      style: AppStyle.normalTextStyle
+                          .copyWith(color: Colors.black),
+                    ),
+                    Text(
+                      'Phone : Your Phone here',
+                      style: AppStyle.normalTextStyle
+                          .copyWith(color: Colors.black),
+                    ),
+                    SizedBox(
+                      height: SizeConfig.getProportionateHeight(20),
+                    ),
+                    CommonButton(
+                        onTap: () {}, title: 'SignOut', isLoading: false)
+                  ],
+                ),
+              );
+            }));
   }
 }
