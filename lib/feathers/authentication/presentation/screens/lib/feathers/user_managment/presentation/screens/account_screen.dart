@@ -20,6 +20,26 @@ class AccountScreen extends ConsumerWidget {
     ref.listen<AsyncValue>(loadUserInformationProvider(userId), (_, state) {
       state.showAlertDialogOnError(context);
     });
+
+    void logOut() {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+              title: const Text('Are you sure?'),
+              icon: const Icon(
+                Icons.logout,
+                size: 50,
+                color: AppStyle.mainColor,
+              ),
+              actions: [
+                ElevatedButton(onPressed: (){
+                  Navigator.of(context).pop();
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: AppStyle.mainColor), child: Text('Cancel', style: AppStyle.normalTextStyle,)),
+              ],
+              ));
+    }
+
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -78,7 +98,11 @@ class AccountScreen extends ConsumerWidget {
                       height: SizeConfig.getProportionateHeight(20),
                     ),
                     CommonButton(
-                        onTap: () {}, title: 'SignOut', isLoading: false)
+                        onTap: () {
+                          logOut();
+                        },
+                        title: 'SignOut',
+                        isLoading: false)
                   ],
                 ),
               );
