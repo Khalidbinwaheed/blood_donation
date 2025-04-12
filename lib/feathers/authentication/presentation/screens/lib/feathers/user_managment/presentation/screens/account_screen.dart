@@ -13,7 +13,7 @@ class AccountScreen extends ConsumerWidget {
       ),
       body: Column(
         children: [
-          Text( 'Type : User Type', style: AppStyle.normalTextStyle,)
+          Text( 'Type : User Type', style: AppStyle.titleTextStyle,)
         ],
       )
     );
