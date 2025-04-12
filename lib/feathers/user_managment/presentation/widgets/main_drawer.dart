@@ -294,7 +294,7 @@ class MainDrawer extends ConsumerWidget {
                                       .copyWith(fontSize: 17.0),
                                 ),
                                 onTap: () {
-                                  context.goNamed(AppRoutes.main.name);
+                                  context.goNamed(AppRoutes.account.name);
                                 },
                               ),
                               const Divider(
