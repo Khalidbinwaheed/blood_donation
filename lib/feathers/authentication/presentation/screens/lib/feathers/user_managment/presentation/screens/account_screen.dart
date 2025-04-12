@@ -55,22 +55,22 @@ class AccountScreen extends ConsumerWidget {
                       height: SizeConfig.getProportionateHeight(20),
                     ),
                     Text(
-                      'Name : User Name',
+                      'Name : ${userData.name}',
                       style: AppStyle.normalTextStyle
                           .copyWith(color: Colors.black),
                     ),
                     Text(
-                      'BloodGroup : Your Blood Group here ',
+                      'BloodGroup : $userData.bloodGroup',
                       style: AppStyle.normalTextStyle
                           .copyWith(color: Colors.black),
                     ),
                     Text(
-                      'Email : Your Email here',
+                      'Email : ${userData.email}',
                       style: AppStyle.normalTextStyle
                           .copyWith(color: Colors.black),
                     ),
                     Text(
-                      'Phone : Your Phone here',
+                      'Phone : $userData.phone',
                       style: AppStyle.normalTextStyle
                           .copyWith(color: Colors.black),
                     ),
