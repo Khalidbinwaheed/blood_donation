@@ -3,6 +3,7 @@ import 'package:blood_donation/common_widgets/async_value_widget.dart';
 import 'package:blood_donation/common_widgets/common_button.dart';
 import 'package:blood_donation/feathers/user_managment/Domain/app_user.dart';
 import 'package:blood_donation/feathers/user_managment/data/auth_repository.dart';
+import 'package:blood_donation/routes/routes.dart';
 import 'package:blood_donation/util/appstyles.dart';
 import 'package:blood_donation/util/size_config.dart';
 import 'package:flutter/material.dart';
@@ -25,18 +26,36 @@ class AccountScreen extends ConsumerWidget {
       showDialog(
           context: context,
           builder: (context) => AlertDialog(
-              title: const Text('Are you sure?'),
-              icon: const Icon(
-                Icons.logout,
-                size: 50,
-                color: AppStyle.mainColor,
-              ),
-              actions: [
-                ElevatedButton(onPressed: (){
-                  Navigator.of(context).pop();
-                },
-                style: ElevatedButton.styleFrom(backgroundColor: AppStyle.mainColor), child: Text('Cancel', style: AppStyle.normalTextStyle,)),
-              ],
+                title: const Text('Are you sure?'),
+                icon: const Icon(
+                  Icons.logout,
+                  size: 50,
+                  color: AppStyle.mainColor,
+                ),
+                actions: [
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: AppStyle.mainColor),
+                      child: Text(
+                        'Cancel',
+                        style: AppStyle.normalTextStyle,
+                      )),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        ref.read(authRepositoryProvider).signOut();
+                        ref.read(goRouterProvider).refresh();
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: AppStyle.mainColor),
+                      child: Text(
+                        'Log Out',
+                        style: AppStyle.normalTextStyle,
+                      ))
+                ],
               ));
     }
 
