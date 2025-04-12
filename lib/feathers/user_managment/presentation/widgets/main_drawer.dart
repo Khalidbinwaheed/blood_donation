@@ -1,4 +1,6 @@
 import 'package:blood_donation/common_widgets/async_value_ui.dart';
+import 'package:blood_donation/common_widgets/async_value_widget.dart';
+import 'package:blood_donation/feathers/user_managment/Domain/app_user.dart';
 import 'package:blood_donation/feathers/user_managment/data/auth_repository.dart';
 import 'package:blood_donation/routes/routes.dart';
 import 'package:blood_donation/util/appstyles.dart';
@@ -19,331 +21,345 @@ class MainDrawer extends ConsumerWidget {
     ref.listen<AsyncValue>(loadUserInformationProvider(userId), (_, state) {
       state.showAlertDialogOnError(context);
     });
-    return SafeArea(
-      child: Drawer(
-        child: Column(
-          children: [
-            DrawerHeader(
-                child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: AppStyle.mainColor,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: Colors.white,
-                  style: BorderStyle.solid,
-                  width: 2,
-                ),
-              ),
+    return AsyncValueWidget<AppUser>(
+        value: userDataAsync,
+        data: (userData) {
+          return SafeArea(
+            child: Drawer(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    'assets/logo.png',
-                    height: SizeConfig.getProportionateHeight(40),
-                    width: SizeConfig.getProportionateWidth(40),
-                    fit: BoxFit.cover,
-                  ),
-                  Text('Blood Donation App', style: AppStyle.titleTextStyle),
-                  Text('Your name', style: AppStyle.normalTextStyle),
-                  Text('Your email', style: AppStyle.normalTextStyle),
-                ],
-              ),
-            )),
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                margin: EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                    color: AppStyle.mainColor,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: Colors.white,
-                      style: BorderStyle.solid,
-                      width: 2,
-                    )),
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                  DrawerHeader(
+                      child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: AppStyle.mainColor,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: Colors.white,
+                        style: BorderStyle.solid,
+                        width: 2,
+                      ),
+                    ),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ListTile(
-                          leading: const Icon(
-                            Icons.home,
-                            color: Colors.black,
-                            size: 30,
-                          ),
-                          title: Text(
-                            'Home',
-                            style: AppStyle.headingTextStyle
-                                .copyWith(fontSize: 17.0),
-                          ),
-                          onTap: () {
-                            context.goNamed(AppRoutes.main.name);
-                          },
+                        Image.asset(
+                          'assets/logo.png',
+                          height: SizeConfig.getProportionateHeight(40),
+                          width: SizeConfig.getProportionateWidth(40),
+                          fit: BoxFit.cover,
                         ),
-                        ListTile(
-                          leading: const Icon(
-                            Icons.check_circle,
-                            color: Colors.black,
-                            size: 30,
-                          ),
-                          title: Text(
-                            'Donors Emailed',
-                            style: AppStyle.headingTextStyle
-                                .copyWith(fontSize: 17.0),
-                          ),
-                          onTap: () {
-                            // context.goNamed(AppRoutes.main.name);
-                          },
-                        ),
-                        ListTile(
-                          leading: const Icon(
-                            Icons.handshake,
-                            color: Colors.black,
-                            size: 30,
-                          ),
-                          title: Text(
-                            'Same Blood Group As me',
-                            style: AppStyle.headingTextStyle
-                                .copyWith(fontSize: 17.0),
-                          ),
-                          onTap: () {
-                            context.goNamed(AppRoutes.main.name);
-                          },
-                        ),
-                        const Divider(
-                          color: Colors.white,
-                          height: 2,
-                        ),
-                        Text(
-                          'Blood Groups',
-                          style: AppStyle.normalTextStyle,
-                        ),
-                        ListTile(
-                          leading: Image.asset('assets/logo.png',
-                              height: 30, width: 30),
-                          title: Text(
-                            'A positive',
-                            style: AppStyle.normalTextStyle,
-                          ),
-                          onTap: () {
-                            context.goNamed(AppRoutes.bloodGroupSelected.name,
-                                extra: 'A+');
-                          },
-                        ),
-                        ListTile(
-                          leading: Image.asset('assets/logo.png',
-                              height: 30, width: 30),
-                          title: Text(
-                            'A Negative',
-                            style: AppStyle.normalTextStyle,
-                          ),
-                          onTap: () {
-                            context.goNamed(AppRoutes.bloodGroupSelected.name,
-                                extra: 'A-');
-                          },
-                        ),
-                        ListTile(
-                          leading: Image.asset('assets/logo.png',
-                              height: 30, width: 30),
-                          title: Text(
-                            'B positive',
-                            style: AppStyle.normalTextStyle,
-                          ),
-                          onTap: () {
-                            context.goNamed(AppRoutes.bloodGroupSelected.name,
-                                extra: 'B+');
-                          },
-                        ),
-                        ListTile(
-                          leading: Image.asset('assets/logo.png',
-                              height: 30, width: 30),
-                          title: Text(
-                            'A positive',
-                            style: AppStyle.normalTextStyle,
-                          ),
-                          onTap: () {
-                            context.goNamed(AppRoutes.bloodGroupSelected.name,
-                                extra: 'A+');
-                          },
-                        ),
-                        ListTile(
-                          leading: Image.asset('assets/logo.png',
-                              height: 30, width: 30),
-                          title: Text(
-                            'B Negative',
-                            style: AppStyle.normalTextStyle,
-                          ),
-                          onTap: () {
-                            context.goNamed(AppRoutes.bloodGroupSelected.name,
-                                extra: 'B-');
-                          },
-                        ),
-                        ListTile(
-                          leading: Image.asset('assets/logo.png',
-                              height: 30, width: 30),
-                          title: Text(
-                            'AB positive',
-                            style: AppStyle.normalTextStyle,
-                          ),
-                          onTap: () {
-                            context.goNamed(AppRoutes.bloodGroupSelected.name,
-                                extra: 'AB+');
-                          },
-                        ),
-                        ListTile(
-                          leading: Image.asset('assets/logo.png',
-                              height: 30, width: 30),
-                          title: Text(
-                            'AB Negative',
-                            style: AppStyle.normalTextStyle,
-                          ),
-                          onTap: () {
-                            context.goNamed(AppRoutes.bloodGroupSelected.name,
-                                extra: 'AB-');
-                          },
-                        ),
-                        ListTile(
-                          leading: Image.asset('assets/logo.png',
-                              height: 30, width: 30),
-                          title: Text(
-                            'O positive',
-                            style: AppStyle.normalTextStyle,
-                          ),
-                          onTap: () {
-                            context.goNamed(AppRoutes.bloodGroupSelected.name,
-                                extra: 'O+');
-                          },
-                        ),
-                        ListTile(
-                          leading: Image.asset('assets/logo.png',
-                              height: 30, width: 30),
-                          title: Text(
-                            'O Nagative',
-                            style: AppStyle.normalTextStyle,
-                          ),
-                          onTap: () {
-                            context.goNamed(AppRoutes.bloodGroupSelected.name,
-                                extra: 'O-');
-                          },
-                        ),
-                        const Divider(
-                          color: Colors.white,
-                          height: 2,
-                        ),
-                        Text(
-                          'Actions',
-                          style: AppStyle.normalTextStyle,
-                        ),
-                        ListTile(
-                          leading: const Icon(
-                            Icons.notifications,
-                            color: Colors.black,
-                            size: 30,
-                          ),
-                          title: Text(
-                            'Notifications',
-                            style: AppStyle.headingTextStyle
-                                .copyWith(fontSize: 17.0),
-                          ),
-                          onTap: () {
-                            context.goNamed(AppRoutes.main.name);
-                          },
-                        ),
-                        ListTile(
-                          leading: const Icon(
-                            Icons.settings,
-                            color: Colors.black,
-                            size: 30,
-                          ),
-                          title: Text(
-                            'Settings',
-                            style: AppStyle.headingTextStyle
-                                .copyWith(fontSize: 17.0),
-                          ),
-                          onTap: () {
-                            context.goNamed(AppRoutes.main.name);
-                          },
-                        ),
-                        ListTile(
-                          leading: const Icon(
-                            Icons.account_circle,
-                            color: Colors.black,
-                            size: 30,
-                          ),
-                          title: Text(
-                            'My Account',
-                            style: AppStyle.headingTextStyle
-                                .copyWith(fontSize: 17.0),
-                          ),
-                          onTap: () {
-                            context.goNamed(AppRoutes.main.name);
-                          },
-                        ),
-                        const Divider(
-                          color: Colors.white,
-                          height: 2,
-                        ),
-                        Text(
-                          'Communicate',
-                          style: AppStyle.normalTextStyle,
-                        ),
-                        ListTile(
-                          leading: const Icon(
-                            Icons.info,
-                            color: Colors.black,
-                            size: 30,
-                          ),
-                          title: Text(
-                            'About Us',
-                            style: AppStyle.headingTextStyle
-                                .copyWith(fontSize: 17.0),
-                          ),
-                          onTap: () {
-                            context.goNamed(AppRoutes.main.name);
-                          },
-                        ),
-                        ListTile(
-                          leading: const Icon(
-                            Icons.share,
-                            color: Colors.black,
-                            size: 30,
-                          ),
-                          title: Text(
-                            'Share',
-                            style: AppStyle.headingTextStyle
-                                .copyWith(fontSize: 17.0),
-                          ),
-                          onTap: () {
-                            context.goNamed(AppRoutes.main.name);
-                          },
-                        ),
-                        ListTile(
-                          leading: const Icon(
-                            Icons.star,
-                            color: Colors.black,
-                            size: 30,
-                          ),
-                          title: Text(
-                            'Rate Us',
-                            style: AppStyle.headingTextStyle
-                                .copyWith(fontSize: 17.0),
-                          ),
-                          onTap: () {
-                            context.goNamed(AppRoutes.main.name);
-                          },
-                        )
+                        Text('Blood Donation App',
+                            style: AppStyle.titleTextStyle),
+                        Text(userData.name, style: AppStyle.normalTextStyle),
+                        Text(userData.email, style: AppStyle.normalTextStyle),
                       ],
                     ),
+                  )),
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      margin: EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                          color: AppStyle.mainColor,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Colors.white,
+                            style: BorderStyle.solid,
+                            width: 2,
+                          )),
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ListTile(
+                                leading: const Icon(
+                                  Icons.home,
+                                  color: Colors.black,
+                                  size: 30,
+                                ),
+                                title: Text(
+                                  'Home',
+                                  style: AppStyle.headingTextStyle
+                                      .copyWith(fontSize: 17.0),
+                                ),
+                                onTap: () {
+                                  context.goNamed(AppRoutes.main.name);
+                                },
+                              ),
+                              ListTile(
+                                leading: const Icon(
+                                  Icons.check_circle,
+                                  color: Colors.black,
+                                  size: 30,
+                                ),
+                                title: Text(
+                                  'Donors Emailed',
+                                  style: AppStyle.headingTextStyle
+                                      .copyWith(fontSize: 17.0),
+                                ),
+                                onTap: () {
+                                  // context.goNamed(AppRoutes.main.name);
+                                },
+                              ),
+                              ListTile(
+                                leading: const Icon(
+                                  Icons.handshake,
+                                  color: Colors.black,
+                                  size: 30,
+                                ),
+                                title: Text(
+                                  'Same Blood Group As me',
+                                  style: AppStyle.headingTextStyle
+                                      .copyWith(fontSize: 17.0),
+                                ),
+                                onTap: () {
+                                  context.goNamed(AppRoutes.main.name);
+                                },
+                              ),
+                              const Divider(
+                                color: Colors.white,
+                                height: 2,
+                              ),
+                              Text(
+                                'Blood Groups',
+                                style: AppStyle.normalTextStyle,
+                              ),
+                              ListTile(
+                                leading: Image.asset('assets/logo.png',
+                                    height: 30, width: 30),
+                                title: Text(
+                                  'A positive',
+                                  style: AppStyle.normalTextStyle,
+                                ),
+                                onTap: () {
+                                  context.goNamed(
+                                      AppRoutes.bloodGroupSelected.name,
+                                      extra: 'A+');
+                                },
+                              ),
+                              ListTile(
+                                leading: Image.asset('assets/logo.png',
+                                    height: 30, width: 30),
+                                title: Text(
+                                  'A Negative',
+                                  style: AppStyle.normalTextStyle,
+                                ),
+                                onTap: () {
+                                  context.goNamed(
+                                      AppRoutes.bloodGroupSelected.name,
+                                      extra: 'A-');
+                                },
+                              ),
+                              ListTile(
+                                leading: Image.asset('assets/logo.png',
+                                    height: 30, width: 30),
+                                title: Text(
+                                  'B positive',
+                                  style: AppStyle.normalTextStyle,
+                                ),
+                                onTap: () {
+                                  context.goNamed(
+                                      AppRoutes.bloodGroupSelected.name,
+                                      extra: 'B+');
+                                },
+                              ),
+                              ListTile(
+                                leading: Image.asset('assets/logo.png',
+                                    height: 30, width: 30),
+                                title: Text(
+                                  'A positive',
+                                  style: AppStyle.normalTextStyle,
+                                ),
+                                onTap: () {
+                                  context.goNamed(
+                                      AppRoutes.bloodGroupSelected.name,
+                                      extra: 'A+');
+                                },
+                              ),
+                              ListTile(
+                                leading: Image.asset('assets/logo.png',
+                                    height: 30, width: 30),
+                                title: Text(
+                                  'B Negative',
+                                  style: AppStyle.normalTextStyle,
+                                ),
+                                onTap: () {
+                                  context.goNamed(
+                                      AppRoutes.bloodGroupSelected.name,
+                                      extra: 'B-');
+                                },
+                              ),
+                              ListTile(
+                                leading: Image.asset('assets/logo.png',
+                                    height: 30, width: 30),
+                                title: Text(
+                                  'AB positive',
+                                  style: AppStyle.normalTextStyle,
+                                ),
+                                onTap: () {
+                                  context.goNamed(
+                                      AppRoutes.bloodGroupSelected.name,
+                                      extra: 'AB+');
+                                },
+                              ),
+                              ListTile(
+                                leading: Image.asset('assets/logo.png',
+                                    height: 30, width: 30),
+                                title: Text(
+                                  'AB Negative',
+                                  style: AppStyle.normalTextStyle,
+                                ),
+                                onTap: () {
+                                  context.goNamed(
+                                      AppRoutes.bloodGroupSelected.name,
+                                      extra: 'AB-');
+                                },
+                              ),
+                              ListTile(
+                                leading: Image.asset('assets/logo.png',
+                                    height: 30, width: 30),
+                                title: Text(
+                                  'O positive',
+                                  style: AppStyle.normalTextStyle,
+                                ),
+                                onTap: () {
+                                  context.goNamed(
+                                      AppRoutes.bloodGroupSelected.name,
+                                      extra: 'O+');
+                                },
+                              ),
+                              ListTile(
+                                leading: Image.asset('assets/logo.png',
+                                    height: 30, width: 30),
+                                title: Text(
+                                  'O Nagative',
+                                  style: AppStyle.normalTextStyle,
+                                ),
+                                onTap: () {
+                                  context.goNamed(
+                                      AppRoutes.bloodGroupSelected.name,
+                                      extra: 'O-');
+                                },
+                              ),
+                              const Divider(
+                                color: Colors.white,
+                                height: 2,
+                              ),
+                              Text(
+                                'Actions',
+                                style: AppStyle.normalTextStyle,
+                              ),
+                              ListTile(
+                                leading: const Icon(
+                                  Icons.notifications,
+                                  color: Colors.black,
+                                  size: 30,
+                                ),
+                                title: Text(
+                                  'Notifications',
+                                  style: AppStyle.headingTextStyle
+                                      .copyWith(fontSize: 17.0),
+                                ),
+                                onTap: () {
+                                  context.goNamed(AppRoutes.main.name);
+                                },
+                              ),
+                              ListTile(
+                                leading: const Icon(
+                                  Icons.settings,
+                                  color: Colors.black,
+                                  size: 30,
+                                ),
+                                title: Text(
+                                  'Settings',
+                                  style: AppStyle.headingTextStyle
+                                      .copyWith(fontSize: 17.0),
+                                ),
+                                onTap: () {
+                                  context.goNamed(AppRoutes.main.name);
+                                },
+                              ),
+                              ListTile(
+                                leading: const Icon(
+                                  Icons.account_circle,
+                                  color: Colors.black,
+                                  size: 30,
+                                ),
+                                title: Text(
+                                  'My Account',
+                                  style: AppStyle.headingTextStyle
+                                      .copyWith(fontSize: 17.0),
+                                ),
+                                onTap: () {
+                                  context.goNamed(AppRoutes.main.name);
+                                },
+                              ),
+                              const Divider(
+                                color: Colors.white,
+                                height: 2,
+                              ),
+                              Text(
+                                'Communicate',
+                                style: AppStyle.normalTextStyle,
+                              ),
+                              ListTile(
+                                leading: const Icon(
+                                  Icons.info,
+                                  color: Colors.black,
+                                  size: 30,
+                                ),
+                                title: Text(
+                                  'About Us',
+                                  style: AppStyle.headingTextStyle
+                                      .copyWith(fontSize: 17.0),
+                                ),
+                                onTap: () {
+                                  context.goNamed(AppRoutes.main.name);
+                                },
+                              ),
+                              ListTile(
+                                leading: const Icon(
+                                  Icons.share,
+                                  color: Colors.black,
+                                  size: 30,
+                                ),
+                                title: Text(
+                                  'Share',
+                                  style: AppStyle.headingTextStyle
+                                      .copyWith(fontSize: 17.0),
+                                ),
+                                onTap: () {
+                                  context.goNamed(AppRoutes.main.name);
+                                },
+                              ),
+                              ListTile(
+                                leading: const Icon(
+                                  Icons.star,
+                                  color: Colors.black,
+                                  size: 30,
+                                ),
+                                title: Text(
+                                  'Rate Us',
+                                  style: AppStyle.headingTextStyle
+                                      .copyWith(fontSize: 17.0),
+                                ),
+                                onTap: () {
+                                  context.goNamed(AppRoutes.main.name);
+                                },
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
+          );
+        });
   }
 }
