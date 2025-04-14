@@ -99,7 +99,7 @@ class AccountScreen extends ConsumerWidget {
                           .copyWith(color: Colors.black),
                     ),
                     Text(
-                      'BloodGroup : $userData.bloodGroup',
+                      'BloodGroup : ${userData.bloodGroup}',
                       style: AppStyle.normalTextStyle
                           .copyWith(color: Colors.black),
                     ),
