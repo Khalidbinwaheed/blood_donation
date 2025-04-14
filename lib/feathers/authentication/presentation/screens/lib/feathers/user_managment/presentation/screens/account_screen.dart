@@ -77,7 +77,9 @@ class AccountScreen extends ConsumerWidget {
                   children: [
                     Text(
                       'Type : ${userData.type}',
-                      style: AppStyle.titleTextStyle,
+                      style: AppStyle.titleTextStyle.copyWith(
+                        color: Colors.black,
+                      ),
                     ),
                     SizedBox(
                       height: SizeConfig.getProportionateHeight(20),
