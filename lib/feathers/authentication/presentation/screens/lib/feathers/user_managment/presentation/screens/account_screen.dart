@@ -109,7 +109,7 @@ class AccountScreen extends ConsumerWidget {
                           .copyWith(color: Colors.black),
                     ),
                     Text(
-                      'Phone : $userData.phone',
+                      'Phone : ${userData.phoneNumber}',
                       style: AppStyle.normalTextStyle
                           .copyWith(color: Colors.black),
                     ),
