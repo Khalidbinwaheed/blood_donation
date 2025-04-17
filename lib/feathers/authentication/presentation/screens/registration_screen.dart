@@ -115,7 +115,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                   CommonTextField(
                     hintText: 'Enter Your Distract',
                     textInputType: TextInputType.text,
-                    controller: _phoneNumberController,
+                    controller: _districtcontroller,
                   ),
                   SizedBox(height: SizeConfig.getProportionateHeight(10)),
                   DropdownButtonFormField<String>(
