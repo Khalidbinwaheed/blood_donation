@@ -37,11 +37,13 @@ class AuthController extends _$AuthController {
     required String phoneNumber,
     required String bloodGroup,
     required String type,
+    required String district,
   }) async {
     if (email.trim().isEmpty ||
         password.trim().isEmpty ||
         name.trim().isEmpty ||
         phoneNumber.trim().isEmpty ||
+        district.trim().isEmpty ||
         bloodGroup.isEmpty) {
       state = AsyncError('Ensure all fields are filled', StackTrace.current);
       return; // Add a return to prevent further execution
@@ -55,6 +57,7 @@ class AuthController extends _$AuthController {
               name: name,
               bloodGroup: bloodGroup,
               phoneNumber: phoneNumber,
+              district: district,
               type: type,
             ));
   }
