@@ -31,7 +31,7 @@ class AuthRepository {
     required String name,
     required String bloodGroup,
     required String phoneNumber,
-    required String type,
+    required String type, required String district,
   }) async {
     try {
       final cred = await _auth.createUserWithEmailAndPassword(
