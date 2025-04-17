@@ -112,6 +112,12 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                     controller: _phoneNumberController,
                   ),
                   SizedBox(height: SizeConfig.getProportionateHeight(10)),
+                  CommonTextField(
+                    hintText: 'Enter Your Distract',
+                    textInputType: TextInputType.text,
+                    controller: _phoneNumberController,
+                  ),
+                  SizedBox(height: SizeConfig.getProportionateHeight(10)),
                   DropdownButtonFormField<String>(
                     value: _selectedBloodGroup,
                     decoration: InputDecoration(
