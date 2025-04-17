@@ -23,6 +23,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
   final _passwordController = TextEditingController();
   final _nameController = TextEditingController();
   final _phoneNumberController = TextEditingController();
+  final _districtcontroller = TextEditingController();
 
   String? _selectedBloodGroup;
 
