@@ -167,6 +167,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                               name: name,
                               phoneNumber: phoneNumber,
                               bloodGroup: _selectedBloodGroup!,
+                              district: _districtcontroller.text,
                               type: widget.type);
                     },
                     title: 'Rigester Me Now',
