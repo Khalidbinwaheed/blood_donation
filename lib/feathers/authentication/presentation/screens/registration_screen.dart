@@ -158,6 +158,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                       final name = _nameController.text.toString();
                       final phoneNumber =
                           _phoneNumberController.text.toString();
+                      // Removed unused local variable 'district'
 
                       ref
                           .read(authControllerProvider.notifier)
