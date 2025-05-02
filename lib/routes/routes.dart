@@ -1,12 +1,12 @@
 import 'dart:async'; // Import needed for StreamSubscription
 
-import 'package:blood_donation/feathers/authentication/presentation/screens/lib/feathers/user_managment/presentation/screens/account_screen.dart';
-import 'package:blood_donation/feathers/authentication/presentation/screens/registration_screen.dart';
-import 'package:blood_donation/feathers/authentication/presentation/screens/sign_in_screen.dart';
-import 'package:blood_donation/feathers/user_managment/presentation/screens/blood_group_selected_screen.dart';
+import 'package:blood_donation/features/authentication/presentation/screens/lib/feathers/user_managment/presentation/screens/account_screen.dart';
+import 'package:blood_donation/features/authentication/presentation/screens/registration_screen.dart';
+import 'package:blood_donation/features/authentication/presentation/screens/sign_in_screen.dart';
+import 'package:blood_donation/features/user_managment/presentation/screens/blood_group_selected_screen.dart';
 // Assuming RegisterScreen exists or you'll add it
 // import 'package:blood_donation/feathers/authentication/presentation/screens/register_screen.dart';
-import 'package:blood_donation/feathers/user_managment/presentation/screens/main_screen.dart';
+import 'package:blood_donation/features/user_managment/presentation/screens/main_screen.dart';
 // Removed GoRouterRefreshStream import, will define it below or assume it exists correctly
 // import 'package:blood_donation/routes/go_router_refresh_stream.dart';
 import 'package:firebase_auth/firebase_auth.dart';
