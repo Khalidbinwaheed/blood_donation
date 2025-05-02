@@ -6,9 +6,52 @@ part of 'firestore_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+String _$firebaseFirestoreHash() => r'230b9276da2e44bb1aa6b300e1ddbb2f93c422da';
+
+/// Provides the FirebaseFirestore instance.
+///
+/// Copied from [firebaseFirestore].
+@ProviderFor(firebaseFirestore)
+final firebaseFirestoreProvider =
+    AutoDisposeProvider<FirebaseFirestore>.internal(
+  firebaseFirestore,
+  name: r'firebaseFirestoreProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$firebaseFirestoreHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef FirebaseFirestoreRef = AutoDisposeProviderRef<FirebaseFirestore>;
+String _$firestoreRepositoryHash() =>
+    r'ddb83ed3268e2a11ed4d45024e964ea9cb8b1802';
+
+/// Provides the FirestoreRepository instance.
+///
+/// Copied from [firestoreRepository].
+@ProviderFor(firestoreRepository)
+final firestoreRepositoryProvider =
+    AutoDisposeProvider<FirestoreRepository>.internal(
+  firestoreRepository,
+  name: r'firestoreRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$firestoreRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef FirestoreRepositoryRef = AutoDisposeProviderRef<FirestoreRepository>;
 String _$loadDonorsHash() => r'dd10a4feae9896796bd457393cff97da63431a44';
 
-/// See also [loadDonors].
+/// Provider to stream all donors.
+///
+/// Copied from [loadDonors].
 @ProviderFor(loadDonors)
 final loadDonorsProvider = AutoDisposeStreamProvider<List<AppUser>>.internal(
   loadDonors,
@@ -46,18 +89,26 @@ class _SystemHash {
   }
 }
 
-/// See also [loadSpecificBloodGroupDonors].
+/// Provider to stream donors of a specific blood group.
+///
+/// Copied from [loadSpecificBloodGroupDonors].
 @ProviderFor(loadSpecificBloodGroupDonors)
 const loadSpecificBloodGroupDonorsProvider =
     LoadSpecificBloodGroupDonorsFamily();
 
-/// See also [loadSpecificBloodGroupDonors].
+/// Provider to stream donors of a specific blood group.
+///
+/// Copied from [loadSpecificBloodGroupDonors].
 class LoadSpecificBloodGroupDonorsFamily
     extends Family<AsyncValue<List<AppUser>>> {
-  /// See also [loadSpecificBloodGroupDonors].
+  /// Provider to stream donors of a specific blood group.
+  ///
+  /// Copied from [loadSpecificBloodGroupDonors].
   const LoadSpecificBloodGroupDonorsFamily();
 
-  /// See also [loadSpecificBloodGroupDonors].
+  /// Provider to stream donors of a specific blood group.
+  ///
+  /// Copied from [loadSpecificBloodGroupDonors].
   LoadSpecificBloodGroupDonorsProvider call(
     String bloodGroup,
   ) {
@@ -90,10 +141,14 @@ class LoadSpecificBloodGroupDonorsFamily
   String? get name => r'loadSpecificBloodGroupDonorsProvider';
 }
 
-/// See also [loadSpecificBloodGroupDonors].
+/// Provider to stream donors of a specific blood group.
+///
+/// Copied from [loadSpecificBloodGroupDonors].
 class LoadSpecificBloodGroupDonorsProvider
     extends AutoDisposeStreamProvider<List<AppUser>> {
-  /// See also [loadSpecificBloodGroupDonors].
+  /// Provider to stream donors of a specific blood group.
+  ///
+  /// Copied from [loadSpecificBloodGroupDonors].
   LoadSpecificBloodGroupDonorsProvider(
     String bloodGroup,
   ) : this._internal(
@@ -185,16 +240,28 @@ class _LoadSpecificBloodGroupDonorsProviderElement
 String _$loadSimilarBloodGroupsHash() =>
     r'068b7ed54fe3d3862559a1fbbddeae33bc612604';
 
-/// See also [loadSimilarBloodGroups].
+/// Provider to stream donors based on the (currently exact) blood group.
+/// See note in FirestoreRepository.loadSimilarBloodGroups about logic.
+///
+/// Copied from [loadSimilarBloodGroups].
 @ProviderFor(loadSimilarBloodGroups)
 const loadSimilarBloodGroupsProvider = LoadSimilarBloodGroupsFamily();
 
-/// See also [loadSimilarBloodGroups].
+/// Provider to stream donors based on the (currently exact) blood group.
+/// See note in FirestoreRepository.loadSimilarBloodGroups about logic.
+///
+/// Copied from [loadSimilarBloodGroups].
 class LoadSimilarBloodGroupsFamily extends Family<AsyncValue<List<AppUser>>> {
-  /// See also [loadSimilarBloodGroups].
+  /// Provider to stream donors based on the (currently exact) blood group.
+  /// See note in FirestoreRepository.loadSimilarBloodGroups about logic.
+  ///
+  /// Copied from [loadSimilarBloodGroups].
   const LoadSimilarBloodGroupsFamily();
 
-  /// See also [loadSimilarBloodGroups].
+  /// Provider to stream donors based on the (currently exact) blood group.
+  /// See note in FirestoreRepository.loadSimilarBloodGroups about logic.
+  ///
+  /// Copied from [loadSimilarBloodGroups].
   LoadSimilarBloodGroupsProvider call(
     String bloodGroup,
   ) {
@@ -227,10 +294,16 @@ class LoadSimilarBloodGroupsFamily extends Family<AsyncValue<List<AppUser>>> {
   String? get name => r'loadSimilarBloodGroupsProvider';
 }
 
-/// See also [loadSimilarBloodGroups].
+/// Provider to stream donors based on the (currently exact) blood group.
+/// See note in FirestoreRepository.loadSimilarBloodGroups about logic.
+///
+/// Copied from [loadSimilarBloodGroups].
 class LoadSimilarBloodGroupsProvider
     extends AutoDisposeStreamProvider<List<AppUser>> {
-  /// See also [loadSimilarBloodGroups].
+  /// Provider to stream donors based on the (currently exact) blood group.
+  /// See note in FirestoreRepository.loadSimilarBloodGroups about logic.
+  ///
+  /// Copied from [loadSimilarBloodGroups].
   LoadSimilarBloodGroupsProvider(
     String bloodGroup,
   ) : this._internal(
