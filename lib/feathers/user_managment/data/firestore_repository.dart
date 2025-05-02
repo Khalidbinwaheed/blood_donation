@@ -1,5 +1,8 @@
 import 'package:blood_donation/feathers/user_managment/Domain/app_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'firestore_repository.g.dart';
 
 class FirestoreRepository {
   FirestoreRepository(this._firestore);
@@ -36,4 +39,28 @@ class FirestoreRepository {
             .map((doc) => AppUser.fromMap(doc.data()))
             .toList());
   }
+}
+
+
+@riverpod
+
+Stream<List<AppUser>> loadDonors(LoadDonorsRef ref) {
+  final firestoreRepository = ref.watch(firestoreRepositoryProvider);
+  return firestoreRepository.loadDonors();
+}
+
+@riverpod
+
+Stream<List<AppUser>> loadSpecificBloodGroupDonors(
+    LoadSpecificBloodGroupDonorsRef ref, String bloodGroup) {
+  final firestoreRepository = ref.watch(firestoreRepositoryProvider);
+  return firestoreRepository.loadSpecificBloodGroupDonors(bloodGroup);
+}
+
+@riverpod
+
+Stream<List<AppUser>> loadSimilarBloodGroups(
+    LoadSimilarBloodGroupsRef ref, String bloodGroup) {
+  final firestoreRepository = ref.watch(firestoreRepositoryProvider);
+  return firestoreRepository.loadSimilarBloodGroups(bloodGroup);
 }
