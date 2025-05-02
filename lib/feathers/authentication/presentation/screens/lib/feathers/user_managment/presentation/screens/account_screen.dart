@@ -85,12 +85,11 @@ class AccountScreen extends ConsumerWidget {
                       height: SizeConfig.getProportionateHeight(20),
                     ),
                     Image.asset(
-                      userData.type == userData.type
-                          ? 'assets/reciver.png' //donor image
-                          : 'assets/Donor.png', //recipient image
-                      height: SizeConfig.getProportionateHeight(100),
-                      width: SizeConfig.getProportionateWidth(100),
-                      fit: BoxFit.cover,
+                      userData.type == 'donor'
+                          ? 'assets/Donorr.png' //donor image
+                          : 'assets/recepint.png', //recipient image
+                      height: SizeConfig.getProportionateHeight(150),
+                      width: SizeConfig.getProportionateWidth(150),
                     ),
                     SizedBox(
                       height: SizeConfig.getProportionateHeight(20),
