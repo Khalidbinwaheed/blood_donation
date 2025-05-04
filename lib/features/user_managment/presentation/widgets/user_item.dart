@@ -32,7 +32,17 @@ class UserItem extends ConsumerWidget {
             style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
           ),
           Text(
-            'Name: ${appUser.email}',
+            'Email: ${appUser.email}',
+            overflow: TextOverflow.ellipsis,
+            style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
+          ),
+          Text(
+            'Phone: ${appUser.phoneNumber}',
+            overflow: TextOverflow.ellipsis,
+            style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
+          ),
+          Text(
+            'Blood Group: ${appUser.bloodGroup}',
             overflow: TextOverflow.ellipsis,
             style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
           ),
