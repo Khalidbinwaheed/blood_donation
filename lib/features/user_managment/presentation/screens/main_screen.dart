@@ -25,7 +25,9 @@ class MainScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Expanded(child: AsyncValueWidget<list<AppUser>>(value: donorsAsyncValue,data: (donors){return donors.isEmpty}? const ,))
+            Expanded(child: AsyncValueWidget<list<AppUser>>(value: donorsAsyncValue,data: (donors){return donors.isEmpty}? const Center(child: Text('no Donors yet') ,) : ListView.builder(itemCount: donors.length,itemBuilder: (ctx, index){
+              
+            }),))
           ],
         ),
       ),
