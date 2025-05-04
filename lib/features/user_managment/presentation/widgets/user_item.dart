@@ -1,15 +1,43 @@
 import 'package:blood_donation/features/user_managment/Domain/app_user.dart';
+import 'package:blood_donation/util/appstyles.dart';
+import 'package:blood_donation/util/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UserItem extends ConsumerWidget {
   const UserItem(this.appUser, {super.key});
-  final AppUser appUser ;
+  final AppUser appUser;
   @override
-  Widget build (BuildContext context , WidgetRef ref){
+  Widget build(BuildContext context, WidgetRef ref) {
+    SizeConfig.init(context);
     return Card(
-      child: ,
-    ) ;
+        child: ListTile(
+      leading: Image.asset(
+        appUser.type == 'donor'
+            ? 'assets/images/donor.png'
+            : 'assets/images/reciever.png',
+        height: SizeConfig.getProportionateHeight(100),
+        width: SizeConfig.getProportionateWidth(100),
+      ),
+      title: Column(
+        children: [
+          Text(
+            appUser.type.toUpperCase(),
+            style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
+          ),
+          Text(
+            'Name: ${appUser.name}',
+            overflow: TextOverflow.ellipsis,
+            style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
+          ),
+          Text(
+            'Name: ${appUser.email}',
+            overflow: TextOverflow.ellipsis,
+            style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
+          ),
+        ],
+      ),
+    ));
   }
 }
