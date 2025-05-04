@@ -3,6 +3,7 @@ import 'package:blood_donation/common_widgets/async_value_widget.dart';
 import 'package:blood_donation/features/user_managment/Domain/app_user.dart';
 import 'package:blood_donation/features/user_managment/data/firestore_repository.dart';
 import 'package:blood_donation/features/user_managment/presentation/widgets/main_drawer.dart';
+import 'package:blood_donation/features/user_managment/presentation/widgets/user_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -34,8 +35,9 @@ class MainScreen extends ConsumerWidget {
                         child: Text('no Donors yet'),
                       )
                     : ListView.builder(
-                        itemCount: donors.length, itemBuilder: (ctx, index) {
-                         return UserItem(appUser : donors[index]);
+                        itemCount: donors.length,
+                        itemBuilder: (ctx, index) {
+                          return UserItem(donors[index]);
                         });
               },
             ))
