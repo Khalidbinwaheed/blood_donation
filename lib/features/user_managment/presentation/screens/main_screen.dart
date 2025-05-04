@@ -19,8 +19,11 @@ class MainScreen extends ConsumerWidget {
         title: const Text('Blood Donation'),
       ),
       drawer: const MainDrawer(),
-      body: Column(
-        
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [],
+        ),
       ),
     );
   }
