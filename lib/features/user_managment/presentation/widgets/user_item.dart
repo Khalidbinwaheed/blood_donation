@@ -13,41 +13,53 @@ class UserItem extends ConsumerWidget {
     SizeConfig.init(context);
     return Card(
         child: ListTile(
-      leading: Image.asset(
-        appUser.type == 'donor'
-            ? 'assets/images/donor.png'
-            : 'assets/images/reciever.png',
-        height: SizeConfig.getProportionateHeight(100),
-        width: SizeConfig.getProportionateWidth(100),
-      ),
-      title: Column(
-        children: [
-          Text(
-            appUser.type.toUpperCase(),
-            style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
-          ),
-          Text(
-            'Name: ${appUser.name}',
-            overflow: TextOverflow.ellipsis,
-            style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
-          ),
-          Text(
-            'Email: ${appUser.email}',
-            overflow: TextOverflow.ellipsis,
-            style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
-          ),
-          Text(
-            'Phone: ${appUser.phoneNumber}',
-            overflow: TextOverflow.ellipsis,
-            style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
-          ),
-          Text(
-            'Blood Group: ${appUser.bloodGroup}',
-            overflow: TextOverflow.ellipsis,
-            style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
-          ),
-        ],
-      ),
-    ));
+            leading: Image.asset(
+              appUser.type == 'donor'
+                  ? 'assets/images/donor.png'
+                  : 'assets/images/reciever.png',
+              height: SizeConfig.getProportionateHeight(100),
+              width: SizeConfig.getProportionateWidth(100),
+            ),
+            title: Column(
+              children: [
+                Text(
+                  appUser.type.toUpperCase(),
+                  style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
+                ),
+                Text(
+                  'Name: ${appUser.name}',
+                  overflow: TextOverflow.ellipsis,
+                  style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
+                ),
+                Text(
+                  'Email: ${appUser.email}',
+                  overflow: TextOverflow.ellipsis,
+                  style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
+                ),
+                Text(
+                  'Phone: ${appUser.phoneNumber}',
+                  overflow: TextOverflow.ellipsis,
+                  style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
+                ),
+                Text(
+                  'Blood Group: ${appUser.bloodGroup}',
+                  overflow: TextOverflow.ellipsis,
+                  style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
+                ),
+              ],
+            ),
+            trailing: ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppStyle.mainColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+              child: Text(
+                'EMAIL',
+                style: AppStyle.normalTextStyle,
+              ),
+            )));
   }
 }
