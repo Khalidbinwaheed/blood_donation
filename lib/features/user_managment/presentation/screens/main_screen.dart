@@ -26,7 +26,7 @@ class MainScreen extends ConsumerWidget {
         child: Column(
           children: [
             Expanded(
-                child: AsyncValueWidget<list<AppUser>>(
+                child: AsyncValueWidget<List<AppUser>>(
               value: donorsAsyncValue,
               data: (donors) {
                 return donors.isEmpty
@@ -34,7 +34,9 @@ class MainScreen extends ConsumerWidget {
                         child: Text('no Donors yet'),
                       )
                     : ListView.builder(
-                        itemCount: donors.length, itemBuilder: (ctx, index) {});
+                        itemCount: donors.length, itemBuilder: (ctx, index) {
+                         return UserItem(appUser : donors[index]);
+                        });
               },
             ))
           ],
