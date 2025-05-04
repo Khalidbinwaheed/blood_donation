@@ -1,3 +1,4 @@
+import 'package:blood_donation/common_widgets/async_value_ui.dart';
 import 'package:blood_donation/features/user_managment/data/firestore_repository.dart';
 import 'package:blood_donation/features/user_managment/presentation/widgets/main_drawer.dart';
 import 'package:flutter/material.dart';
@@ -10,12 +11,17 @@ class MainScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final donorsAsyncValue = ref.watch(loadDonorsProvider);
 
-    ref.listen<AsyncValue>(loadDonorsProvider, (_,state){});
+    ref.listen<AsyncValue>(loadDonorsProvider, (_, state) {
+      state.showAlertDialogOnError(context);
+    });
     return Scaffold(
       appBar: AppBar(
         title: const Text('Blood Donation'),
       ),
       drawer: const MainDrawer(),
+      body: Column(
+        
+      ),
     );
   }
 }
