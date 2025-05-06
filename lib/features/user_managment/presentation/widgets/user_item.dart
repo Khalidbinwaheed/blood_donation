@@ -16,7 +16,7 @@ class UserItem extends ConsumerWidget {
             leading: Image.asset(
               appUser.type == 'donor'
                   ? 'assets/donor.png'
-                  : 'assets/images/reciever.png',
+                  : 'assets/reciever.png',
               height: SizeConfig.getProportionateHeight(100),
               width: SizeConfig.getProportionateWidth(100),
             ),
