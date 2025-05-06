@@ -15,7 +15,7 @@ class UserItem extends ConsumerWidget {
         child: ListTile(
             leading: Image.asset(
               appUser.type == 'donor'
-                  ? 'assets/images/donor.png'
+                  ? 'assets/donor.png'
                   : 'assets/images/reciever.png',
               height: SizeConfig.getProportionateHeight(100),
               width: SizeConfig.getProportionateWidth(100),
