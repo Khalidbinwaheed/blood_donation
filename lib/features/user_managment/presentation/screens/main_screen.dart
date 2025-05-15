@@ -37,7 +37,7 @@ class MainScreen extends ConsumerWidget {
                     : ListView.builder(
                         itemCount: donors.length,
                         itemBuilder: (ctx, index) {
-                          return UserItem(donors[index]); 
+                          return UserItem(donors[index]);
                         });
               },
             ))
