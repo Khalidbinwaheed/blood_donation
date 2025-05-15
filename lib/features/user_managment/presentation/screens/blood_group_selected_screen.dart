@@ -37,7 +37,7 @@ class BloodGroupSelectedScreen extends ConsumerWidget {
           children: [
             Expanded(
                 child: AsyncValueWidget<List<AppUser>>(
-              value: donorsAsyncValue,
+              value: donarsAsyncValue,
               data: (donors) {
                 return donors.isEmpty
                     ? const Center(
