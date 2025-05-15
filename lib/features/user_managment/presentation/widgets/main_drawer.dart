@@ -172,19 +172,6 @@ class MainDrawer extends ConsumerWidget {
                                 leading: Image.asset('assets/logo.png',
                                     height: 30, width: 30),
                                 title: Text(
-                                  'A positive',
-                                  style: AppStyle.normalTextStyle,
-                                ),
-                                onTap: () {
-                                  context.goNamed(
-                                      AppRoutes.bloodGroupSelected.name,
-                                      extra: 'A+');
-                                },
-                              ),
-                              ListTile(
-                                leading: Image.asset('assets/logo.png',
-                                    height: 30, width: 30),
-                                title: Text(
                                   'B Negative',
                                   style: AppStyle.normalTextStyle,
                                 ),
