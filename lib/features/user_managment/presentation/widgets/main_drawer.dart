@@ -115,7 +115,10 @@ class MainDrawer extends ConsumerWidget {
                                       .copyWith(fontSize: 17.0),
                                 ),
                                 onTap: () {
-                                  context.goNamed(AppRoutes.main.name);
+                                  context.goNamed(
+                                      AppRoutes.bloodGroupSelected.name);
+                                  extra:
+                                  userData.bloodGroup;
                                 },
                               ),
                               const Divider(
