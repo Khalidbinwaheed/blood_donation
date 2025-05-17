@@ -1,5 +1,6 @@
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'mail_repository.g.dart';
 

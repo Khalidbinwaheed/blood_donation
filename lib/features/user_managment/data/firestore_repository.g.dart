@@ -240,28 +240,16 @@ class _LoadSpecificBloodGroupDonorsProviderElement
 String _$loadSimilarBloodGroupsHash() =>
     r'068b7ed54fe3d3862559a1fbbddeae33bc612604';
 
-/// Provider to stream donors based on the (currently exact) blood group.
-/// See note in FirestoreRepository.loadSimilarBloodGroups about logic.
-///
-/// Copied from [loadSimilarBloodGroups].
+/// See also [loadSimilarBloodGroups].
 @ProviderFor(loadSimilarBloodGroups)
 const loadSimilarBloodGroupsProvider = LoadSimilarBloodGroupsFamily();
 
-/// Provider to stream donors based on the (currently exact) blood group.
-/// See note in FirestoreRepository.loadSimilarBloodGroups about logic.
-///
-/// Copied from [loadSimilarBloodGroups].
+/// See also [loadSimilarBloodGroups].
 class LoadSimilarBloodGroupsFamily extends Family<AsyncValue<List<AppUser>>> {
-  /// Provider to stream donors based on the (currently exact) blood group.
-  /// See note in FirestoreRepository.loadSimilarBloodGroups about logic.
-  ///
-  /// Copied from [loadSimilarBloodGroups].
+  /// See also [loadSimilarBloodGroups].
   const LoadSimilarBloodGroupsFamily();
 
-  /// Provider to stream donors based on the (currently exact) blood group.
-  /// See note in FirestoreRepository.loadSimilarBloodGroups about logic.
-  ///
-  /// Copied from [loadSimilarBloodGroups].
+  /// See also [loadSimilarBloodGroups].
   LoadSimilarBloodGroupsProvider call(
     String bloodGroup,
   ) {
@@ -294,16 +282,10 @@ class LoadSimilarBloodGroupsFamily extends Family<AsyncValue<List<AppUser>>> {
   String? get name => r'loadSimilarBloodGroupsProvider';
 }
 
-/// Provider to stream donors based on the (currently exact) blood group.
-/// See note in FirestoreRepository.loadSimilarBloodGroups about logic.
-///
-/// Copied from [loadSimilarBloodGroups].
+/// See also [loadSimilarBloodGroups].
 class LoadSimilarBloodGroupsProvider
     extends AutoDisposeStreamProvider<List<AppUser>> {
-  /// Provider to stream donors based on the (currently exact) blood group.
-  /// See note in FirestoreRepository.loadSimilarBloodGroups about logic.
-  ///
-  /// Copied from [loadSimilarBloodGroups].
+  /// See also [loadSimilarBloodGroups].
   LoadSimilarBloodGroupsProvider(
     String bloodGroup,
   ) : this._internal(
