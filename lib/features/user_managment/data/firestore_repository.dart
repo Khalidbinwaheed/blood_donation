@@ -50,6 +50,12 @@ class FirestoreRepository {
             .map((doc) => AppUser.fromMap(doc.data()))
             .toList());
   }
+  Future <void> saveIdToDatabase ({
+    required String recipientId,
+    required String donorId,
+  }) async {
+    await _firestore.collection('emails').doc(recipientId).collection('users emailed').add({donorId: true});
+    await _firestore.collection('emails').doc(donorId).collection('users emailed').add({recipientId: true});
 }
 
 // --- Riverpod Providers ---
