@@ -65,7 +65,14 @@ class FirestoreRepository {
         .collection('users emailed')
         .add({recipientId: true});
   }
-  Future<void> addNotification({required String recipientId, required String donorId})
+
+  Future<void> addNotification(
+      {required String recipientId, required String donorId}) async {
+    await _firestore
+        .collection('notifications')
+        .doc(recipientId)
+        .collection('users emailed')
+        .add({donorId: true});
   }
 }
 // --- Riverpod Providers ---
