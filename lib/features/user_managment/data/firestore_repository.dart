@@ -38,26 +38,36 @@ class FirestoreRepository {
             .toList());
   }
 
- 
   Stream<List<AppUser>> loadSimilarBloodGroups(String bloodGroup) {
-  
     return _firestore // Use injected instance
         .collection(_usersCollection) // Corrected collection name
         .where(_typeField, isEqualTo: _donorType)
-        .where(_bloodGroupField, isEqualTo: bloodGroup) // Currently filters for exact match
+        .where(_bloodGroupField,
+            isEqualTo: bloodGroup) // Currently filters for exact match
         .snapshots()
         .map((querySnapshot) => querySnapshot.docs
             .map((doc) => AppUser.fromMap(doc.data()))
             .toList());
   }
-  Future <void> saveIdToDatabase ({
+
+  Future<void> saveIdToDatabase({
     required String recipientId,
     required String donorId,
   }) async {
-    await _firestore.collection('emails').doc(recipientId).collection('users emailed').add({donorId: true});
-    await _firestore.collection('emails').doc(donorId).collection('users emailed').add({recipientId: true});
+    await _firestore
+        .collection('emails')
+        .doc(recipientId)
+        .collection('users emailed')
+        .add({donorId: true});
+    await _firestore
+        .collection('emails')
+        .doc(donorId)
+        .collection('users emailed')
+        .add({recipientId: true});
+  }
+  Future<void> addNotification({required String recipientId, required String donorId})
+  }
 }
-
 // --- Riverpod Providers ---
 
 /// Provides the FirebaseFirestore instance.
@@ -77,7 +87,6 @@ FirestoreRepository firestoreRepository(FirestoreRepositoryRef ref) {
 /// Provider to stream all donors.
 @riverpod
 Stream<List<AppUser>> loadDonors(LoadDonorsRef ref) {
-  
   final firestoreRepository = ref.watch(firestoreRepositoryProvider);
   return firestoreRepository.loadDonors();
 }
