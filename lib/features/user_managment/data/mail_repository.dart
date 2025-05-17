@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -44,6 +45,6 @@ class Mailrepository {
 }
 
 @riverpod
-Mailrepository mailRepository(MailrepositoryRef ref) {
+Mailrepository mailRepository(MailRepositoryRef ref) {
   return Mailrepository();
 }
