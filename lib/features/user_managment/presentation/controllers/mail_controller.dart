@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
 
 import 'package:blood_donation/features/user_managment/data/mail_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
