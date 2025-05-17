@@ -1,3 +1,4 @@
+import 'package:blood_donation/features/user_managment/Domain/app_notification.dart';
 import 'package:blood_donation/features/user_managment/Domain/app_user.dart'; // Make sure this path is correct
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -67,12 +68,44 @@ class FirestoreRepository {
   }
 
   Future<void> addNotification(
-      {required String recipientId, required String donorId}) async {
+      {required String recipientId,
+      required String donorId,
+      required AppNotification notification}) async {
+    await _firestore
+        .collection('notifications')
+        .doc(donorId)
+        .collection('users emailed')
+        .add(notification.toMap());
     await _firestore
         .collection('notifications')
         .doc(recipientId)
         .collection('users emailed')
-        .add({donorId: true});
+        .add(notification.toMap());
+  }
+
+  Stream<List<AppNotification>> loadNotifications(String userId) {
+    return _firestore
+        .collection('notifications')
+        .doc(userId)
+        .collection('users emailed')
+        .snapshots()
+        .map((querySnapshot) => querySnapshot.docs
+            .map((doc) => AppNotification.fromMap(doc.data()))
+            .toList());
+  }
+
+  Stream<List<String>> loadEmailedUsersIds(String userId) {
+    return _firestore
+        .collection('emails')
+        .doc(userId)
+        .collection('users emailed')
+        .snapshots()
+        .map((querySnapshot) {
+      return querySnapshot.docs
+          .map((doc) => doc.data().keys.toList())
+          .expand((keys) => keys)
+          .toList();
+    });
   }
 }
 // --- Riverpod Providers ---
