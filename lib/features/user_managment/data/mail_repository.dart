@@ -1,6 +1,7 @@
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 part 'mail_repository.g.dart';
 
@@ -14,7 +15,7 @@ class Mailrepository {
     const String username = 'Blooddonationkp@gmail.com';
     const String password = '';
 
-    final SmtpServer = gmail(username, password);
+    final smtpServer = gmail(username, password);
     final message = Message()
       ..from = const Address(username, 'Blood Donation App')
       ..recipients.add(donorEmail)
@@ -36,7 +37,7 @@ class Mailrepository {
           '<p>Please contact them if you are willing to donate blood.</p>'
           '<p>Thank you!</p>';
     try {
-      await send(message, SmtpServer);
+      await send(message, smtpServer);
     } on MailerException catch (e) {
       throw Exception('Failed to send email: ${e.message}');
     }
@@ -44,6 +45,6 @@ class Mailrepository {
 }
 
 @riverpod
-Mailrepository mailRepository(MailRepositoryRef ref) {
+Mailrepository mailRepository(Ref ref) {
   return Mailrepository();
 }

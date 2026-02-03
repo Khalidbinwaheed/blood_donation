@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen>
@@ -34,7 +34,9 @@ class _SplashScreenState extends State<SplashScreen>
     _controller.forward();
 
     Future.delayed(const Duration(seconds: 5), () {
-      context.goNamed(AppRoutes.main.name);
+      if (mounted) {
+        context.goNamed(AppRoutes.main.name);
+      }
     });
   }
 
@@ -75,4 +77,3 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 }
- 

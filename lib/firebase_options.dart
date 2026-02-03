@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,15 +25,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -50,20 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBsBXooLA0TaJOSvwY6cZtLm_cNhCmPBeo',
-    appId: '1:949652620149:android:5e215585187a2b1a88093c',
-    messagingSenderId: '949652620149',
-    projectId: 'blood-donation-71fbe',
-    storageBucket: 'blood-donation-71fbe.firebasestorage.app',
+    apiKey: 'AIzaSyCgrFtwnW32aWUg2GOAjt-CmD4hCEPfS10',
+    appId: '1:234167986290:android:decdb0ae4c13f189bb3aeb',
+    messagingSenderId: '234167986290',
+    projectId: 'blooddonation-89361',
+    storageBucket: 'blooddonation-89361.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDSyn4nXqboKDZSDvcTkXY8ElD4toHLr8o',
-    appId: '1:949652620149:ios:9fa396135786397b88093c',
-    messagingSenderId: '949652620149',
-    projectId: 'blood-donation-71fbe',
-    storageBucket: 'blood-donation-71fbe.firebasestorage.app',
+    apiKey: 'AIzaSyDnYAx4z4fdTqD4ebg2auWfWapM0YwPYG8',
+    appId: '1:234167986290:ios:0c143fa4a8550fffbb3aeb',
+    messagingSenderId: '234167986290',
+    projectId: 'blooddonation-89361',
+    storageBucket: 'blooddonation-89361.firebasestorage.app',
     iosBundleId: 'com.example.bloodDonation',
+  );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDGsfQ1nJkvejyYPY8vVJsUrC2tZjtXY1w',
+    appId: '1:234167986290:web:ac9cba2f78db98cfbb3aeb',
+    messagingSenderId: '234167986290',
+    projectId: 'blooddonation-89361',
+    authDomain: 'blooddonation-89361.firebaseapp.com',
+    storageBucket: 'blooddonation-89361.firebasestorage.app',
+    measurementId: 'G-S48TJNC5L9',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyDnYAx4z4fdTqD4ebg2auWfWapM0YwPYG8',
+    appId: '1:234167986290:ios:0c143fa4a8550fffbb3aeb',
+    messagingSenderId: '234167986290',
+    projectId: 'blooddonation-89361',
+    storageBucket: 'blooddonation-89361.firebasestorage.app',
+    iosBundleId: 'com.example.bloodDonation',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyDGsfQ1nJkvejyYPY8vVJsUrC2tZjtXY1w',
+    appId: '1:234167986290:web:e6f0ad308a2089d2bb3aeb',
+    messagingSenderId: '234167986290',
+    projectId: 'blooddonation-89361',
+    authDomain: 'blooddonation-89361.firebaseapp.com',
+    storageBucket: 'blooddonation-89361.firebasestorage.app',
+    measurementId: 'G-VRBTCEBVL1',
   );
 
 }

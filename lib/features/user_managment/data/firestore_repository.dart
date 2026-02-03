@@ -3,6 +3,8 @@ import 'package:blood_donation/features/user_managment/Domain/app_user.dart'; //
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 part 'firestore_repository.g.dart';
 
 class FirestoreRepository {
@@ -13,7 +15,7 @@ class FirestoreRepository {
   static const String _usersCollection = 'users';
   static const String _typeField = 'type';
   static const String _bloodGroupField = 'bloodGroup';
-  static const String _donorType = 'Donor';
+  static const String _donorType = 'donor';
   // ---
 
   /// Loads all users marked as donors.
@@ -112,13 +114,13 @@ class FirestoreRepository {
 
 /// Provides the FirebaseFirestore instance.
 @riverpod
-FirebaseFirestore firebaseFirestore(FirebaseFirestoreRef ref) {
+FirebaseFirestore firebaseFirestore(Ref ref) {
   return FirebaseFirestore.instance;
 }
 
 /// Provides the FirestoreRepository instance.
 @riverpod
-FirestoreRepository firestoreRepository(FirestoreRepositoryRef ref) {
+FirestoreRepository firestoreRepository(Ref ref) {
   // Get the Firestore instance from its provider and inject it
   final firestore = ref.watch(firebaseFirestoreProvider);
   return FirestoreRepository(firestore);
@@ -126,23 +128,21 @@ FirestoreRepository firestoreRepository(FirestoreRepositoryRef ref) {
 
 /// Provider to stream all donors.
 @riverpod
-Stream<List<AppUser>> loadDonors(LoadDonorsRef ref) {
+Stream<List<AppUser>> loadDonors(Ref ref) {
   final firestoreRepository = ref.watch(firestoreRepositoryProvider);
   return firestoreRepository.loadDonors();
 }
 
 /// Provider to stream donors of a specific blood group.
 @riverpod
-Stream<List<AppUser>> loadSpecificBloodGroupDonors(
-    LoadSpecificBloodGroupDonorsRef ref, String bloodGroup) {
+Stream<List<AppUser>> loadSpecificBloodGroupDonors(Ref ref, String bloodGroup) {
   // Watch the repository provider
   final firestoreRepository = ref.watch(firestoreRepositoryProvider);
   return firestoreRepository.loadSpecificBloodGroupDonors(bloodGroup);
 }
 
 @riverpod
-Stream<List<AppUser>> loadSimilarBloodGroups(
-    LoadSimilarBloodGroupsRef ref, String bloodGroup) {
+Stream<List<AppUser>> loadSimilarBloodGroups(Ref ref, String bloodGroup) {
   // Watch the repository provider
   final firestoreRepository = ref.watch(firestoreRepositoryProvider);
   return firestoreRepository.loadSimilarBloodGroups(bloodGroup);

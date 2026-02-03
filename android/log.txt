@@ -1,0 +1,120 @@
+> Task :gradle:checkKotlinGradlePluginConfigurationErrors
+> Task :gradle:compileKotlin UP-TO-DATE
+> Task :gradle:compileJava NO-SOURCE
+> Task :gradle:compileGroovy NO-SOURCE
+> Task :gradle:pluginDescriptors UP-TO-DATE
+> Task :gradle:processResources UP-TO-DATE
+> Task :gradle:classes UP-TO-DATE
+> Task :gradle:jar UP-TO-DATE
+
+> Configure project :app
+.\gradlew : Warning: 
+Flutter support for 
+your project's 
+Kotlin version 
+(1.8.22) will soon 
+be dropped. Please 
+upgrade your Kotlin 
+version to a version 
+of at least 2.1.0 
+soon.
+At line:1 char:1
++ .\gradlew 
+assembleDebug > 
+build_log.txt 2>&1
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (Warning   
+ : Flutte...ast 2    
+.1.0 soon.:Strin    
+g) [], RemoteExc    
+eption
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+Alternatively, use 
+the flag "--android-s
+kip-build-dependency-
+validation" to 
+bypass this check.
+
+Potential fix: Your 
+project's KGP 
+version is typically 
+defined in the 
+plugins block of the 
+`settings.gradle` 
+file (D:\Code Craft 
+It Solution\blood_don
+ation\android/setting
+s.gradle), by a 
+plugin with the id 
+of org.jetbrains.kotl
+in.android. 
+If you don't see a 
+plugins block, your 
+project was likely 
+created with an 
+older template 
+version, in which 
+case it is most 
+likely defined in 
+the top-level 
+build.gradle file 
+(D:\Code Craft It Sol
+ution\blood_donation\
+android/build.gradle)
+ by the 
+ext.kotlin_version 
+property.
+
+
+FAILURE: Build 
+failed with an 
+exception.
+
+* Where:
+Build file 'D:\Code 
+Craft It Solution\blo
+od_donation\android\b
+uild.gradle.kts' 
+line: 18
+
+* What went wrong:
+A problem occurred 
+configuring project 
+':app'.
+> [CXX1101] NDK at C:
+\Users\capta\AppData\
+Local\Android\sdk\ndk
+\27.0.12077973 did 
+not have a 
+source.properties 
+file
+
+* Try:
+> Run with 
+--stacktrace option 
+to get the stack 
+trace.
+> Run with --info or 
+--debug option to 
+get more log output.
+> Run with --scan to 
+get full insights.
+> Get more help at ht
+tps://help.gradle.org
+.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.10.2/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 5s
+5 actionable tasks: 1 executed, 4 up-to-date

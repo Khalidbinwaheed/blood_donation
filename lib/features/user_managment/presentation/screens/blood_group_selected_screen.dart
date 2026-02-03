@@ -18,8 +18,7 @@ class BloodGroupSelectedScreen extends ConsumerWidget {
     SizeConfig.init(context);
     final donarsAsyncValue =
         ref.watch(loadSpecificBloodGroupDonorsProvider(bloodGroup));
-    final userDataAsync =
-        ref.watch(loadSpecificBloodGroupDonorsProvider(bloodGroup));
+
     ref.listen<AsyncValue>(loadSpecificBloodGroupDonorsProvider(bloodGroup),
         (_, state) {
       state.showAlertDialogOnError(context);

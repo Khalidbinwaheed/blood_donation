@@ -116,9 +116,8 @@ class MainDrawer extends ConsumerWidget {
                                 ),
                                 onTap: () {
                                   context.goNamed(
-                                      AppRoutes.bloodGroupSelected.name);
-                                  extra:
-                                  userData.bloodGroup;
+                                      AppRoutes.bloodGroupSelected.name,
+                                      extra: userData.bloodGroup);
                                 },
                               ),
                               const Divider(

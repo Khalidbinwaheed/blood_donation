@@ -28,8 +28,8 @@ class MailController extends _$MailController {
           recipientBloodGroup: recipientBloodGroup);
       state = const AsyncData(null);
       return true;
-    } catch (e, StackTrace) {
-      state = AsyncError(e, StackTrace);
+    } catch (e, stackTrace) {
+      state = AsyncError(e, stackTrace);
       return false;
     }
   }

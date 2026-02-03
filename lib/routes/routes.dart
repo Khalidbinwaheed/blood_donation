@@ -1,8 +1,8 @@
 import 'dart:async'; // Import needed for StreamSubscription
 
-import 'package:blood_donation/features/authentication/presentation/screens/lib/feathers/user_managment/presentation/screens/account_screen.dart';
 import 'package:blood_donation/features/authentication/presentation/screens/registration_screen.dart';
 import 'package:blood_donation/features/authentication/presentation/screens/sign_in_screen.dart';
+import 'package:blood_donation/features/user_managment/presentation/screens/account_screen.dart';
 import 'package:blood_donation/features/user_managment/presentation/screens/blood_group_selected_screen.dart';
 // Assuming RegisterScreen exists or you'll add it
 // import 'package:blood_donation/feathers/authentication/presentation/screens/register_screen.dart';
@@ -14,6 +14,7 @@ import 'package:flutter/foundation.dart'; // Import needed for ChangeNotifier
 import 'package:flutter/material.dart'; // Import needed for Placeholder Screen
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../splash/splash_screen.dart'; // Assuming splash_screen.dart exists
 
@@ -70,7 +71,7 @@ class GoRouterRefreshStream extends ChangeNotifier {
 
 // --- GoRouter Configuration ---
 @riverpod
-GoRouter goRouter(GoRouterRef ref) {
+GoRouter goRouter(Ref ref) {
   final firebaseAuth = ref.watch(firebaseAuthProvider);
 
   // Define path constants for clarity and consistency
@@ -78,10 +79,8 @@ GoRouter goRouter(GoRouterRef ref) {
   const signInPath = '/signIn'; // Standardized path
   const registerPath = '/register';
   const mainPath = '/main';
-  const accountpath = '/account';
-  const bloodGroupSelectedPath = '/bloodGroupSelected';
-  const emailedUsersPath = '/emailedUsers';
-  const notificationsPath = '/notifications';
+  const accountpath = 'account';
+  const bloodGroupSelectedPath = 'bloodGroupSelected';
 
   return GoRouter(
     initialLocation: splashPath,
@@ -158,17 +157,17 @@ GoRouter goRouter(GoRouterRef ref) {
         routes: [
           GoRoute(
             name: AppRoutes.bloodGroupSelected.name,
-            path: 'bloodGroupSelected', // Relative path: /main/account
+            path: bloodGroupSelectedPath, // Relative path: /main/account
             builder: (context, state) {
               final bloodGroup = state.extra as String;
               return BloodGroupSelectedScreen(bloodGroup);
             },
           ),
-           GoRoute(
-        name: AppRoutes.account.name, // Use enum for name
-        path: accountpath, // Use constant and CORRECTED path
-        builder: (context, state) => const AccountScreen(),
-      ),
+          GoRoute(
+            name: AppRoutes.account.name, // Use enum for name
+            path: accountpath, // Use constant and CORRECTED path
+            builder: (context, state) => const AccountScreen(),
+          ),
         ],
       ),
     ],

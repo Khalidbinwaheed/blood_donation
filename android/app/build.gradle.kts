@@ -23,7 +23,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.blood_donation"
-        minSdk = 23
+        minSdk = flutter.minSdkVersion
         targetSdk = 34
         versionCode = 1
         versionName = "1.0.0"
@@ -56,7 +56,10 @@ dependencies {
     implementation("androidx.multidex:multidex:2.0.1")
     // Correct way to add core library desugaring
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
-    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
+    // Import the Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:34.8.0"))
+    // Add the dependency for the Firebase SDK for Google Analytics
+    implementation("com.google.firebase:firebase-analytics")
 }
 
 flutter {

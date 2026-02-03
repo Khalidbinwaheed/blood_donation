@@ -95,7 +95,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                   ),
                   SizedBox(height: SizeConfig.getProportionateHeight(25)),
                   CommonTextField(
-                    hintText: 'Enter Ur Email',
+                    hintText: 'Enter Your Email',
                     textInputType: TextInputType.text,
                     controller: _emailController,
                   ),
@@ -113,13 +113,13 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                   ),
                   SizedBox(height: SizeConfig.getProportionateHeight(10)),
                   CommonTextField(
-                    hintText: 'Enter Your Distract',
+                    hintText: 'Enter Your District',
                     textInputType: TextInputType.text,
                     controller: _districtcontroller,
                   ),
                   SizedBox(height: SizeConfig.getProportionateHeight(10)),
                   DropdownButtonFormField<String>(
-                    value: _selectedBloodGroup,
+                    initialValue: _selectedBloodGroup,
                     decoration: InputDecoration(
                       labelText: 'Select Blood Group',
                       labelStyle: AppStyle.normalTextStyle.copyWith(
@@ -153,12 +153,24 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                   SizedBox(height: SizeConfig.getProportionateHeight(15)),
                   CommonButton(
                     onTap: () {
-                      final email = _emailController.text.toString();
-                      final password = _passwordController.text.toString();
-                      final name = _nameController.text.toString();
-                      final phoneNumber =
-                          _phoneNumberController.text.toString();
-                      // Removed unused local variable 'district'
+                      final email = _emailController.text.trim();
+                      final password = _passwordController.text.trim();
+                      final name = _nameController.text.trim();
+                      final phoneNumber = _phoneNumberController.text.trim();
+                      final district = _districtcontroller.text.trim();
+
+                      if (_selectedBloodGroup == null ||
+                          email.isEmpty ||
+                          password.isEmpty ||
+                          name.isEmpty ||
+                          phoneNumber.isEmpty ||
+                          district.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('Please fill all fields')),
+                        );
+                        return;
+                      }
 
                       ref
                           .read(authControllerProvider.notifier)
@@ -168,10 +180,10 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                               name: name,
                               phoneNumber: phoneNumber,
                               bloodGroup: _selectedBloodGroup!,
-                              district: _districtcontroller.text,
+                              district: district,
                               type: widget.type);
                     },
-                    title: 'Rigester Me Now',
+                    title: 'Register Me Now',
                     isLoading: state.isLoading,
                   ),
                   SizedBox(height: SizeConfig.getProportionateHeight(15)),
