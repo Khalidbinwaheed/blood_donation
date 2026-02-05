@@ -13,7 +13,7 @@ class SignInScreen extends ConsumerStatefulWidget {
   const SignInScreen({super.key});
 
   @override
-  _SignInScreenState createState() => _SignInScreenState();
+  ConsumerState<SignInScreen> createState() => _SignInScreenState();
 }
 
 class _SignInScreenState extends ConsumerState<SignInScreen> {
@@ -35,128 +35,192 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
 
     ref.listen<AsyncValue>(authControllerProvider, (_, state) {
       state.showAlertDialogOnError(context);
-      
     });
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppStyle.mainColor,
-        body: Padding(
-          padding: EdgeInsets.fromLTRB(
-            SizeConfig.getProportionateWidth(10),
-            SizeConfig.getProportionateHeight(50),
-            SizeConfig.getProportionateWidth(10),
-            0,
-          ),
-          child: SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20.0),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          // Background Header with Curve and Gradient
+          Container(
+            height: SizeConfig.screenHeight * 0.4,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  AppStyle.primaryColor,
+                  AppStyle.secondaryColor,
+                ],
               ),
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
+              ),
+            ),
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Image.asset(
+                      'assets/logo.png',
+                      height: SizeConfig.getProportionateHeight(80),
+                      width: SizeConfig.getProportionateWidth(80),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Welcome Back',
+                    style: AppStyle.headingTextStyle.copyWith(
+                      color: Colors.white,
+                      fontSize: 28,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    'Sign in to continue saving lives',
+                    style: AppStyle.normalTextStyle.copyWith(
+                      color: Colors.white70,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          Padding(
+            padding: EdgeInsets.only(top: SizeConfig.screenHeight * 0.35),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
-                  Image.asset(
-                    'assets/logo.png',
-                    height: SizeConfig.getProportionateHeight(100),
-                    width: SizeConfig.getProportionateWidth(100),
-                    fit: BoxFit.cover,
-                  ),
-                  Text(
-                    'Sign in to your account',
-                    style:
-                        AppStyle.titleTextStyle.copyWith(color: Colors.black),
+                  Container(
+                    padding: const EdgeInsets.all(25),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Login',
+                          style: AppStyle.titleTextStyle.copyWith(fontSize: 24),
+                        ),
+                        SizedBox(height: SizeConfig.getProportionateHeight(25)),
+                        CommonTextField(
+                          hintText: 'Email Address',
+                          textInputType: TextInputType.emailAddress,
+                          controller: _emailController,
+                          prefixIcon: const Icon(Icons.email_outlined,
+                              color: Colors.grey),
+                          filled: true,
+                          fillColor: AppStyle.backgroundColor,
+                        ),
+                        SizedBox(height: SizeConfig.getProportionateHeight(15)),
+                        CommonTextField(
+                          hintText: 'Password',
+                          textInputType: TextInputType.text,
+                          controller: _passwordController,
+                          obscureText: true,
+                          prefixIcon: const Icon(Icons.lock_outline,
+                              color: Colors.grey),
+                          filled: true,
+                          fillColor: AppStyle.backgroundColor,
+                        ),
+                        SizedBox(height: SizeConfig.getProportionateHeight(25)),
+                        CommonButton(
+                            onTap: () {
+                              final email = _emailController.text.toString();
+                              final password =
+                                  _passwordController.text.toString();
+
+                              ref
+                                  .read(authControllerProvider.notifier)
+                                  .signInWithEmailAndPassword(
+                                      email: email, password: password);
+                            },
+                            title: 'Sign In',
+                            isLoading: state.isLoading),
+                      ],
+                    ),
                   ),
                   SizedBox(height: SizeConfig.getProportionateHeight(25)),
-                  CommonTextField(
-                    hintText: 'Email',
-                    textInputType: TextInputType.emailAddress,
-                    controller: _emailController,
+                  Row(
+                    children: [
+                      const Expanded(child: Divider()),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text('OR',
+                            style: TextStyle(color: Colors.grey.shade600)),
+                      ),
+                      const Expanded(child: Divider()),
+                    ],
                   ),
-                  SizedBox(height: SizeConfig.getProportionateHeight(10)),
-                  CommonTextField(
-                    hintText: 'Enter Password',
-                    textInputType: TextInputType.text,
-                    controller: _passwordController,
-                  ),
-                  SizedBox(height: SizeConfig.getProportionateHeight(10)),
-                  CommonButton(
-                      onTap: () {
-                        final email = _emailController.text.toString();
-                        final password = _passwordController.text.toString();
-
-                        ref
-                            .read(authControllerProvider.notifier)
-                            .signInWithEmailAndPassword(
-                                email: email, password: password);
-                      },
-                      title: 'Sign In',
-                      isLoading: state.isLoading),
-                  SizedBox(height: SizeConfig.getProportionateHeight(15)),
-                  Text(
-                    'Or',
-                    style:
-                        AppStyle.titleTextStyle.copyWith(color: Colors.black),
-                  ),
-                  SizedBox(height: SizeConfig.getProportionateHeight(15)),
-                  GestureDetector(
-                    onTap: () {
+                  SizedBox(height: SizeConfig.getProportionateHeight(25)),
+                  OutlinedButton(
+                    onPressed: () {
                       context.goNamed(
                         AppRoutes.register.name,
                         extra: 'Recipient',
                       );
                     },
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      width: SizeConfig.screenWidth,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.0),
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 2.0,
-                          style: BorderStyle.solid,
-                        ),
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: AppStyle.primaryColor),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                      child: Text(
-                        'Register as a Recipient',
-                        style: AppStyle.normalTextStyle.copyWith(
-                          color: Colors.black,
-                        ),
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      minimumSize: const Size(double.infinity, 50),
+                    ),
+                    child: Text(
+                      'Register as a Recipient',
+                      style: AppStyle.normalTextStyle.copyWith(
+                        color: AppStyle.primaryColor,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  SizedBox(height: SizeConfig.getProportionateHeight(10)),
-                  GestureDetector(
-                    onTap: () {
+                  SizedBox(height: SizeConfig.getProportionateHeight(15)),
+                  TextButton(
+                    onPressed: () {
                       context.goNamed(AppRoutes.register.name, extra: 'Donor');
                     },
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      width: SizeConfig.screenWidth,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.0),
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 2.0,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                      child: Text(
-                        'Register as a Donor',
-                        style: AppStyle.normalTextStyle.copyWith(
-                          color: Colors.black,
-                        ),
+                    child: RichText(
+                      text: TextSpan(
+                        text: "Want to donate? ",
+                        style: TextStyle(color: Colors.grey.shade600),
+                        children: [
+                          TextSpan(
+                            text: 'Register as Donor',
+                            style: TextStyle(
+                              color: AppStyle.primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  SizedBox(height: SizeConfig.getProportionateHeight(10)),
+                  SizedBox(height: SizeConfig.getProportionateHeight(20)),
                 ],
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

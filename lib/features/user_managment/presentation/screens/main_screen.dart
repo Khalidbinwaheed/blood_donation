@@ -3,8 +3,10 @@ import 'package:blood_donation/common_widgets/async_value_widget.dart';
 import 'package:blood_donation/features/user_managment/Domain/app_user.dart';
 import 'package:blood_donation/features/user_managment/data/firestore_repository.dart';
 import 'package:blood_donation/features/user_managment/presentation/widgets/main_drawer.dart';
+import 'package:blood_donation/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
@@ -40,10 +42,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       drawer: const MainDrawer(),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // TODO: Navigate to Add Donor Screen
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Add Donor tapped!')),
-          );
+          context.pushNamed(AppRoutes.addDonor.name);
         },
         icon: const Icon(Icons.person_add),
         label: const Text('Add Donor'),
@@ -100,11 +99,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                           const SizedBox(height: 20),
                           ElevatedButton.icon(
                             onPressed: () {
-                              // TODO: Navigate to Add Donor Screen
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Add Donor tapped!')),
-                              );
+                              context.pushNamed(AppRoutes.addDonor.name);
                             },
                             icon: const Icon(Icons.person_add),
                             label: const Text('Add Donor'),
@@ -147,18 +142,13 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                                 color: Colors.redAccent),
                             tooltip: 'View Details',
                             onPressed: () {
-                              // TODO: Navigate to donor details
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                    content: Text('Details for ${donor.name}')),
-                              );
+                              context.pushNamed(AppRoutes.donorDetails.name,
+                                  extra: donor);
                             },
                           ),
                           onTap: () {
-                            // TODO: Navigate to donor details
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Tapped ${donor.name}')),
-                            );
+                            context.pushNamed(AppRoutes.donorDetails.name,
+                                extra: donor);
                           },
                         );
                       },

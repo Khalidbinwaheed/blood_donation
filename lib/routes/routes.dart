@@ -4,6 +4,9 @@ import 'package:blood_donation/features/authentication/presentation/screens/regi
 import 'package:blood_donation/features/authentication/presentation/screens/sign_in_screen.dart';
 import 'package:blood_donation/features/user_managment/presentation/screens/account_screen.dart';
 import 'package:blood_donation/features/user_managment/presentation/screens/blood_group_selected_screen.dart';
+import 'package:blood_donation/features/user_managment/presentation/screens/add_donor_screen.dart';
+import 'package:blood_donation/features/user_managment/presentation/screens/donor_details_screen.dart';
+import 'package:blood_donation/features/user_managment/Domain/app_user.dart';
 // Assuming RegisterScreen exists or you'll add it
 // import 'package:blood_donation/feathers/authentication/presentation/screens/register_screen.dart';
 import 'package:blood_donation/features/user_managment/presentation/screens/main_screen.dart';
@@ -32,6 +35,8 @@ enum AppRoutes {
   bloodGroupSelected,
   emailedUsers,
   notifications,
+  addDonor,
+  donorDetails,
 }
 
 // --- Placeholder for RegisterScreen (if you haven't created it) ---
@@ -81,6 +86,8 @@ GoRouter goRouter(Ref ref) {
   const mainPath = '/main';
   const accountpath = 'account';
   const bloodGroupSelectedPath = 'bloodGroupSelected';
+  const addDonorPath = 'addDonor';
+  const donorDetailsPath = 'donorDetails';
 
   return GoRouter(
     initialLocation: splashPath,
@@ -155,6 +162,19 @@ GoRouter goRouter(Ref ref) {
         builder: (context, state) => const MainScreen(),
         // Define nested routes for '/main/...' if needed
         routes: [
+          GoRoute(
+            name: AppRoutes.addDonor.name,
+            path: addDonorPath,
+            builder: (context, state) => const AddDonorScreen(),
+          ),
+          GoRoute(
+            name: AppRoutes.donorDetails.name,
+            path: donorDetailsPath,
+            builder: (context, state) {
+              final donor = state.extra as AppUser;
+              return DonorDetailsScreen(donor: donor);
+            },
+          ),
           GoRoute(
             name: AppRoutes.bloodGroupSelected.name,
             path: bloodGroupSelectedPath, // Relative path: /main/account

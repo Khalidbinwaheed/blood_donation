@@ -9,47 +9,56 @@ extension AsyncValueUi on AsyncValue {
       if (ModalRoute.of(context)?.isCurrent == false) {
         return;
       }
-    }
-    final massage = _errorMessage(error);
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              icon: const Icon(
-                Icons.error,
-                color: Color(0xFF680c07),
-                size: 40,
-              ),
-              title: Text(
-                massage,
-                style: AppStyle.normalTextStyle
-                    .copyWith(color: const Color(0xFF680c07)),
-              ),
-              actions: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
+      final message = _errorMessage(error);
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                icon: Icon(
+                  Icons.error_outline,
+                  color: AppStyle.primaryColor,
+                  size: 40,
+                ),
+                title: Text(
+                  'Error',
+                  style: AppStyle.headingTextStyle.copyWith(
+                    color: AppStyle.primaryColor,
+                    fontSize: 20,
+                  ),
+                ),
+                content: Text(
+                  message,
+                  style:
+                      AppStyle.normalTextStyle.copyWith(color: Colors.black87),
+                  textAlign: TextAlign.center,
+                ),
+                actions: [
+                  Center(
+                    child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF680c07)),
+                        backgroundColor: AppStyle.primaryColor,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text(
-                        'Close',
-                        style: AppStyle.normalTextStyle,
-                      ),
-                    )
-                  ],
-                )
-              ],
-            ));
+                      child: const Text('Close'),
+                    ),
+                  )
+                ],
+              ));
+    }
   }
 }
 
 String _errorMessage(Object? error) {
   if (error is FirebaseAuthException) {
-    return error.message ?? error.toString();
-  } else {
+    return error.message ?? 'Authentication error occurred.';
+  } else if (error != null) {
     return error.toString();
+  } else {
+    return 'An unknown error occurred.';
   }
 }

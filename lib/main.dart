@@ -8,10 +8,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
     runApp(const ProviderScope(child: MyApp()));
   } catch (e) {
-    runApp(const ConfigurationErrorApp(error: "Firebase Initialization Failed"));
+    runApp(
+        const ConfigurationErrorApp(error: "Firebase Initialization Failed"));
   }
 }
 
@@ -77,12 +79,22 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       title: 'Blood Donation',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppStyle.mainColor),
+        scaffoldBackgroundColor: AppStyle.backgroundColor,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppStyle.primaryColor,
+          primary: AppStyle.primaryColor,
+          secondary: AppStyle.secondaryColor,
+          surface: AppStyle.surfaceColor,
+        ),
         useMaterial3: true,
         appBarTheme: const AppBarTheme().copyWith(
-          backgroundColor: AppStyle.mainColor,
+          backgroundColor: AppStyle.primaryColor,
           centerTitle: true,
           iconTheme: IconThemeData().copyWith(color: Colors.white),
+          titleTextStyle: AppStyle.headingTextStyle.copyWith(
+            color: Colors.white,
+            fontSize: 20,
+          ),
         ),
       ),
     );

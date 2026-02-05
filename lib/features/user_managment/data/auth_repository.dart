@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../Domain/app_user.dart';
 
@@ -31,7 +32,8 @@ class AuthRepository {
     required String name,
     required String bloodGroup,
     required String phoneNumber,
-    required String type, required String district,
+    required String type,
+    required String district,
   }) async {
     try {
       final cred = await _auth.createUserWithEmailAndPassword(
@@ -89,19 +91,18 @@ class AuthRepository {
 }
 
 @riverpod
-AuthRepository authRepository(AuthRepositoryRef ref) {
+AuthRepository authRepository(Ref ref) {
   return AuthRepository(FirebaseAuth.instance);
 }
 
 @riverpod
-User? currentUser(CurrentUserRef ref) {
+User? currentUser(Ref ref) {
   final authRepository = ref.watch(authRepositoryProvider);
   return authRepository.currentUser;
 }
 
-
 @riverpod
-Stream<AppUser> loadUserInformation(LoadUserInformationRef ref, String userId) {
+Stream<AppUser> loadUserInformation(Ref ref, String userId) {
   final authRepository = ref.watch(authRepositoryProvider);
   return authRepository.loadUserInformation(userId);
 }
