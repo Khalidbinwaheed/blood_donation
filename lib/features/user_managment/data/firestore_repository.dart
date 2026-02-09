@@ -25,7 +25,7 @@ class FirestoreRepository {
         .where(_typeField, isEqualTo: _donorType)
         .snapshots()
         .map((querySnapshot) => querySnapshot.docs
-            .map((doc) => AppUser.fromMap(doc.data()))
+            .map((doc) => AppUser.fromJson(doc.data()))
             .toList());
   }
 
@@ -37,7 +37,7 @@ class FirestoreRepository {
         .where(_bloodGroupField, isEqualTo: bloodGroup)
         .snapshots()
         .map((querySnapshot) => querySnapshot.docs
-            .map((doc) => AppUser.fromMap(doc.data()))
+            .map((doc) => AppUser.fromJson(doc.data()))
             .toList());
   }
 
@@ -49,7 +49,7 @@ class FirestoreRepository {
             isEqualTo: bloodGroup) // Currently filters for exact match
         .snapshots()
         .map((querySnapshot) => querySnapshot.docs
-            .map((doc) => AppUser.fromMap(doc.data()))
+            .map((doc) => AppUser.fromJson(doc.data()))
             .toList());
   }
 

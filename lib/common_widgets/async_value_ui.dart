@@ -13,7 +13,7 @@ extension AsyncValueUi on AsyncValue {
       showDialog(
           context: context,
           builder: (context) => AlertDialog(
-                icon: Icon(
+                icon: const Icon(
                   Icons.error_outline,
                   color: AppStyle.primaryColor,
                   size: 40,

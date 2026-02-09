@@ -6,7 +6,7 @@ part of 'firestore_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$firebaseFirestoreHash() => r'230b9276da2e44bb1aa6b300e1ddbb2f93c422da';
+String _$firebaseFirestoreHash() => r'963402713bf9b7cc1fb259d619d9b0184d4dcec1';
 
 /// Provides the FirebaseFirestore instance.
 ///
@@ -27,7 +27,7 @@ final firebaseFirestoreProvider =
 // ignore: unused_element
 typedef FirebaseFirestoreRef = AutoDisposeProviderRef<FirebaseFirestore>;
 String _$firestoreRepositoryHash() =>
-    r'ddb83ed3268e2a11ed4d45024e964ea9cb8b1802';
+    r'69a38ebd24a41a99714586d672729f52befb3b26';
 
 /// Provides the FirestoreRepository instance.
 ///
@@ -47,7 +47,7 @@ final firestoreRepositoryProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef FirestoreRepositoryRef = AutoDisposeProviderRef<FirestoreRepository>;
-String _$loadDonorsHash() => r'dd10a4feae9896796bd457393cff97da63431a44';
+String _$loadDonorsHash() => r'185bdd0a91959cd3449d071503e738e2503cb01c';
 
 /// Provider to stream all donors.
 ///
@@ -66,7 +66,7 @@ final loadDonorsProvider = AutoDisposeStreamProvider<List<AppUser>>.internal(
 // ignore: unused_element
 typedef LoadDonorsRef = AutoDisposeStreamProviderRef<List<AppUser>>;
 String _$loadSpecificBloodGroupDonorsHash() =>
-    r'f8d417bf8a87f6e95702c83290811ff21c3ba3dd';
+    r'd830eaf70a07164ffa612176d630e556f2818d20';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -238,7 +238,7 @@ class _LoadSpecificBloodGroupDonorsProviderElement
 }
 
 String _$loadSimilarBloodGroupsHash() =>
-    r'068b7ed54fe3d3862559a1fbbddeae33bc612604';
+    r'e8ca54317f833ecd6e08369f8e381779105c1899';
 
 /// See also [loadSimilarBloodGroups].
 @ProviderFor(loadSimilarBloodGroups)

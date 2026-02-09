@@ -1,0 +1,50 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && getUserData().role == 'admin';
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Users Collection
+    match /users/{userId} {
+      allow read: if isAuthenticated(); // Users can read other profiles (for social features)
+      allow write: if isOwner(userId) || isAdmin(); // Only owner or admin can edit
+    }
+    
+    // Appointments
+    match /appointments/{appointmentId} {
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || resource.data.doctorId == request.auth.uid || isAdmin());
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated() && (resource.data.userId == request.auth.uid || resource.data.doctorId == request.auth.uid || isAdmin());
+    }
+    
+    // Blood Requests:
+    // - Read: Allow everyone (including unauthenticated for "Skip Login")
+    // - Create: Authenticated users (Donors/Recipients)
+    // - Update/Delete: Creator or Admin
+    match /blood_requests/{requestId} {
+      allow read: if true;
+      allow create: if isAuthenticated();
+      allow update, delete: if isAuthenticated() && (request.auth.uid == resource.data.userId || isAdmin());
+    }
+    
+    // Internal System Settings (Admin Only)
+    match /system_settings/{docId} {
+      allow read, write: if isAdmin();
+    }
+  }
+}

@@ -1,108 +1,112 @@
+import 'package:blood_donation/features/user_managment/Domain/app_user.dart';
+import 'package:blood_donation/features/user_managment/data/firebase_auth_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../Domain/app_user.dart';
-
-part 'auth_repository.g.dart';
-
-class AuthRepository {
-  AuthRepository(this._auth);
-
-  final FirebaseAuth _auth;
-
-  /// Signs in a user with email and password
-  Future<void> signInWithEmailAndPassword({
-    required String email,
-    required String password,
-  }) async {
-    try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-    } catch (e) {
-      // Error handling
-      throw Exception('Error signing in: $e');
-    }
-  }
-
-  /// Creates a new user with email, password, and additional details
+abstract class AuthRepository {
+  Stream<AppUser?> get authStateChanges;
+  Future<void> signInWithEmailAndPassword(
+      {required String email, required String password});
   Future<void> createUserWithEmailAndPassword({
     required String email,
     required String password,
     required String name,
-    required String bloodGroup,
     required String phoneNumber,
+    required String bloodGroup,
+    required String type,
+    required String district,
+  });
+  Future<void> signOut();
+  Future<AppUser?> getCurrentUser();
+  Future<void> signIn(String email, String password);
+}
+
+class MockAuthRepository implements AuthRepository {
+  @override
+  Stream<AppUser?> get authStateChanges => Stream.value(
+        const AppUser(
+          uid: 'mock_uid_123',
+          email: 'alex@example.com',
+          firstName: 'Alex',
+          lastName: 'Doe',
+          role: 'patient',
+          donorEligibilityStatus: 'eligible',
+          phoneNumber: '1234567890',
+          bloodGroup: 'O+',
+          type: 'donor',
+          district: 'Downtown',
+        ),
+      );
+
+  @override
+  Future<AppUser?> getCurrentUser() async {
+    return const AppUser(
+      uid: 'mock_uid_123',
+      email: 'alex@example.com',
+      firstName: 'Alex',
+      lastName: 'Doe',
+      role: 'patient',
+      donorEligibilityStatus: 'eligible',
+      phoneNumber: '1234567890',
+      bloodGroup: 'O+',
+      type: 'donor',
+      district: 'Downtown',
+    );
+  }
+
+  @override
+  Future<void> signIn(String email, String password) async {
+    await signInWithEmailAndPassword(email: email, password: password);
+  }
+
+  @override
+  Future<void> signInWithEmailAndPassword(
+      {required String email, required String password}) async {
+    await Future.delayed(const Duration(seconds: 1));
+  }
+
+  @override
+  Future<void> createUserWithEmailAndPassword({
+    required String email,
+    required String password,
+    required String name,
+    required String phoneNumber,
+    required String bloodGroup,
     required String type,
     required String district,
   }) async {
-    try {
-      final cred = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      final firebaseFirestore = FirebaseFirestore.instance;
-      final appUser = AppUser(
-        name: name,
-        phoneNumber: phoneNumber,
-        bloodGroup: bloodGroup,
-        email: email,
-        type: type,
-        userId: cred.user!.uid,
-      );
-
-      await firebaseFirestore
-          .collection('users')
-          .doc(cred.user!.uid)
-          .set(appUser.toMap());
-    } catch (e) {
-      // Error handling
-      throw Exception('Error creating user: $e');
-    }
+    await Future.delayed(const Duration(seconds: 1));
   }
 
-  Stream<AppUser> loadUserInformation(String userId) {
-    return FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .snapshots()
-        .map((docSnapshot) => AppUser.fromMap(docSnapshot.data()!));
-  }
-
-  /// Gets the currently signed-in user
-  User? get currentUser {
-    try {
-      return _auth.currentUser;
-    } catch (e) {
-      // Error handling
-      throw Exception('Error fetching current user: $e');
-    }
-  }
-
-  /// Signs out the current user
+  @override
   Future<void> signOut() async {
-    try {
-      await _auth.signOut();
-    } catch (e) {
-      // Error handling
-      throw Exception('Error signing out: $e');
-    }
+    await Future.delayed(const Duration(milliseconds: 500));
   }
 }
 
-@riverpod
-AuthRepository authRepository(Ref ref) {
-  return AuthRepository(FirebaseAuth.instance);
-}
+final authRepositoryProvider = Provider<AuthRepository>((ref) {
+  return FirebaseAuthRepository();
+});
 
-@riverpod
-User? currentUser(Ref ref) {
-  final authRepository = ref.watch(authRepositoryProvider);
-  return authRepository.currentUser;
-}
+final authStateProvider = StreamProvider<AppUser?>((ref) {
+  return ref.watch(authRepositoryProvider).authStateChanges;
+});
 
-@riverpod
-Stream<AppUser> loadUserInformation(Ref ref, String userId) {
-  final authRepository = ref.watch(authRepositoryProvider);
-  return authRepository.loadUserInformation(userId);
-}
+final currentUserProvider = FutureProvider<AppUser?>((ref) async {
+  return ref.watch(authRepositoryProvider).getCurrentUser();
+});
+
+final loadUserInformationProvider =
+    FutureProvider.family<AppUser, String>((ref, uid) async {
+  try {
+    final doc =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    if (doc.exists && doc.data() != null) {
+      return AppUser.fromJson(doc.data()!);
+    }
+  } catch (e) {
+    // Log error
+  }
+  // Return a minimal valid user or throw to handle in UI
+  throw Exception('User not found');
+});

@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "234167986290",
+    "firebase_url": "https://blooddonation-89361-default-rtdb.firebaseio.com",
     "project_id": "blooddonation-89361",
     "storage_bucket": "blooddonation-89361.firebasestorage.app"
   },
@@ -12,7 +13,20 @@
           "package_name": "com.example.blood_donation"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "234167986290-fbi3jdr62df6sqqie5g5r7i3ue7fg3pb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.blood_donation",
+            "certificate_hash": "9bb6a811860394a9fe7e484ffa96873991c3640d"
+          }
+        },
+        {
+          "client_id": "234167986290-neinc3g6bif0hbb1552p1agaprcraugj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCgrFtwnW32aWUg2GOAjt-CmD4hCEPfS10"
@@ -20,7 +34,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "234167986290-neinc3g6bif0hbb1552p1agaprcraugj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "234167986290-iar03gdtl0pcluquufrii78f8nj675b6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.bloodDonation"
+              }
+            }
+          ]
         }
       }
     }

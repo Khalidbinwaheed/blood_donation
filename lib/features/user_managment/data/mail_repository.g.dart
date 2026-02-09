@@ -6,7 +6,7 @@ part of 'mail_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$mailRepositoryHash() => r'f0fd5943618cec040a982ebad9e1f29f69b91e2e';
+String _$mailRepositoryHash() => r'c8f97b8d5e69fd6bd8951b7c91dbbd2e2bdf5c6e';
 
 /// See also [mailRepository].
 @ProviderFor(mailRepository)

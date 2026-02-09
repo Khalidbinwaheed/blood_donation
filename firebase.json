@@ -1,1 +1,39 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"blooddonation-89361","appId":"1:234167986290:android:decdb0ae4c13f189bb3aeb","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"blooddonation-89361","configurations":{"android":"1:234167986290:android:decdb0ae4c13f189bb3aeb","ios":"1:234167986290:ios:0c143fa4a8550fffbb3aeb","macos":"1:234167986290:ios:0c143fa4a8550fffbb3aeb","web":"1:234167986290:web:ac9cba2f78db98cfbb3aeb","windows":"1:234167986290:web:e6f0ad308a2089d2bb3aeb"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "blooddonation-89361",
+          "appId": "1:234167986290:android:decdb0ae4c13f189bb3aeb",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "blooddonation-89361",
+          "configurations": {
+            "android": "1:234167986290:android:decdb0ae4c13f189bb3aeb",
+            "ios": "1:234167986290:ios:0c143fa4a8550fffbb3aeb",
+            "macos": "1:234167986290:ios:0c143fa4a8550fffbb3aeb",
+            "web": "1:234167986290:web:ac9cba2f78db98cfbb3aeb",
+            "windows": "1:234167986290:web:e6f0ad308a2089d2bb3aeb"
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "emulators": {
+    "singleProjectMode": true,
+    "firestore": {
+      "port": 8080
+    },
+    "ui": {
+      "enabled": true,
+      "port": 4000
+    }
+  }
+}

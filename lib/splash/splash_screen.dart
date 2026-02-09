@@ -1,4 +1,4 @@
-import 'package:blood_donation/routes/routes.dart';
+import 'package:blood_donation/core/router/app_routes.dart';
 import 'package:blood_donation/util/appstyles.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     Future.delayed(const Duration(seconds: 5), () {
       if (mounted) {
-        context.goNamed(AppRoutes.main.name);
+        context.goNamed(AppRoutes.home.name);
       }
     });
   }

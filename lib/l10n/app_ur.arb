@@ -1,0 +1,19 @@
+{
+  "appTitle": "کیئر لنک",
+  "homeGreeting": "مرحبا، {firstName}",
+  "lastCheckIn": "آخری چیک ان: {date}",
+  "donorCtaTitle": "میں ڈونر ہوں",
+  "donorCtaSubtitle": "آج ہی زندگی بچائیں",
+  "recipientCtaTitle": "میں وصول کنندہ ہوں",
+  "recipientCtaSubtitle": "میچ تلاش کریں",
+  "quickActionsTitle": "فوری اقدامات",
+  "nearbyCentersTitle": "قریبی مراکز",
+  "openNow": "ابھی کھلا ہے",
+  "call": "کال کریں",
+  "directions": "راستہ",
+  "newsTitle": "صحت کی خبریں",
+  "requestHelp": "مدد کی درخواست",
+  "bookAppointment": "اپائنٹمنٹ بک کریں",
+  "myId": "میری شناخت/QR",
+  "emergencySos": "ہنگامی SOS"
+}

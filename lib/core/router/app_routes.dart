@@ -1,0 +1,17 @@
+enum AppRoutes {
+  splash,
+  home,
+  signIn,
+  register,
+  account,
+  bloodGroupSelected,
+  emailedUsers,
+  notifications,
+  addDonor,
+  donorDetails,
+  settings,
+  about,
+  requestBlood,
+  appointments,
+  digitalId,
+}

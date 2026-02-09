@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 //import 'package:google_fonts/google_fonts.dart';
 
 class AppStyle {
-  static final headingTextStyle = TextStyle(
+  static final headingTextStyle = const TextStyle(
     fontSize: 24,
     color: Colors.black,
     fontWeight: FontWeight.bold,
   );
-  static final titleTextStyle = TextStyle(
+  static final titleTextStyle = const TextStyle(
     fontSize: 20,
     color: Colors.black87,
     fontWeight: FontWeight.w600,
   );
-  static final normalTextStyle = TextStyle(
+  static final normalTextStyle = const TextStyle(
     fontSize: 16,
     color: Colors.black87,
     fontWeight: FontWeight.w400,

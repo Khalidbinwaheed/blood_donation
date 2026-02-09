@@ -1,0 +1,35 @@
+{
+  "appTitle": "CareLink",
+  "homeGreeting": "Hi, {firstName}",
+  "@homeGreeting": {
+    "placeholders": {
+      "firstName": {
+        "type": "String",
+        "example": "Alex"
+      }
+    }
+  },
+  "lastCheckIn": "Last check-in: {date}",
+  "@lastCheckIn": {
+    "placeholders": {
+      "date": {
+        "type": "String",
+        "example": "Today"
+      }
+    }
+  },
+  "donorCtaTitle": "I'm a Donor",
+  "donorCtaSubtitle": "Give life today",
+  "recipientCtaTitle": "I'm a Recipient",
+  "recipientCtaSubtitle": "Find a match",
+  "quickActionsTitle": "Quick Actions",
+  "nearbyCentersTitle": "Nearby Centers",
+  "openNow": "Open Now",
+  "call": "Call",
+  "directions": "Directions",
+  "newsTitle": "Health News",
+  "requestHelp": "Request Help",
+  "bookAppointment": "Book Appointment",
+  "myId": "My ID/QR",
+  "emergencySos": "Emergency SOS"
+}

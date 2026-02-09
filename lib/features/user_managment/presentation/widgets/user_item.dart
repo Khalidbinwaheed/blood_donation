@@ -26,7 +26,7 @@ class UserItem extends ConsumerWidget {
                   style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
                 ),
                 Text(
-                  'Name: ${appUser.name}',
+                  'Name: ${appUser.firstName ?? ''} ${appUser.lastName ?? ''}',
                   overflow: TextOverflow.ellipsis,
                   style: AppStyle.normalTextStyle.copyWith(color: Colors.black),
                 ),

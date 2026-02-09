@@ -1,294 +1,202 @@
-import 'package:blood_donation/common_widgets/async_value_ui.dart';
-import 'package:blood_donation/common_widgets/common_button.dart';
-import 'package:blood_donation/common_widgets/common_text_field.dart';
-import 'package:blood_donation/features/authentication/presentation/controllers/auth_controller.dart';
-import 'package:blood_donation/routes/routes.dart';
-import 'package:blood_donation/util/appstyles.dart';
-import 'package:blood_donation/util/size_config.dart';
+import 'package:blood_donation/features/authentication/presentation/controllers/auth_view_model.dart';
+import 'package:blood_donation/features/authentication/presentation/widgets/blood_group_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+
+// Pro-Tip: Location
+// import 'package:geolocator/geolocator.dart'; // Add dependency if needed
 
 class RegistrationScreen extends ConsumerStatefulWidget {
-  const RegistrationScreen(this.type, {super.key});
-
-  final String type;
+  const RegistrationScreen({super.key});
 
   @override
-  ConsumerState createState() => _RegistrationScreenState();
+  ConsumerState<RegistrationScreen> createState() => _RegistrationScreenState();
 }
 
 class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _nameController = TextEditingController();
-  final _phoneNumberController = TextEditingController();
-  final _districtcontroller = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
+  String _selectedRole = 'donor';
   String? _selectedBloodGroup;
-
-  final List<String> _bloodGroups = [
-    'A+',
-    'A-',
-    'B+',
-    'B-',
-    'AB+',
-    'AB-',
-    'O+',
-    'O-',
-  ];
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-    _nameController.dispose();
-    _phoneNumberController.dispose();
     super.dispose();
+  }
+
+  Future<void> _handleSignup() async {
+    if (_formKey.currentState!.validate()) {
+      if (_selectedBloodGroup == null && _selectedRole != 'doctor') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please select your Blood Group')),
+        );
+        return;
+      }
+
+      // Pro-Tip: Request Location Permission immediately?
+      // For now, we pass null, but we could add Geolocator logic here.
+      double? lat, lng;
+
+      final success = await ref.read(authViewModelProvider.notifier).signUp(
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim(),
+            name: _nameController.text.trim(),
+            bloodGroup: _selectedBloodGroup ?? 'N/A',
+            role: _selectedRole,
+            lat: lat,
+            lng: lng,
+          );
+
+      if (!success && mounted) {
+        final error = ref.read(authViewModelProvider).error;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error ?? 'Signup Failed')),
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig.init(context);
+    final authState = ref.watch(authViewModelProvider);
 
-    final state = ref.watch(authControllerProvider);
-
-    ref.listen<AsyncValue>(authControllerProvider, (_, state) {
-      state.showAlertDialogOnError(context);
-    });
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          // Background Header with Gradient
-          Container(
-            height: SizeConfig.screenHeight * 0.35,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  AppStyle.primaryColor,
-                  AppStyle.secondaryColor,
-                ],
-              ),
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30),
-              ),
-            ),
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Image.asset(
-                      'assets/logo.png',
-                      height: SizeConfig.getProportionateHeight(60),
-                      width: SizeConfig.getProportionateWidth(60),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Create Account',
-                    style: AppStyle.headingTextStyle.copyWith(
-                      color: Colors.white,
-                      fontSize: 26,
-                    ),
-                  ),
-                  Text(
-                    'Join the community of heroes',
-                    style: AppStyle.normalTextStyle.copyWith(
-                      color: Colors.white70,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+      appBar: AppBar(
+        title: const Text('Join the Lifesavers'),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.black,
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Create Account',
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFFD32F2F),
+                      ),
+                ),
+                const SizedBox(height: 24),
 
-          Padding(
-            padding: EdgeInsets.only(top: SizeConfig.screenHeight * 0.28),
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              child: Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(25),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.1),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${widget.type} Registration',
-                          style: AppStyle.titleTextStyle.copyWith(fontSize: 22),
-                        ),
-                        SizedBox(height: SizeConfig.getProportionateHeight(25)),
-                        CommonTextField(
-                          hintText: 'Full Name',
-                          textInputType: TextInputType.text,
-                          controller: _nameController,
-                          prefixIcon: const Icon(Icons.person_outline,
-                              color: Colors.grey),
-                          filled: true,
-                          fillColor: AppStyle.backgroundColor,
-                        ),
-                        SizedBox(height: SizeConfig.getProportionateHeight(15)),
-                        CommonTextField(
-                          hintText: 'Email Address',
-                          textInputType: TextInputType.emailAddress,
-                          controller: _emailController,
-                          prefixIcon: const Icon(Icons.email_outlined,
-                              color: Colors.grey),
-                          filled: true,
-                          fillColor: AppStyle.backgroundColor,
-                        ),
-                        SizedBox(height: SizeConfig.getProportionateHeight(15)),
-                        CommonTextField(
-                          hintText: 'Password',
-                          textInputType: TextInputType.visiblePassword,
-                          controller: _passwordController,
-                          obscureText: true,
-                          prefixIcon: const Icon(Icons.lock_outline,
-                              color: Colors.grey),
-                          filled: true,
-                          fillColor: AppStyle.backgroundColor,
-                        ),
-                        SizedBox(height: SizeConfig.getProportionateHeight(15)),
-                        CommonTextField(
-                          hintText: 'Phone Number',
-                          textInputType: TextInputType.phone,
-                          controller: _phoneNumberController,
-                          prefixIcon: const Icon(Icons.phone_outlined,
-                              color: Colors.grey),
-                          filled: true,
-                          fillColor: AppStyle.backgroundColor,
-                        ),
-                        SizedBox(height: SizeConfig.getProportionateHeight(15)),
-                        CommonTextField(
-                          hintText: 'District',
-                          textInputType: TextInputType.text,
-                          controller: _districtcontroller,
-                          prefixIcon: const Icon(Icons.location_on_outlined,
-                              color: Colors.grey),
-                          filled: true,
-                          fillColor: AppStyle.backgroundColor,
-                        ),
-                        SizedBox(height: SizeConfig.getProportionateHeight(15)),
-                        DropdownButtonFormField<String>(
-                          initialValue: _selectedBloodGroup,
-                          decoration: InputDecoration(
-                            labelText: 'Select Blood Group',
-                            labelStyle: TextStyle(color: Colors.grey.shade700),
-                            prefixIcon: const Icon(Icons.bloodtype_outlined,
-                                color: Colors.grey),
-                            filled: true,
-                            fillColor: AppStyle.backgroundColor,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
-                          items: _bloodGroups.map((String group) {
-                            return DropdownMenuItem<String>(
-                              value: group,
-                              child: Text(
-                                group,
-                                style: AppStyle.normalTextStyle.copyWith(
-                                  color: Colors.black,
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              _selectedBloodGroup = newValue;
-                            });
-                          },
-                        ),
-                        SizedBox(height: SizeConfig.getProportionateHeight(25)),
-                        CommonButton(
-                          onTap: () {
-                            final email = _emailController.text.trim();
-                            final password = _passwordController.text.trim();
-                            final name = _nameController.text.trim();
-                            final phoneNumber =
-                                _phoneNumberController.text.trim();
-                            final district = _districtcontroller.text.trim();
-
-                            if (_selectedBloodGroup == null ||
-                                email.isEmpty ||
-                                password.isEmpty ||
-                                name.isEmpty ||
-                                phoneNumber.isEmpty ||
-                                district.isEmpty) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Please fill all fields')),
-                              );
-                              return;
-                            }
-
-                            ref
-                                .read(authControllerProvider.notifier)
-                                .createUserWithEmailAndPassword(
-                                    email: email,
-                                    password: password,
-                                    name: name,
-                                    phoneNumber: phoneNumber,
-                                    bloodGroup: _selectedBloodGroup!,
-                                    district: district,
-                                    type: widget.type);
-                          },
-                          title: 'Register Now',
-                          isLoading: state.isLoading,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: SizeConfig.getProportionateHeight(20)),
-                  TextButton(
-                    onPressed: () {
-                      context.goNamed(AppRoutes.signIn.name);
+                // 1. Role Toggle
+                Center(
+                  child: SegmentedButton<String>(
+                    segments: const [
+                      ButtonSegment(
+                        value: 'donor',
+                        label: Text('Donor'),
+                        icon: Icon(Icons.volunteer_activism),
+                      ),
+                      ButtonSegment(
+                        value: 'recipient',
+                        label: Text('Recipient'),
+                        icon: Icon(Icons.bloodtype),
+                      ),
+                      ButtonSegment(
+                        value: 'doctor',
+                        label: Text('Doctor'),
+                        icon: Icon(Icons.medical_services),
+                      ),
+                    ],
+                    selected: {_selectedRole},
+                    onSelectionChanged: (Set<String> newSelection) {
+                      setState(() {
+                        _selectedRole = newSelection.first;
+                      });
                     },
-                    child: RichText(
-                      text: TextSpan(
-                        text: "Already have an account? ",
-                        style: TextStyle(color: Colors.grey.shade600),
-                        children: [
-                          TextSpan(
-                            text: 'Sign In',
-                            style: TextStyle(
-                              color: AppStyle.primaryColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.resolveWith(
+                        (states) => states.contains(WidgetState.selected)
+                            ? Colors.red.shade100
+                            : null,
+                      ),
+                      foregroundColor: WidgetStateProperty.resolveWith(
+                        (states) => states.contains(WidgetState.selected)
+                            ? Colors.red.shade900
+                            : null,
                       ),
                     ),
                   ),
-                  SizedBox(height: SizeConfig.getProportionateHeight(20)),
+                ),
+                const SizedBox(height: 32),
+
+                // 2. Info Fields
+                TextFormField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Full Name',
+                    prefixIcon: Icon(Icons.person_outline),
+                  ),
+                  validator: (val) =>
+                      val == null || val.isEmpty ? 'Required' : null,
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    prefixIcon: Icon(Icons.email_outlined),
+                  ),
+                  validator: (val) => val == null || !val.contains('@')
+                      ? 'Invalid email'
+                      : null,
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Password',
+                    prefixIcon: Icon(Icons.lock_outline),
+                  ),
+                  validator: (val) =>
+                      val == null || val.length < 6 ? 'min 6 characters' : null,
+                ),
+                const SizedBox(height: 32),
+
+                // 3. Blood Group Selector (Horizontal)
+                // Only show for Donor and Recipient
+                if (_selectedRole != 'doctor') ...[
+                  BloodGroupSelector(
+                    selectedGroup: _selectedBloodGroup,
+                    onSelected: (group) {
+                      setState(() => _selectedBloodGroup = group);
+                    },
+                  ),
+                  const SizedBox(height: 32),
                 ],
-              ),
+
+                // 4. Action Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: FilledButton(
+                    onPressed: authState.isLoading ? null : _handleSignup,
+                    style: FilledButton.styleFrom(
+                      backgroundColor: const Color(0xFFD32F2F),
+                    ),
+                    child: authState.isLoading
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : const Text('SIGN UP'),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

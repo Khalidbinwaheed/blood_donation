@@ -43,7 +43,7 @@ class CommonTextField extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide(color: AppStyle.primaryColor, width: 2.0),
+          borderSide: const BorderSide(color: AppStyle.primaryColor, width: 2.0),
         ),
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),

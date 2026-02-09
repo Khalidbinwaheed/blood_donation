@@ -18,7 +18,7 @@ class DonorDetailsScreen extends StatelessWidget {
       await launchUrlString(launchUri.toString());
     } else {
       // Handle error
-      debugPrint("Count not launch phone call to $phoneNumber");
+      debugPrint('Count not launch phone call to $phoneNumber');
     }
   }
 
@@ -31,7 +31,7 @@ class DonorDetailsScreen extends StatelessWidget {
       await launchUrlString(launchUri.toString());
     } else {
       // Handle error
-      debugPrint("Count not launch email to $email");
+      debugPrint('Count not launch email to $email');
     }
   }
 
@@ -54,8 +54,10 @@ class DonorDetailsScreen extends StatelessWidget {
                 radius: 60,
                 backgroundColor: Colors.red[100],
                 child: Text(
-                  donor.name.isNotEmpty ? donor.name[0].toUpperCase() : '?',
-                  style: TextStyle(
+                  (donor.firstName?.isNotEmpty == true)
+                      ? donor.firstName![0].toUpperCase()
+                      : '?',
+                  style: const TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
                     color: AppStyle.mainColor,
@@ -65,7 +67,7 @@ class DonorDetailsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              donor.name,
+              '${donor.firstName ?? ''} ${donor.lastName ?? ''}',
               style: AppStyle.titleTextStyle.copyWith(color: Colors.black),
               textAlign: TextAlign.center,
             ),
