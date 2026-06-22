@@ -11,8 +11,9 @@ name: Deploy Firebase
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main, master]
+  # Auto-deploy only when FIREBASE_SERVICE_ACCOUNT secret is configured.
+  # push:
+  #   branches: [main, master]
 
 jobs:
   deploy:
@@ -33,8 +34,11 @@ jobs:
         run: flutter pub get
 
       - name: Install Functions dependencies
-        run: npm ci
+        run: npm install
         working-directory: functions
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
 
       - name: Inject web maps key
         run: |
