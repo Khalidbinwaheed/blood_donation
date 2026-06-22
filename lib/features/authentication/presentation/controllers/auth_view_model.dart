@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:blood_donation/features/user_management/data/auth_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,23 +20,74 @@ class AuthState {
 }
 
 class AuthViewModel extends StateNotifier<AuthState> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final AuthRepository _authRepository;
 
-  AuthViewModel() : super(const AuthState());
+  AuthViewModel(this._authRepository) : super(const AuthState());
 
   Future<bool> signIn(String email, String password) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
-      final credential = await _auth.signInWithEmailAndPassword(
+      await _authRepository.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      state = state.copyWith(isLoading: false, user: credential.user);
+      // Determine user after sign in?
+      // actually authStateChanges stream provider should handle user state updates in the app.
+      // But we might want to return true/false for UI feedback.
+      // The current implementation returns bool.
+      await _authRepository.getCurrentUser();
+      // Wait a bit to ensure stream updates? Or just trust the repo.
+
+      // We don't necessarily need to update 'user' in state if we rely on the StreamProvider for 'authState' in the UI.
+      // But the current AuthState class has a 'user' field.
+      // Let's update it to be consistent with previous logic.
+      // Note: AuthRepository.getCurrentUser returns AppUser?, but AuthState expects User? (Firebase User).
+      // WARN: AuthState definition uses User? from firebase_auth.
+      // We should probably update AuthState to use AppUser? or remove it if we use the stream.
+      // For now, let's keep the existing UI contract: return true on success.
+
+      // Converting AppUser to Firebase User is n/a.
+      // The previous implementation used Firebase User in AuthState.
+      // If the UI depends on AuthState.user, we might break it if we don't supply it.
+      // EXCEPT: The UI (main.dart) watches `authStateProvider` (stream of AppUser) for routing.
+      // The `signIn_screen` checks `ref.read(authViewModelProvider).error`.
+      // It seems `AuthState.user` might not be heavily used if `authStateProvider` is used for auth state.
+      // Let's check `signIn_screen.dart`: `final authState = ref.watch(authViewModelProvider);`
+      // It uses `authState.isLoading`.
+
+      state = state.copyWith(isLoading: false);
       return true;
-    } on FirebaseAuthException catch (e) {
-      state = state.copyWith(isLoading: false, error: e.message);
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
       return false;
+    }
+  }
+
+  Future<bool> signInWithGoogle() async {
+    state = state.copyWith(isLoading: true, error: null);
+    try {
+      await _authRepository.signInWithGoogle();
+      state = state.copyWith(isLoading: false);
+      return true;
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> signInWithBiometrics() async {
+    state = state.copyWith(isLoading: true, error: null);
+    try {
+      final success = await _authRepository.authenticateWithBiometrics();
+      if (!success) {
+        state = state.copyWith(
+          isLoading: false,
+          error: 'Biometric authentication was cancelled or unavailable.',
+        );
+        return false;
+      }
+      state = state.copyWith(isLoading: false);
+      return true;
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
       return false;
@@ -54,34 +105,19 @@ class AuthViewModel extends StateNotifier<AuthState> {
   }) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
-      final credential = await _auth.createUserWithEmailAndPassword(
+      await _authRepository.createUserWithEmailAndPassword(
         email: email,
         password: password,
+        name: name,
+        bloodGroup: bloodGroup,
+        type: role,
+        // Optional fields not in UI
+        phoneNumber: '',
+        district: '',
       );
 
-      final user = credential.user;
-      if (user != null) {
-        // Write profile to Firestore
-        await _firestore.collection('users').doc(user.uid).set({
-          'uid': user.uid,
-          'name': name,
-          'email': email,
-          'bloodGroup': bloodGroup,
-          'role': role,
-          'isAvailable': role == 'donor', // Default availability for donors
-          'location': lat != null && lng != null
-              ? GeoPoint(lat, lng)
-              : null, // Pro-Tip: Immediate location
-          'createdAt': FieldValue.serverTimestamp(),
-        });
-
-        state = state.copyWith(isLoading: false, user: user);
-        return true;
-      }
-      return false;
-    } on FirebaseAuthException catch (e) {
-      state = state.copyWith(isLoading: false, error: e.message);
-      return false;
+      state = state.copyWith(isLoading: false);
+      return true;
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
       return false;
@@ -89,12 +125,13 @@ class AuthViewModel extends StateNotifier<AuthState> {
   }
 
   void signOut() async {
-    await _auth.signOut();
+    await _authRepository.signOut();
     state = const AuthState();
   }
 }
 
 final authViewModelProvider =
     StateNotifierProvider<AuthViewModel, AuthState>((ref) {
-  return AuthViewModel();
+  final authRepository = ref.watch(authRepositoryProvider);
+  return AuthViewModel(authRepository);
 });

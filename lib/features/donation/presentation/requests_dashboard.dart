@@ -1,7 +1,7 @@
 import 'package:blood_donation/features/donation/domain/blood_request.dart';
 import 'package:blood_donation/features/donation/presentation/widgets/request_card.dart';
 import 'package:blood_donation/features/recipient/data/donation_repository.dart';
-import 'package:blood_donation/features/user_managment/data/auth_repository.dart';
+import 'package:blood_donation/features/user_management/data/auth_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,8 +16,11 @@ class RequestsDashboard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final showAll = ref.watch(showAllRequestsProvider);
     final userAsync = ref.watch(currentUserProvider);
+    final listHeight =
+        (MediaQuery.sizeOf(context).height * 0.45).clamp(260.0, 420.0);
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -42,7 +45,8 @@ class RequestsDashboard extends ConsumerWidget {
             ],
           ),
         ),
-        Expanded(
+        SizedBox(
+          height: listHeight,
           child: StreamBuilder<List<Map<String, dynamic>>>(
             stream: ref.watch(donationRepositoryProvider).getOpenRequests(),
             builder: (context, snapshot) {

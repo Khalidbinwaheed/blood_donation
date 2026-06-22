@@ -1,4 +1,5 @@
 import 'package:blood_donation/l10n/app_localizations.dart';
+import 'package:blood_donation/core/router/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -12,31 +13,31 @@ class QuickActionsWidget extends StatelessWidget {
       _QuickActionItem(
         icon: Icons.volunteer_activism,
         label: AppLocalizations.of(context)!.requestHelp,
-        color: const Color(0xFFD32F2F), // Red
+        color: Theme.of(context).colorScheme.primary, // Red
         onTap: () {
-          context.pushNamed('requestBlood');
+          context.pushNamed(AppRoutes.requestBlood.name);
         },
       ),
       _QuickActionItem(
         icon: Icons.calendar_month,
         label: AppLocalizations.of(context)!.bookAppointment,
-        color: const Color(0xFF009688), // Teal
+        color: const Color(0xFF009688), // Teal - Kept distinct
         onTap: () {
-          context.pushNamed('appointments');
+          context.pushNamed(AppRoutes.appointments.name);
         },
       ),
       _QuickActionItem(
         icon: Icons.qr_code,
         label: AppLocalizations.of(context)!.myId,
-        color: const Color(0xFF607D8B), // Blue Grey
+        color: const Color(0xFF607D8B), // Blue Grey - Kept distinct
         onTap: () {
-          context.pushNamed('digitalId');
+          context.pushNamed(AppRoutes.digitalId.name);
         },
       ),
       _QuickActionItem(
         icon: Icons.sos,
         label: AppLocalizations.of(context)!.emergencySos,
-        color: const Color(0xFFB71C1C), // Deep Red
+        color: Theme.of(context).colorScheme.error, // Deep Red
         onTap: () {
           showDialog(
             context: context,

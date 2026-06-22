@@ -1,4 +1,3 @@
-import 'package:blood_donation/util/appstyles.dart';
 import 'package:blood_donation/util/size_config.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +14,7 @@ class CommonButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(15),
@@ -23,11 +23,11 @@ class CommonButton extends StatelessWidget {
         height: SizeConfig.getProportionateHeight(55),
         width: SizeConfig.screenWidth,
         decoration: BoxDecoration(
-          color: AppStyle.primaryColor,
+          color: theme.colorScheme.primary,
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
-              color: AppStyle.primaryColor.withValues(alpha: 0.4),
+              color: theme.colorScheme.primary.withValues(alpha: 0.35),
               blurRadius: 10,
               offset: const Offset(0, 5),
             ),
@@ -46,10 +46,9 @@ class CommonButton extends StatelessWidget {
               )
             : Text(
                 title,
-                style: AppStyle.normalTextStyle.copyWith(
-                  color: Colors.white,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: theme.colorScheme.onPrimary,
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
                 ),
               ),
       ),

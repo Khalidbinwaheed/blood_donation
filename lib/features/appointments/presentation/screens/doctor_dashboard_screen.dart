@@ -1,5 +1,5 @@
 import 'package:blood_donation/features/appointments/data/appointment_repository.dart';
-import 'package:blood_donation/features/user_managment/data/auth_repository.dart';
+import 'package:blood_donation/features/user_management/data/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -76,50 +76,108 @@ class _DoctorDashboardScreenState extends ConsumerState<DoctorDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Doctor Dashboard')),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final isWide = constraints.maxWidth > 800;
-          return Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: isWide
-                ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: _buildDateSelection(),
-                      ),
-                      const SizedBox(width: 32),
-                      Expanded(
-                        flex: 2,
-                        child: _buildSlotSelection(),
-                      ),
-                    ],
-                  )
-                : Column(
-                    children: [
-                      _buildDateSelection(),
-                      const SizedBox(height: 24),
-                      Expanded(child: _buildSlotSelection()),
-                    ],
-                  ),
-          );
-        },
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ElevatedButton(
-          onPressed: _isLoading ? null : _saveAvailability,
-          style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 16),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Doctor Dashboard'),
+          bottom: const TabBar(
+            tabs: [
+              Tab(text: 'Availability', icon: Icon(Icons.access_time)),
+              Tab(text: 'Appointments', icon: Icon(Icons.calendar_month)),
+            ],
           ),
-          child: _isLoading
-              ? const CircularProgressIndicator()
-              : const Text('Save Availability'),
+        ),
+        body: TabBarView(
+          children: [
+            // Tab 1: Availability
+            Scaffold(
+              body: LayoutBuilder(
+                builder: (context, constraints) {
+                  final isWide = constraints.maxWidth > 800;
+                  return Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: isWide
+                        ? Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: _buildDateSelection(),
+                              ),
+                              const SizedBox(width: 32),
+                              Expanded(
+                                flex: 2,
+                                child: _buildSlotSelection(),
+                              ),
+                            ],
+                          )
+                        : Column(
+                            children: [
+                              _buildDateSelection(),
+                              const SizedBox(height: 24),
+                              Expanded(child: _buildSlotSelection()),
+                            ],
+                          ),
+                  );
+                },
+              ),
+              bottomNavigationBar: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ElevatedButton(
+                  onPressed: _isLoading ? null : _saveAvailability,
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  child: _isLoading
+                      ? const CircularProgressIndicator()
+                      : const Text('Save Availability'),
+                ),
+              ),
+            ),
+            // Tab 2: Appointments
+            _buildAppointmentsList(),
+          ],
         ),
       ),
+    );
+  }
+
+  Widget _buildAppointmentsList() {
+    final user = ref.watch(currentUserProvider).value;
+    if (user == null) return const Center(child: Text('Not logged in'));
+
+    final appointmentsAsync = ref.watch(doctorAppointmentsProvider(user.uid));
+
+    return appointmentsAsync.when(
+      data: (appointments) {
+        if (appointments.isEmpty) {
+          return const Center(child: Text('No upcoming appointments.'));
+        }
+        return ListView.separated(
+          padding: const EdgeInsets.all(16),
+          itemCount: appointments.length,
+          separatorBuilder: (_, __) => const Divider(),
+          itemBuilder: (context, index) {
+            final apt = appointments[index];
+            final date = (apt['date'] as dynamic)?.toDate();
+            return Card(
+              child: ListTile(
+                leading: const CircleAvatar(child: Icon(Icons.person)),
+                title: Text(
+                    'Appointment at ${apt['centerId'] ?? 'Center'}'), // Ideally fetch center name
+                subtitle: Text(
+                  'Date: ${date != null ? DateFormat.yMMMd().add_jm().format(date) : 'N/A'}\nType: ${apt['type'] ?? 'General'}',
+                ),
+                isThreeLine: true,
+                trailing: Text(apt['status'] ?? 'Scheduled'),
+              ),
+            );
+          },
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, _) => Center(child: Text('Error: $err')),
     );
   }
 

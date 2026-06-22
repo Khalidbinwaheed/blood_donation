@@ -1,0 +1,4 @@
+Analyzing blood_donation...                                     
+
+   info - Use 'const' with the constructor to improve performance - lib\features\home\presentation\home_screen.dart:497:12 - prefer_const_constructors
+

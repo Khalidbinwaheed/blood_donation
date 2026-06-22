@@ -1,117 +1,194 @@
-import 'package:blood_donation/features/map/domain/center_model.dart';
-import 'package:blood_donation/features/map/presentation/centers_provider.dart';
+import 'package:blood_donation/features/emergency/data/permission_providers.dart';
+import 'package:blood_donation/features/map/data/location_provider.dart';
+import 'package:blood_donation/features/map/domain/app_map_marker.dart';
+import 'package:blood_donation/features/map/presentation/nearby_places_provider.dart';
+import 'package:blood_donation/features/map/presentation/widgets/osm_satellite_map.dart';
+import 'package:blood_donation/features/models/place.dart';
+import 'package:blood_donation/features/widgets/permission_required_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class CentersMapScreen extends ConsumerStatefulWidget {
+class CentersMapScreen extends ConsumerWidget {
   const CentersMapScreen({super.key});
 
   @override
-  ConsumerState<CentersMapScreen> createState() => _CentersMapScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final location = ref.watch(userLocationProvider);
+    final placesAsync = ref.watch(nearbyPlacesProvider);
+    final permissions = ref.watch(permissionControllerProvider);
+    final locationGranted =
+        permissions[AppPermissionType.location]?.granted ?? false;
 
-class _CentersMapScreenState extends ConsumerState<CentersMapScreen> {
-  static const CameraPosition _kInitialPosition = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 13.0,
-  );
-
-  CenterModel? _selectedCenter;
-
-  @override
-  Widget build(BuildContext context) {
-    final centersAsync = ref.watch(nearbyCentersProvider(
-      lat: _kInitialPosition.target.latitude,
-      lng: _kInitialPosition.target.longitude,
-    ));
+    final current = location.valueOrNull;
+    final fallback = const LatLng(34.0123, 71.5678);
+    final initial =
+        current == null ? fallback : LatLng(current.lat, current.lng);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Nearby Centers')),
-      body: Stack(
+      appBar: AppBar(
+        title: const Text('Nearby Hospitals'),
+        actions: [
+          IconButton(
+            onPressed: () => ref.invalidate(nearbyPlacesProvider),
+            icon: const Icon(Icons.refresh),
+          ),
+        ],
+      ),
+      body: Column(
         children: [
-          favoritesMap(centersAsync),
-          if (_selectedCenter != null) _buildCenterCard(_selectedCenter!),
+          if (!locationGranted)
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: PermissionRequiredCard(
+                title: 'We need this to help you',
+                subtitle: 'Enable location to see nearby hospitals and routes.',
+                onOpenSettings: () {
+                  ref
+                      .read(permissionControllerProvider.notifier)
+                      .openSystemSettings();
+                },
+              ),
+            ),
+          Expanded(
+            child: placesAsync.when(
+              data: (places) {
+                final markers = places
+                    .map(
+                      (place) => AppMapMarker(
+                        id: place.id,
+                        lat: place.lat,
+                        lng: place.lng,
+                        title: place.name,
+                        icon: Icons.local_hospital,
+                        color: place.isOpenNow
+                            ? const Color(0xFF2E7D32)
+                            : const Color(0xFFE53935),
+                      ),
+                    )
+                    .toList();
+
+                if (locationGranted && current != null) {
+                  markers.insert(
+                    0,
+                    AppMapMarker(
+                      id: 'you',
+                      lat: current.lat,
+                      lng: current.lng,
+                      title: 'You',
+                      icon: Icons.my_location,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  );
+                }
+
+                return Stack(
+                  children: [
+                    OsmSatelliteMap(
+                      center: initial,
+                      zoom: 13.2,
+                      markers: markers,
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: _HospitalsList(places: places),
+                    ),
+                  ],
+                );
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, _) => Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Could not load hospitals: $error'),
+                      const SizedBox(height: 8),
+                      FilledButton(
+                        onPressed: () => ref.invalidate(nearbyPlacesProvider),
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
+}
 
-  Widget favoritesMap(AsyncValue<List<CenterModel>> centersAsync) {
-    return GoogleMap(
-      initialCameraPosition: _kInitialPosition,
-      myLocationEnabled: true,
-      myLocationButtonEnabled: true,
-      onTap: (_) => setState(() => _selectedCenter = null),
-      markers: centersAsync.when(
-        data: (centers) => centers
-            .map(
-              (c) => Marker(
-                markerId: MarkerId(c.id),
-                position: LatLng(c.lat, c.lng),
-                infoWindow: InfoWindow(title: c.name),
-                onTap: () => setState(() => _selectedCenter = c),
-              ),
-            )
-            .toSet(),
-        error: (_, __) => {},
-        loading: () => {},
-      ),
+class _HospitalsList extends StatelessWidget {
+  const _HospitalsList({required this.places});
+
+  final List<Place> places;
+
+  @override
+  Widget build(BuildContext context) {
+    if (places.isEmpty) {
+      return Container(
+        width: double.infinity,
+        margin: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: const Text('No nearby hospitals found.'),
+      );
+    }
+
+    return DraggableScrollableSheet(
+      initialChildSize: 0.23,
+      minChildSize: 0.12,
+      maxChildSize: 0.55,
+      builder: (context, controller) {
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+            boxShadow: const [
+              BoxShadow(blurRadius: 10, color: Colors.black26),
+            ],
+          ),
+          child: ListView.separated(
+            controller: controller,
+            padding: const EdgeInsets.all(12),
+            itemCount: places.length,
+            separatorBuilder: (_, __) => const Divider(),
+            itemBuilder: (context, index) {
+              final place = places[index];
+              return ListTile(
+                leading: Icon(
+                  place.isOpenNow ? Icons.check_circle : Icons.cancel,
+                  color: place.isOpenNow ? Colors.green : Colors.red,
+                ),
+                title: Text(place.name),
+                subtitle: Text(
+                  '${place.distanceKm.toStringAsFixed(1)} km - ${place.isOpenNow ? 'Open now' : 'Closed'}',
+                ),
+                trailing: IconButton(
+                  onPressed: () => _openDirections(place),
+                  icon: const Icon(Icons.directions),
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildCenterCard(CenterModel center) {
-    return Positioned(
-      bottom: 24,
-      left: 16,
-      right: 16,
-      child: Card(
-        elevation: 8,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                center.name,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Icon(Icons.access_time,
-                      size: 16,
-                      color: center.openNow ? Colors.green : Colors.red),
-                  const SizedBox(width: 4),
-                  Text(
-                    center.openNow ? 'Open Now' : 'Closed',
-                    style: TextStyle(
-                      color: center.openNow ? Colors.green : Colors.red,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text(center.address),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(onPressed: () {}, child: const Text('Call')),
-                  const SizedBox(width: 8),
-                  FilledButton(
-                      onPressed: () {}, child: const Text('Directions')),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+  Future<void> _openDirections(Place place) async {
+    final uri = Uri.parse(
+      'https://www.google.com/maps/search/?api=1&query=${place.lat},${place.lng}',
     );
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
   }
 }

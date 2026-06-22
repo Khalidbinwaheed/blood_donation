@@ -85,5 +85,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'blooddonation-89361.firebasestorage.app',
     measurementId: 'G-VRBTCEBVL1',
   );
-
 }

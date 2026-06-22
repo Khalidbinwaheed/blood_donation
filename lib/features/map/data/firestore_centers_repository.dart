@@ -1,7 +1,7 @@
 import 'package:blood_donation/features/map/data/centers_repository.dart';
 import 'package:blood_donation/features/map/domain/center_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:geolocator/geolocator.dart'; // For distance calculation
+import 'package:geolocator/geolocator.dart';
 
 class FirestoreCentersRepository implements CentersRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -10,14 +10,21 @@ class FirestoreCentersRepository implements CentersRepository {
   Future<List<CenterModel>> getNearbyCenters(
       {required double lat, required double lng, double radius = 10.0}) async {
     try {
-      // In a real production app with GeoHashing, we'd query by bounds.
-      // For this implementation, we fetch all (assuming < 100 centers) and filter client-side.
       final snapshot = await _firestore.collection('centers').get();
 
-      final centers = snapshot.docs.map((doc) {
+      if (snapshot.docs.isEmpty) {
+        return const [];
+      }
+
+      final centers = <CenterModel>[];
+      for (final doc in snapshot.docs) {
         final data = doc.data();
-        final centerLat = (data['lat'] as num).toDouble();
-        final centerLng = (data['lng'] as num).toDouble();
+        final centerLat = _toDouble(data['lat']);
+        final centerLng = _toDouble(data['lng']);
+
+        if (centerLat == null || centerLng == null) {
+          continue;
+        }
 
         final distanceInMeters = Geolocator.distanceBetween(
           lat,
@@ -27,19 +34,18 @@ class FirestoreCentersRepository implements CentersRepository {
         );
         final distanceInKm = distanceInMeters / 1000;
 
-        return _fromFirestore(doc, distanceInKm);
-      }).toList();
+        centers.add(_fromFirestore(doc, distanceInKm));
+      }
 
-      // Filter by radius and sort
       final nearby = centers
           .where((c) => (c.distance ?? double.infinity) <= radius)
-          .toList();
-      nearby.sort((a, b) => (a.distance ?? double.infinity)
-          .compareTo(b.distance ?? double.infinity));
+          .toList()
+        ..sort((a, b) => (a.distance ?? double.infinity)
+            .compareTo(b.distance ?? double.infinity));
 
       return nearby;
-    } catch (e) {
-      return [];
+    } catch (_) {
+      return const [];
     }
   }
 
@@ -48,11 +54,10 @@ class FirestoreCentersRepository implements CentersRepository {
     try {
       final doc = await _firestore.collection('centers').doc(id).get();
       if (doc.exists) {
-        return _fromFirestore(
-            doc, 0); // Distance unknown from single fetch without user loc
+        return _fromFirestore(doc, 0);
       }
-    } catch (e) {
-      // log error
+    } catch (_) {
+      // Caller handles null state.
     }
     return null;
   }
@@ -60,18 +65,45 @@ class FirestoreCentersRepository implements CentersRepository {
   CenterModel _fromFirestore(
       DocumentSnapshot<Map<String, dynamic>> doc, double distance) {
     final data = doc.data()!;
+    final centerLat = _toDouble(data['lat']) ?? 0;
+    final centerLng = _toDouble(data['lng']) ?? 0;
     return CenterModel(
       id: doc.id,
       name: data['name'] ?? 'Unknown Center',
-      lat: (data['lat'] as num).toDouble(),
-      lng: (data['lng'] as num).toDouble(),
+      lat: centerLat,
+      lng: centerLng,
       address: data['address'] ?? '',
       phone: data['phone'] ?? '',
       hours: data['hours'] ?? '',
       specializations: List<String>.from(data['specializations'] ?? []),
-      openNow: data['openNow'] ?? false,
+      openNow: _toBool(data['openNow']),
       accessibility: List<String>.from(data['accessibility'] ?? []),
+      website: data['website']?.toString(),
       distance: distance,
     );
+  }
+
+  double? _toDouble(dynamic value) {
+    if (value is num) {
+      return value.toDouble();
+    }
+    if (value is String) {
+      return double.tryParse(value);
+    }
+    return null;
+  }
+
+  bool _toBool(dynamic value) {
+    if (value is bool) {
+      return value;
+    }
+    if (value is num) {
+      return value != 0;
+    }
+    if (value is String) {
+      final normalized = value.trim().toLowerCase();
+      return normalized == 'true' || normalized == '1' || normalized == 'yes';
+    }
+    return false;
   }
 }

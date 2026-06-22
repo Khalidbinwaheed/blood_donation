@@ -1,4 +1,4 @@
-import 'package:blood_donation/util/appstyles.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AboutUsScreen extends StatelessWidget {
@@ -7,62 +7,109 @@ class AboutUsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('About Us', style: AppStyle.headingTextStyle),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset('assets/logo.png', height: 100),
-            const SizedBox(height: 20),
-            Text(
-              'Blood Donation App',
-              style: AppStyle.titleTextStyle
-                  .copyWith(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Version 1.0.0',
-              style: TextStyle(color: Colors.grey[600]),
-            ),
-            const SizedBox(height: 30),
-            const Text(
-              'Our mission is to bridge the gap between blood donors and recipients. We provide a platform for easy communication and quick access to life-saving blood donations.',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, height: 1.5),
-            ),
-            const SizedBox(height: 30),
-            _buildFeature('Find Donors', Icons.search),
-            _buildFeature('Connect Instantly', Icons.contact_phone),
-            _buildFeature('Save Lives', Icons.favorite),
-            const SizedBox(height: 40),
-            Text(
-              '© 2026 Code Craft It Solution',
-              style: TextStyle(color: Colors.grey[500], fontSize: 12),
-            ),
-          ],
+      appBar: AppBar(title: const Text('About Us')),
+      body: Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 760),
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(16, 14, 16, 22),
+            children: [
+              Card(
+                margin: EdgeInsets.zero,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        'assets/logo.png',
+                        height: 96,
+                        fit: BoxFit.contain,
+                        errorBuilder: (_, __, ___) => Icon(
+                          CupertinoIcons.heart_fill,
+                          size: 72,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      Text(
+                        'Health Helper',
+                        style:
+                            Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Version 1.0.0',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Our mission is to bridge the gap between donors and recipients with reliable, real-time tools for urgent blood requests.',
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              const _FeatureTile(
+                icon: CupertinoIcons.search_circle_fill,
+                title: 'Find Donors',
+                subtitle: 'Filter and locate suitable donors quickly.',
+              ),
+              const SizedBox(height: 8),
+              const _FeatureTile(
+                icon: CupertinoIcons.chat_bubble_2_fill,
+                title: 'Connect Instantly',
+                subtitle: 'Reach users with in-app messaging and alerts.',
+              ),
+              const SizedBox(height: 8),
+              const _FeatureTile(
+                icon: CupertinoIcons.heart_circle_fill,
+                title: 'Save Lives',
+                subtitle: 'Respond to urgent requests with safer workflows.',
+              ),
+              const SizedBox(height: 18),
+              Center(
+                child: Text(
+                  '© 2026 Code Craft It Solution',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+}
 
-  Widget _buildFeature(String text, IconData icon) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: AppStyle.mainColor),
-          const SizedBox(width: 10),
-          Text(text,
-              style: AppStyle.normalTextStyle
-                  .copyWith(fontWeight: FontWeight.w500)),
-        ],
+class _FeatureTile extends StatelessWidget {
+  const _FeatureTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.zero,
+      child: ListTile(
+        leading: Icon(icon, color: Theme.of(context).colorScheme.primary),
+        title: Text(
+          title,
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+        ),
+        subtitle: Text(subtitle),
       ),
     );
   }

@@ -1,8 +1,9 @@
 import 'package:blood_donation/features/appointments/data/appointment_repository.dart';
 import 'package:blood_donation/features/appointments/presentation/availability_controller.dart';
-import 'package:blood_donation/features/map/data/centers_repository.dart';
 import 'package:blood_donation/features/map/data/location_provider.dart';
-import 'package:blood_donation/features/user_managment/data/auth_repository.dart';
+import 'package:blood_donation/features/map/presentation/centers_provider.dart';
+import 'package:blood_donation/features/user_management/data/auth_repository.dart';
+import 'package:blood_donation/features/user_management/data/firestore_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -20,6 +21,7 @@ class BookAppointmentScreen extends ConsumerStatefulWidget {
 class _BookAppointmentScreenState extends ConsumerState<BookAppointmentScreen> {
   final _formKey = GlobalKey<FormState>();
   String? _selectedCenterId;
+  String? _selectedDoctorId;
   DateTime _focusedDay = DateTime.now();
   DateTime _selectedDay = DateTime.now();
   String? _selectedSlot;
@@ -30,6 +32,12 @@ class _BookAppointmentScreenState extends ConsumerState<BookAppointmentScreen> {
     if (_selectedCenterId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please select a center')),
+      );
+      return;
+    }
+    if (_selectedDoctorId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select a doctor')),
       );
       return;
     }
@@ -45,18 +53,10 @@ class _BookAppointmentScreenState extends ConsumerState<BookAppointmentScreen> {
       final user = await ref.read(currentUserProvider.future);
       if (user == null) throw Exception('User not logged in');
 
-      // We treat centerId as doctorId for this implementation based on plan
-      // Or we can have a doctor selection. Let's assume CENTER = DOCTOR/PROVIDER for simplicity
-      // unless we query doctors at the center.
-      // Plan said: "I will add a doctorId field ... but link it to the Center if needed."
-      // Let's use centerId as the doctorId for unavailability check for now to match the dashboard logic
-      // Ideally, we'd select a Doctor FROM the Center.
-      // But let's stick to the prompt's simplicity: Slot booking.
-
       await ref.read(appointmentRepositoryProvider).createAppointment(
             userId: user.uid,
             centerId: _selectedCenterId!,
-            doctorId: _selectedCenterId!, // Using center as provider
+            doctorId: _selectedDoctorId!, // Using selected doctor
             date: _selectedDay,
             timeSlot: _selectedSlot!,
             type: 'Blood Donation',
@@ -104,15 +104,24 @@ class _BookAppointmentScreenState extends ConsumerState<BookAppointmentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final locationAsync = ref.watch(userLocationProvider);
     final location =
         locationAsync.valueOrNull ?? (lat: 37.7749, lng: -122.4194);
-    final centersAsync = ref.watch(nearbyCentersProvider(location));
+    final centersAsync = ref.watch(nearbyCentersProvider(
+      lat: location.lat,
+      lng: location.lng,
+    ));
 
-    // Fetch availability for selected center (acting as doctor) and date
-    final availabilityAsync = _selectedCenterId != null
+    // Fetch doctors for selected center
+    final doctorsAsync = _selectedCenterId != null
+        ? ref.watch(loadDoctorsByCenterProvider(_selectedCenterId!))
+        : const AsyncValue.data([]);
+
+    // Fetch availability for selected doctor (NOT center) and date
+    final availabilityAsync = _selectedDoctorId != null
         ? ref.watch(doctorAvailabilityProvider(
-            (doctorId: _selectedCenterId!, date: _selectedDay)))
+            (doctorId: _selectedDoctorId!, date: _selectedDay)))
         : const AsyncValue.data(null);
 
     return Scaffold(
@@ -152,7 +161,8 @@ class _BookAppointmentScreenState extends ConsumerState<BookAppointmentScreen> {
                       onChanged: (val) {
                         setState(() {
                           _selectedCenterId = val;
-                          _selectedSlot = null; // Reset slot on center change
+                          _selectedDoctorId = null; // Reset doctor
+                          _selectedSlot = null; // Reset slot
                         });
                       },
                       validator: (val) => val == null ? 'Required' : null,
@@ -164,8 +174,49 @@ class _BookAppointmentScreenState extends ConsumerState<BookAppointmentScreen> {
 
                 const SizedBox(height: 24),
 
-                // 2. Calendar
+                // 2. Select Doctor (Only if center selected)
                 if (_selectedCenterId != null) ...[
+                  Text('Select Doctor',
+                      style: Theme.of(context).textTheme.titleMedium),
+                  const SizedBox(height: 8),
+                  doctorsAsync.when(
+                    data: (doctors) {
+                      if (doctors.isEmpty) {
+                        return const Text(
+                            'No doctors available at this center.');
+                      }
+                      return DropdownButtonFormField<String>(
+                        initialValue: _selectedDoctorId,
+                        decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Choose a doctor'),
+                        items: doctors.map<DropdownMenuItem<String>>((d) {
+                          final name =
+                              'Dr. ${d.firstName ?? ''} ${d.lastName ?? ''}'
+                                  .trim();
+                          return DropdownMenuItem<String>(
+                            value: d.uid,
+                            child: Text(name.isNotEmpty ? name : 'Doctor'),
+                          );
+                        }).toList(),
+                        onChanged: (val) {
+                          setState(() {
+                            _selectedDoctorId = val;
+                            _selectedSlot = null; // Reset slot
+                          });
+                        },
+                        validator: (val) => val == null ? 'Required' : null,
+                      );
+                    },
+                    loading: () => const LinearProgressIndicator(),
+                    error: (err, _) => Text('Error loading doctors: $err'),
+                  ),
+                ],
+
+                const SizedBox(height: 24),
+
+                // 3. Calendar
+                if (_selectedDoctorId != null) ...[
                   Text('Select Date',
                       style: Theme.of(context).textTheme.titleMedium),
                   const SizedBox(height: 8),
@@ -184,19 +235,21 @@ class _BookAppointmentScreenState extends ConsumerState<BookAppointmentScreen> {
                         });
                       }
                     },
-                    calendarStyle: const CalendarStyle(
+                    calendarStyle: CalendarStyle(
                         selectedDecoration: BoxDecoration(
-                            color: Colors.red, // Brand color
+                            color: theme.colorScheme.primary,
                             shape: BoxShape.circle),
                         todayDecoration: BoxDecoration(
-                            color: Colors.redAccent, shape: BoxShape.circle)),
+                            color: theme.colorScheme.primary
+                                .withValues(alpha: 0.6),
+                            shape: BoxShape.circle)),
                     headerStyle: const HeaderStyle(
                         formatButtonVisible: false, titleCentered: true),
                   ),
 
                   const SizedBox(height: 24),
 
-                  // 3. Time Slots
+                  // 4. Time Slots
                   Text('Available Slots',
                       style: Theme.of(context).textTheme.titleMedium),
                   const SizedBox(height: 12),
@@ -209,7 +262,10 @@ class _BookAppointmentScreenState extends ConsumerState<BookAppointmentScreen> {
                           child: Center(
                             child: Text(
                               'No slots available for this date.',
-                              style: TextStyle(color: Colors.grey[600]),
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: theme.textTheme.bodyMedium?.color
+                                    ?.withValues(alpha: 0.65),
+                              ),
                             ),
                           ),
                         );
@@ -226,16 +282,18 @@ class _BookAppointmentScreenState extends ConsumerState<BookAppointmentScreen> {
                               setState(
                                   () => _selectedSlot = selected ? slot : null);
                             },
-                            selectedColor: Colors.red,
+                            selectedColor: theme.colorScheme.primary,
                             labelStyle: TextStyle(
-                                color:
-                                    isSelected ? Colors.white : Colors.black),
-                            backgroundColor: Colors.white,
+                                color: isSelected
+                                    ? theme.colorScheme.onPrimary
+                                    : theme.colorScheme.onSurface),
+                            backgroundColor:
+                                theme.colorScheme.surfaceContainerLowest,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                                 side: BorderSide(
                                     color: isSelected
-                                        ? Colors.red
+                                        ? theme.colorScheme.primary
                                         : Colors.grey.shade300)),
                           );
                         }).toList(),
@@ -249,7 +307,7 @@ class _BookAppointmentScreenState extends ConsumerState<BookAppointmentScreen> {
 
                 const SizedBox(height: 32),
 
-                // 4. Confirm Button
+                // 5. Confirm Button
                 SizedBox(
                   width: double.infinity,
                   child: FilledButton(
@@ -258,7 +316,7 @@ class _BookAppointmentScreenState extends ConsumerState<BookAppointmentScreen> {
                         : _submitAppointment,
                     style: FilledButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
-                        backgroundColor: Colors.red),
+                        backgroundColor: theme.colorScheme.primary),
                     child: _isLoading
                         ? const SizedBox(
                             height: 20,

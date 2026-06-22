@@ -1,0 +1,2 @@
+# Production secrets — DO NOT COMMIT
+config/production.env

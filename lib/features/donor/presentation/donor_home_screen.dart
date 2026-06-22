@@ -1,5 +1,7 @@
+import 'package:blood_donation/core/router/app_routes.dart';
 import 'package:blood_donation/features/donor/data/donor_repository.dart';
-import 'package:blood_donation/features/user_managment/data/auth_repository.dart';
+import 'package:blood_donation/features/user_management/data/auth_repository.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -21,46 +23,80 @@ class _DonorHomeScreenState extends ConsumerState<DonorHomeScreen> {
       appBar: AppBar(title: const Text('Donor Hub')),
       body: userAsync.when(
         data: (user) {
-          if (user == null) return const Center(child: Text('Please log in'));
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _buildActionCard(
-                  context,
-                  title: 'Check Eligibility',
-                  subtitle: 'Update your health status',
-                  icon: Icons.health_and_safety,
-                  color: Colors.blue,
-                  onTap: () => _showEligibilityDialog(context, user.uid),
+          if (user == null) {
+            return const Center(child: Text('Please log in'));
+          }
+
+          return Align(
+            alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 980),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Card(
+                      margin: EdgeInsets.zero,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Hello ${user.firstName?.trim().ifEmpty('Donor') ?? 'Donor'}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                            ),
+                            const SizedBox(height: 4),
+                            const Text(
+                              'Manage eligibility, availability, and recent donations.',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    _buildActionCard(
+                      context,
+                      title: 'Check Eligibility',
+                      subtitle: 'Update your current health status',
+                      icon: CupertinoIcons.heart_fill,
+                      color: const Color(0xFF0A84FF),
+                      onTap: () => _showEligibilityDialog(context, user.uid),
+                    ),
+                    const SizedBox(height: 10),
+                    _buildActionCard(
+                      context,
+                      title: 'Register Availability',
+                      subtitle: 'Let centers know when you can donate',
+                      icon: CupertinoIcons.calendar_today,
+                      color: const Color(0xFF34C759),
+                      onTap: () => _showAvailabilityDialog(context, user.uid),
+                    ),
+                    const SizedBox(height: 10),
+                    _buildActionCard(
+                      context,
+                      title: 'Find Centers',
+                      subtitle: 'Locate nearby donation camps',
+                      icon: CupertinoIcons.map_pin_ellipse,
+                      color: const Color(0xFFFF3B30),
+                      onTap: () => context.goNamed(AppRoutes.map.name),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      'Donation History',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(height: 8),
+                    _buildDonationHistory(ref, user.uid),
+                  ],
                 ),
-                const SizedBox(height: 16),
-                _buildActionCard(
-                  context,
-                  title: 'Register Availability',
-                  subtitle: 'Let centers know when you can donate',
-                  icon: Icons.calendar_today,
-                  color: Colors.green,
-                  onTap: () => _showAvailabilityDialog(context, user.uid),
-                ),
-                const SizedBox(height: 16),
-                _buildActionCard(
-                  context,
-                  title: 'Find Centers',
-                  subtitle: 'Locate nearby donation camps',
-                  icon: Icons.map,
-                  color: Colors.red,
-                  onTap: () => context.pushNamed('map'),
-                ),
-                const SizedBox(height: 24),
-                Text(
-                  'Donation History',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 8),
-                _buildDonationHistory(ref, user.uid),
-              ],
+              ),
             ),
           );
         },
@@ -70,21 +106,25 @@ class _DonorHomeScreenState extends ConsumerState<DonorHomeScreen> {
     );
   }
 
-  Widget _buildActionCard(BuildContext context,
-      {required String title,
-      required String subtitle,
-      required IconData icon,
-      required Color color,
-      required VoidCallback onTap}) {
+  Widget _buildActionCard(
+    BuildContext context, {
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
     return Card(
+      margin: EdgeInsets.zero,
       child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
         leading: CircleAvatar(
-          backgroundColor: color.withValues(alpha: 0.1),
+          backgroundColor: color.withValues(alpha: 0.14),
           child: Icon(icon, color: color),
         ),
         title: Text(title),
         subtitle: Text(subtitle),
-        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+        trailing: const Icon(CupertinoIcons.chevron_right, size: 17),
         onTap: onTap,
       ),
     );
@@ -105,6 +145,7 @@ class _DonorHomeScreenState extends ConsumerState<DonorHomeScreen> {
         final history = snapshot.data ?? [];
         if (history.isEmpty) {
           return Card(
+            margin: EdgeInsets.zero,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
@@ -121,15 +162,21 @@ class _DonorHomeScreenState extends ConsumerState<DonorHomeScreen> {
         return Column(
           children: history.map((data) {
             final date = (data['donationDate'] as dynamic)?.toDate();
-            return Card(
-              child: ListTile(
-                leading: const Icon(Icons.history, color: Colors.grey),
-                title: Text(
-                    'Donation at ${data['centerName'] ?? 'Unknown Center'}'),
-                subtitle: Text(date != null
-                    ? DateFormat.yMMMd().format(date)
-                    : 'Unknown Date'),
-                trailing: Text(data['bloodGroup'] ?? ''),
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Card(
+                margin: EdgeInsets.zero,
+                child: ListTile(
+                  leading: const Icon(CupertinoIcons.clock, color: Colors.grey),
+                  title: Text(
+                      'Donation at ${data['centerName'] ?? 'Unknown Center'}'),
+                  subtitle: Text(
+                    date != null
+                        ? DateFormat.yMMMd().format(date)
+                        : 'Unknown Date',
+                  ),
+                  trailing: Text((data['bloodGroup'] ?? '').toString()),
+                ),
               ),
             );
           }).toList(),
@@ -144,11 +191,13 @@ class _DonorHomeScreenState extends ConsumerState<DonorHomeScreen> {
       builder: (context) => AlertDialog(
         title: const Text('Update Eligibility'),
         content: const Text(
-            'Confirm that you meet the criteria:\n\n• Weight > 50kg\n• No recent surgeries\n• No tattoo in last 6 months'),
+          'Confirm that you meet the criteria:\n\n- Weight > 50kg\n- No recent surgeries\n- No tattoo in last 6 months',
+        ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel')),
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
           FilledButton(
             onPressed: () {
               ref.read(donorRepositoryProvider).updateEligibility(uid, {
@@ -157,7 +206,8 @@ class _DonorHomeScreenState extends ConsumerState<DonorHomeScreen> {
               });
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Status updated to Eligible')));
+                const SnackBar(content: Text('Status updated to Eligible')),
+              );
             },
             child: const Text('I Qualify'),
           ),
@@ -174,14 +224,18 @@ class _DonorHomeScreenState extends ConsumerState<DonorHomeScreen> {
       lastDate: DateTime.now().add(const Duration(days: 14)),
     );
     if (date != null && context.mounted) {
-      // Just storing whole day for simplicity, or add TimePicker
       await ref
           .read(donorRepositoryProvider)
           .setAvailability(uid, date, date.add(const Duration(hours: 8)));
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Availability Registered')));
+          const SnackBar(content: Text('Availability registered')),
+        );
       }
     }
   }
+}
+
+extension on String {
+  String ifEmpty(String fallback) => trim().isEmpty ? fallback : this;
 }

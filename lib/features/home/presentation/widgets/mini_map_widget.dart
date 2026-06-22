@@ -1,8 +1,14 @@
-import 'package:blood_donation/features/map/data/centers_repository.dart';
+import 'package:blood_donation/features/map/data/location_provider.dart';
+import 'package:blood_donation/features/map/domain/app_map_marker.dart';
+import 'package:blood_donation/features/map/presentation/centers_provider.dart';
+import 'package:blood_donation/features/map/presentation/widgets/osm_satellite_map.dart';
 import 'package:blood_donation/l10n/app_localizations.dart';
+import 'package:blood_donation/core/router/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:go_router/go_router.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MiniMapWidget extends ConsumerStatefulWidget {
   const MiniMapWidget({super.key});
@@ -12,17 +18,35 @@ class MiniMapWidget extends ConsumerStatefulWidget {
 }
 
 class _MiniMapWidgetState extends ConsumerState<MiniMapWidget> {
-  static const CameraPosition _kInitialPosition = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
+  static const LatLng _kInitialPosition = LatLng(37.42796133580664, -122.085749655962);
 
   @override
   Widget build(BuildContext context) {
-    final centersAsync = ref.watch(nearbyCentersProvider((
-      lat: _kInitialPosition.target.latitude,
-      lng: _kInitialPosition.target.longitude,
-    )));
+    final userLocationAsync = ref.watch(userLocationProvider);
+    final location = userLocationAsync.valueOrNull;
+    final target = location == null
+        ? _kInitialPosition
+        : LatLng(location.lat, location.lng);
+
+    final centersAsync = ref.watch(nearbyCentersProvider(
+      lat: target.latitude,
+      lng: target.longitude,
+    ));
+
+    final markers = centersAsync.maybeWhen(
+      data: (centers) => centers
+          .map(
+            (center) => AppMapMarker(
+              id: center.id,
+              lat: center.lat,
+              lng: center.lng,
+              title: center.name,
+              icon: Icons.local_hospital,
+            ),
+          )
+          .toList(),
+      orElse: () => <AppMapMarker>[],
+    );
 
     return Card(
       margin: const EdgeInsets.all(16),
@@ -34,51 +58,37 @@ class _MiniMapWidgetState extends ConsumerState<MiniMapWidget> {
             height: 200,
             child: Stack(
               children: [
-                // GoogleMap(
-                //   mapType: MapType.normal,
-                //   initialCameraPosition: _kInitialPosition,
-                //   myLocationEnabled: false,
-                //   zoomControlsEnabled: false,
-                //   liteModeEnabled: false,
-                //   markers: centersAsync.when(
-                //     data: (centers) => centers
-                //         .map(
-                //           (c) => Marker(
-                //             markerId: MarkerId(c.id),
-                //             position: LatLng(c.lat, c.lng),
-                //             infoWindow: InfoWindow(title: c.name),
-                //           ),
-                //         )
-                //         .toSet(),
-                //     error: (_, __) => {},
-                //     loading: () => {},
-                //   ),
-                // ),
-                Container(
-                  color: Colors.grey[300],
-                  child: const Center(
-                    child: Text(
-                      'Map Disabled: Add API Key in AndroidManifest.xml',
-                      textAlign: TextAlign.center,
-                    ),
+                OsmSatelliteMap(
+                  key: ValueKey(
+                    '${target.latitude.toStringAsFixed(4)}:${target.longitude.toStringAsFixed(4)}',
                   ),
+                  center: target,
+                  zoom: 13,
+                  markers: markers,
+                  interactive: false,
                 ),
                 Positioned(
                   bottom: 8,
                   right: 8,
                   child: FloatingActionButton.small(
                     heroTag: 'map_fab',
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Please add Google Maps API Key first'),
-                        ),
-                      );
-                    },
-                    // onPressed: () => context.pushNamed('map'),
+                    onPressed: () => context.pushNamed(AppRoutes.map.name),
                     child: const Icon(Icons.my_location),
                   ),
                 ),
+                if (userLocationAsync.isLoading)
+                  const Positioned(
+                    top: 8,
+                    left: 8,
+                    child: Chip(
+                      avatar: SizedBox(
+                        width: 12,
+                        height: 12,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                      label: Text('Locating...'),
+                    ),
+                  ),
               ],
             ),
           ),
@@ -89,12 +99,13 @@ class _MiniMapWidgetState extends ConsumerState<MiniMapWidget> {
               }
               final nearest = centers.first;
               return ListTile(
-                leading: const Icon(Icons.local_hospital, color: Colors.red),
+                leading: Icon(Icons.local_hospital,
+                    color: Theme.of(context).colorScheme.primary),
                 title: Text(nearest.name),
                 subtitle: Text(
-                    '${nearest.openNow ? AppLocalizations.of(context)!.openNow : "Closed"} • ${nearest.address}'),
+                    '${nearest.openNow ? AppLocalizations.of(context)!.openNow : "Closed"} - ${nearest.address}'),
                 trailing: FilledButton.tonal(
-                  onPressed: () {},
+                  onPressed: () => _openMap(nearest.lat, nearest.lng),
                   child: Text(AppLocalizations.of(context)!.directions),
                 ),
               );
@@ -116,5 +127,19 @@ class _MiniMapWidgetState extends ConsumerState<MiniMapWidget> {
         ],
       ),
     );
+  }
+
+  Future<void> _openMap(double lat, double lng) async {
+    final Uri googleMapsUrl =
+        Uri.parse('https://www.google.com/maps/search/?api=1&query=$lat,$lng');
+    if (await canLaunchUrl(googleMapsUrl)) {
+      await launchUrl(googleMapsUrl);
+      return;
+    }
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not open maps')),
+      );
+    }
   }
 }

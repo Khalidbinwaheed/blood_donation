@@ -1,0 +1,11 @@
+[
+  {
+    "id": "p_201",
+    "name": "City General Hospital",
+    "lat": 34.0123,
+    "lng": 71.5678,
+    "distanceMeters": 1200,
+    "isOpenNow": true,
+    "phone": "+92-XXX-XXXXXXX"
+  }
+]

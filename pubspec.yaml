@@ -2,7 +2,7 @@ name: blood_donation
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -20,7 +20,6 @@ version: 1.0.0+1
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
-
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -43,7 +42,8 @@ dependencies:
   firebase_core: ^3.12.1
   cloud_firestore: ^5.6.5
   firebase_messaging: ^15.0.0
-  mailer: ^6.4.1
+  firebase_analytics: ^11.4.5
+  cloud_functions: ^5.2.0
   intl: ^0.20.2
   url_launcher: ^6.3.2
   dio: ^5.0.0
@@ -51,7 +51,8 @@ dependencies:
   hive_flutter: ^1.1.0
   freezed_annotation: ^2.4.1
   json_annotation: ^4.8.1
-  google_maps_flutter: ^2.5.3
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
   flutter_local_notifications: ^17.0.0
   geolocator: ^12.0.0
   permission_handler: ^11.3.1
@@ -65,12 +66,15 @@ dependencies:
   line_icons: ^2.0.3
   shared_preferences: ^2.5.4
   table_calendar: ^3.2.0
-
+  image_picker: ^1.2.1
+  firebase_storage: ^12.4.10
+  google_sign_in: ^6.3.0
+  local_auth: ^2.3.0
+  qr_flutter: ^4.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -84,13 +88,11 @@ dev_dependencies:
   json_serializable: ^6.7.1
   freezed: ^2.4.7
 
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

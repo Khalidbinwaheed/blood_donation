@@ -71,11 +71,3 @@ class MockCentersRepository implements CentersRepository {
 final centersRepositoryProvider = Provider<CentersRepository>((ref) {
   return FirestoreCentersRepository();
 });
-
-final nearbyCentersProvider =
-    FutureProvider.family<List<CenterModel>, ({double lat, double lng})>(
-        (ref, location) async {
-  return ref
-      .watch(centersRepositoryProvider)
-      .getNearbyCenters(lat: location.lat, lng: location.lng);
-});

@@ -1,6 +1,6 @@
 import 'package:blood_donation/features/home/data/notifications_repository.dart';
-import 'package:blood_donation/features/user_managment/data/auth_repository.dart';
-import 'package:blood_donation/util/appstyles.dart';
+import 'package:blood_donation/features/user_management/data/auth_repository.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,86 +9,100 @@ class NotificationsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(authStateProvider).valueOrNull;
     final notificationsAsync = ref.watch(notificationsStreamProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notifications', style: AppStyle.headingTextStyle),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
+        title: const Text('Notifications'),
       ),
       body: notificationsAsync.when(
         data: (notifications) {
           if (notifications.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.notifications_none_rounded,
-                      size: 64, color: Colors.grey[400]),
-                  const SizedBox(height: 16),
-                  Text(
-                    'No notifications yet',
-                    style: TextStyle(color: Colors.grey[600], fontSize: 16),
-                  ),
-                ],
-              ),
+            return _EmptyNotifications(
+              signedIn: user != null,
             );
           }
 
-          return ListView.separated(
-            padding: const EdgeInsets.all(16),
-            itemCount: notifications.length,
-            separatorBuilder: (context, index) => const Divider(),
-            itemBuilder: (context, index) {
-              final notification = notifications[index];
-              return ListTile(
-                leading: CircleAvatar(
-                  backgroundColor:
-                      _getIconColor(notification.type).withValues(alpha: 0.1),
-                  child: Icon(_getIcon(notification.type),
-                      color: _getIconColor(notification.type)),
-                ),
-                title: Text(
-                  notification.title,
-                  style: AppStyle.normalTextStyle.copyWith(
-                    fontWeight: notification.isRead
-                        ? FontWeight.normal
-                        : FontWeight.bold,
-                  ),
-                ),
-                subtitle: Text(
-                  notification.body,
-                  style: AppStyle.normalTextStyle
-                      .copyWith(fontSize: 14, color: Colors.grey[600]),
-                ),
-                trailing: Text(
-                  _formatTimestamp(notification.timestamp),
-                  style: TextStyle(color: Colors.grey[500], fontSize: 12),
-                ),
-                onTap: () {
-                  // Mark as read
-                  final user = ref.read(currentUserProvider).value;
-                  if (user != null) {
-                    ref
-                        .read(notificationsRepositoryProvider)
-                        .markAsRead(user.uid, notification.id);
-                  }
-
-                  // basic navigation logic
-                  if (notification.type == 'blood_request') {
-                    // Navigate to blood request details or similar
-                    // For now, maybe just show a snackbar or go to home
-                    // context.pushNamed(AppRoutes.bloodRequestDetails.name, extra: notification.relatedId);
-                  }
-                },
-              );
+          return RefreshIndicator(
+            onRefresh: () async {
+              ref.invalidate(notificationsStreamProvider);
             },
+            child: ListView.separated(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+              itemCount: notifications.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 10),
+              itemBuilder: (context, index) {
+                final notification = notifications[index];
+                return Card(
+                  margin: EdgeInsets.zero,
+                  child: ListTile(
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    leading: CircleAvatar(
+                      backgroundColor: _getIconColor(notification.type)
+                          .withValues(alpha: 0.14),
+                      child: Icon(
+                        _getIcon(notification.type),
+                        color: _getIconColor(notification.type),
+                      ),
+                    ),
+                    title: Text(
+                      notification.title,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            fontWeight: notification.isRead
+                                ? FontWeight.w500
+                                : FontWeight.w700,
+                          ),
+                    ),
+                    subtitle: Padding(
+                      padding: const EdgeInsets.only(top: 2),
+                      child: Text(
+                        notification.body,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ),
+                    trailing: Text(
+                      _formatTimestamp(notification.timestamp),
+                      style: Theme.of(context).textTheme.labelSmall,
+                    ),
+                    onTap: () {
+                      if (user != null) {
+                        ref
+                            .read(notificationsRepositoryProvider)
+                            .markAsRead(user.uid, notification.id);
+                      }
+                    },
+                  ),
+                );
+              },
+            ),
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Error: $error')),
+        error: (error, _) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(CupertinoIcons.exclamationmark_triangle, size: 36),
+                const SizedBox(height: 8),
+                Text(
+                  'Could not load notifications',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const SizedBox(height: 4),
+                Text(error.toString(), textAlign: TextAlign.center),
+                const SizedBox(height: 12),
+                FilledButton.tonal(
+                  onPressed: () => ref.invalidate(notificationsStreamProvider),
+                  child: const Text('Retry'),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -101,19 +115,19 @@ class NotificationsScreen extends ConsumerWidget {
         return Colors.orange;
       case 'info':
       default:
-        return AppStyle.mainColor;
+        return const Color(0xFF0A84FF);
     }
   }
 
   IconData _getIcon(String type) {
     switch (type) {
       case 'blood_request':
-        return Icons.water_drop;
+        return CupertinoIcons.drop_fill;
       case 'alert':
-        return Icons.warning_amber_rounded;
+        return CupertinoIcons.exclamationmark_triangle_fill;
       case 'info':
       default:
-        return Icons.notifications;
+        return CupertinoIcons.bell_fill;
     }
   }
 
@@ -122,13 +136,60 @@ class NotificationsScreen extends ConsumerWidget {
     final difference = now.difference(timestamp);
 
     if (difference.inDays > 0) {
-      return '${difference.inDays}d ago';
+      return '${difference.inDays}d';
     } else if (difference.inHours > 0) {
-      return '${difference.inHours}h ago';
+      return '${difference.inHours}h';
     } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes}m ago';
+      return '${difference.inMinutes}m';
     } else {
-      return 'Just now';
+      return 'now';
     }
+  }
+}
+
+class _EmptyNotifications extends StatelessWidget {
+  const _EmptyNotifications({
+    required this.signedIn,
+  });
+
+  final bool signedIn;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 420),
+        child: Card(
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          child: Padding(
+            padding: const EdgeInsets.all(18),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  CupertinoIcons.bell_slash,
+                  size: 44,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  signedIn ? 'No notifications yet' : 'Sign in to get alerts',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  signedIn
+                      ? 'New emergency updates and request activity will appear here in real time.'
+                      : 'Notifications for blood requests and emergency actions appear after sign in.',
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

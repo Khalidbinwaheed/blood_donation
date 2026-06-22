@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:blood_donation/features/user_managment/data/auth_repository.dart';
+import 'package:blood_donation/features/user_management/data/auth_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_controller.g.dart';

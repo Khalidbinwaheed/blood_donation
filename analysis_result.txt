@@ -1,0 +1,14 @@
+Analyzing blood_donation...                                     
+
+   info - Use 'const' with the constructor to improve performance - lib\features\home\presentation\home_screen.dart:493:12 - prefer_const_constructors
+   info - Use 'const' literals as arguments to constructors of '@immutable' classes - lib\features\home\presentation\home_screen.dart:494:17 - prefer_const_literals_to_create_immutables
+   info - Use 'const' with the constructor to improve performance - lib\features\home\presentation\home_screen.dart:495:9 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\home\presentation\home_screen.dart:496:9 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\home\presentation\home_screen.dart:497:9 - prefer_const_constructors
+  error - Expected to find ')' - lib\features\home\presentation\home_screen.dart:587:6 - expected_token
+   info - The import of 'package:flutter/cupertino.dart' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart' - lib\features\recipient\presentation\screens\request_blood_screen.dart:3:8 - unnecessary_import
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\features\recipient\presentation\screens\request_blood_screen.dart:174:23 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\features\recipient\presentation\screens\request_blood_screen.dart:253:23 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\features\recipient\presentation\screens\request_blood_screen.dart:267:23 - deprecated_member_use
+   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\features\recipient\presentation\screens\request_blood_screen.dart:280:23 - deprecated_member_use
+

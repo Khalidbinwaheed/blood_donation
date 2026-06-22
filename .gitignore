@@ -42,4 +42,15 @@ app.*.map.json
 # Android Studio will place build artifacts here
 /android/app/debug
 /android/app/profile
-/android/app/release
+# Android release keystore (never commit)
+android/key.properties
+
+# iOS secrets
+ios/Flutter/Secrets.xcconfig
+
+# Production env with API keys
+config/production.env
+
+# Firebase functions
+functions/node_modules/
+functions/.env

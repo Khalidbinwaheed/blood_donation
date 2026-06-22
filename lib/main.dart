@@ -9,9 +9,11 @@ import 'package:blood_donation/l10n/app_localizations.dart'; // Generated in lib
 import 'package:blood_donation/core/services/notification_service.dart';
 import 'core/services/theme_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:blood_donation/core/storage/cache_boxes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await CacheBoxes.init();
 
   // Preload SharedPreferences for robust theme handling
   final prefs = await SharedPreferences.getInstance();
@@ -57,7 +59,7 @@ class _CareLinkAppState extends ConsumerState<CareLinkApp> {
     return MaterialApp.router(
       routerConfig: router,
       debugShowCheckedModeBanner: false,
-      title: 'CareLink',
+      title: 'Lifeline',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,

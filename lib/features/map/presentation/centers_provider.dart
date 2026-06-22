@@ -12,5 +12,5 @@ Future<List<CenterModel>> nearbyCenters(
   required double lng,
 }) async {
   final repository = ref.watch(centersRepositoryProvider);
-  return repository.getNearbyCenters(lat: lat, lng: lng);
+  return repository.getNearbyCenters(lat: lat, lng: lng, radius: 50);
 }

@@ -1,0 +1,72 @@
+# Deploy backend + web to Firebase entirely in the cloud.
+# Requires GitHub repo secrets:
+#   FIREBASE_SERVICE_ACCOUNT  (JSON from Firebase Console → Project settings → Service accounts)
+#   GOOGLE_MAPS_API_KEY       (optional, for web maps)
+#
+# Live URLs after deploy:
+#   Web:     https://blooddonation-89361.web.app
+#   Console: https://console.firebase.google.com/project/blooddonation-89361
+
+name: Deploy Firebase
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install Flutter dependencies
+        run: flutter pub get
+
+      - name: Install Functions dependencies
+        run: npm ci
+        working-directory: functions
+
+      - name: Inject web maps key
+        run: |
+          if [ -n "${{ secrets.GOOGLE_MAPS_API_KEY }}" ]; then
+            node -e "
+              const fs = require('fs');
+              const p = 'web/maps_config.js';
+              let c = fs.existsSync(p) ? fs.readFileSync(p,'utf8') : '';
+              c = c.replace(/window\\.GOOGLE_MAPS_API_KEY\\s*=\\s*'[^']*'/, \"window.GOOGLE_MAPS_API_KEY = '${{ secrets.GOOGLE_MAPS_API_KEY }}'\");
+              if (!c.includes('GOOGLE_MAPS_API_KEY')) {
+                c = \"window.GOOGLE_MAPS_API_KEY = '${{ secrets.GOOGLE_MAPS_API_KEY }}';\\n\" + c;
+              }
+              fs.writeFileSync(p, c);
+            "
+          fi
+
+      - name: Build web
+        run: |
+          flutter build web --release \
+            --dart-define=USE_CLOUD_CHAT=true \
+            --dart-define=GITHUB_MODELS_MODEL=openai/gpt-4.1-mini \
+            --dart-define=GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }} \
+            --dart-define=GOOGLE_WEB_CLIENT_ID=${{ secrets.GOOGLE_WEB_CLIENT_ID }}
+
+      - name: Authenticate Firebase
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+
+      - name: Deploy Firestore, Storage, Functions, Hosting
+        run: |
+          npx firebase-tools deploy \
+            --only firestore:rules,firestore:indexes,storage,functions,hosting \
+            --project blooddonation-89361 \
+            --non-interactive
